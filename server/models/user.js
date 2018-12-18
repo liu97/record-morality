@@ -1,18 +1,18 @@
 var Sequelize = require('sequelize');
-var sequelize = require('../utils/db.js');
+var sequelize = require('../db.js');
 
 var todolist = sequelize.define('user',{
     user_id: {
-        type: Sequelize.BIGINT(12),
+        type: Sequelize.INTEGER(12),
         primaryKey: true,
         allowNull: false,
         unique: true,
         autoIncrement: true
     },
-    password: Sequelize.STRING(255),  // 标题
-    name: Sequelize.STRING(255),  // 详细内容
-    email: Sequelize.STRING(255), // 开始时间
-    register_time: Sequelize.STRING, // 计划完成时间
+    password: Sequelize.STRING(255),  // 用户密码
+    name: Sequelize.STRING(255),  // 用户昵称
+    email: Sequelize.STRING(255), // 用户email
+    register_time: Sequelize.DATE, // 注册时间
 },{
     timestamps: false   // 不要默认时间戳
 });

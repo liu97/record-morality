@@ -9,7 +9,7 @@ const config = {
   port: 3000,
 
   database: {
-    DATABASE: 'record',
+    DATABASE: 'test',
     USERNAME: 'root',
     PASSWORD: '',
     PORT: '3306',

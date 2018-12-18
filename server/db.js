@@ -4,7 +4,7 @@
 * @Last Modified time: 2018-12-18 21:05:40
 * @Email: chuanfuliu@sohu-inc.com
 */
-const allConfig = require('./../../config')
+const allConfig = require('../config')
 const config = allConfig.database
 
 const Sequelize = require('sequelize');
