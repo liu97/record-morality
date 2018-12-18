@@ -1,0 +1,7 @@
+node_modules/
+resources/
+static/upload_images/
+.vscode/
+*.log
+dist/
+*.eddx
