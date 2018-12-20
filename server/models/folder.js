@@ -1,6 +1,6 @@
-var Sequelize = require('sequelize');
-var sequelize = require('../db.js');
-var user = require('./user.js');
+const Sequelize = require('sequelize');
+const sequelize = require('../db.js');
+const user = require('./user.js');
 
 var todolist = sequelize.define('folder',{
     folder_id: {
