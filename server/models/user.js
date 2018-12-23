@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
-const sequelize = require('../db.js');
+const sequelize = require('../sequelizes/db.js');
 
 var todolist = sequelize.define('user',{
-    user_id: {
+    id: {
         type: Sequelize.INTEGER(12),
         primaryKey: true,
         allowNull: false,
@@ -13,7 +13,7 @@ var todolist = sequelize.define('user',{
     name: Sequelize.STRING(255),  // 用户昵称
     email: Sequelize.STRING(255), // 用户email
     register_time: Sequelize.DATE, // 注册时间
-    is_delete: Sequelize.STRING(255), // 是否被删除
+    is_delete: Sequelize.BOOLEAN, // 是否被删除
 },{
     timestamps: false   // 不要默认时间戳
 });
