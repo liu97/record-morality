@@ -1,5 +1,6 @@
 const opt = require('./opt');
-const user = require('../models/user');
+const User = require('../models/user');
+const Birthday = require('../models/birthday');
 
 // user.create({
 //     password: '123',
@@ -78,4 +79,20 @@ const user = require('../models/user');
 // 		}
 // 	}
 // )
-opt.delete(user, {id: [10,11]})
+// opt.delete(user, {id: [10,11]})
+/*
+ * User的实例对象将拥有getBirthdays、setBirthdays、addBirthday、createBirthday、removeBirthday、hasBirthday方法
+ */
+// User.hasMany(Birthday);
+// /*
+//  * Birthday的实例对象将拥有getUser、setUser、createUser方法
+//  */
+// Birthday.belongsTo(User);
+
+(async function(){
+	var user = await User.create();
+	var birthday = user.createBirthday({
+	name: 'hah'
+})
+	console.log(birthday)
+})()

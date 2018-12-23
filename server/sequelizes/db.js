@@ -25,9 +25,6 @@ const record = new Sequelize(config.DATABASE, config.USERNAME, config.PASSWORD, 
 
 	timezone: '+08:00', //东八时区
 
-	define: {
-	    timestamps: false
-	}
 });
 
 

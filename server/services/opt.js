@@ -56,10 +56,7 @@ module.exports.delete = async function(model, message){
 	let result;
 	if(Types.isJSON(message)){
 		try{
-			result = await model.update(
-				{
-					is_delete: true,
-				},
+			result = await model.destroy(
 				{
 					where : message
 				}
