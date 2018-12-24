@@ -16,7 +16,7 @@ const userServive = require('../services/user');
 const config = require('../../config');
 
 
-let userContrallers = {
+const userContrallers = {
     
     async getUserInfo(ctx){
         let result = {

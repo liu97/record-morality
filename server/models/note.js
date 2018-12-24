@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize');
-const db = require('../sequelizes/db.js');
-const User = require('./user.js');
-const Folder = require('./folder.js');
+const db = require('../sequelizes/db');
+const User = require('./user');
+const Folder = require('./folder');
 
-var Note = db.sequelize.define('note',{
+const Note = db.sequelize.define('note',{
     id: {
         type: Sequelize.INTEGER(12),
         primaryKey: true,

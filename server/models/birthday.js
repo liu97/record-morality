@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
-const db = require('../sequelizes/db.js');
-const User = require('./user.js');
+const db = require('../sequelizes/db');
+const User = require('./user');
 
-var Birthday = db.sequelize.define('birthday',{
+const Birthday = db.sequelize.define('birthday',{
     id: {
         type: Sequelize.INTEGER(12),
         primaryKey: true,
