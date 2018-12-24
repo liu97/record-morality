@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
-const sequelize = require('../sequelizes/db.js');
+const db = require('../sequelizes/db.js');
 
-var User = sequelize.define('user',{
+var User = db.sequelize.define('user',{
     id: {
         type: Sequelize.INTEGER(12),
         primaryKey: true,

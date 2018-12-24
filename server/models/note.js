@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize');
-const sequelize = require('../sequelizes/db.js');
+const db = require('../sequelizes/db.js');
 const User = require('./user.js');
 const Folder = require('./folder.js');
 
-var Note = sequelize.define('note',{
+var Note = db.sequelize.define('note',{
     id: {
         type: Sequelize.INTEGER(12),
         primaryKey: true,
@@ -12,8 +12,8 @@ var Note = sequelize.define('note',{
         autoIncrement: true
     },
     title: Sequelize.STRING(255),  // 笔记标题
-    note_path: Sequelize.STRING(255),  // 笔记存储路径
-    note_type: Sequelize.STRING(255), // 笔记类型（txt、md）
+    notePath: Sequelize.STRING(255),  // 笔记存储路径
+    noteType: Sequelize.STRING(255), // 笔记类型（txt、md）
 },{
     paranoid: true,
 });

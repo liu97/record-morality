@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
-const sequelize = require('../sequelizes/db.js');
+const db = require('../sequelizes/db.js');
 const User = require('./user.js');
 
-var Folder = sequelize.define('folder',{
+var Folder = db.sequelize.define('folder',{
     id: {
         type: Sequelize.INTEGER(12),
         primaryKey: true,
@@ -11,7 +11,7 @@ var Folder = sequelize.define('folder',{
         autoIncrement: true
     },
     name: Sequelize.STRING(255),  // 文件夹名称
-    parent_id: Sequelize.INTEGER(12), // 文件夹父id
+    parentId: Sequelize.INTEGER(12), // 文件夹父id
 },{
     paranoid: true,
 });

@@ -1,7 +1,7 @@
 /*
 * @Author: liuchuanfu
 * @Date:   2018-12-18 20:45:19
-* @Last Modified time: 2018-12-23 17:29:53
+* @Last Modified time: 2018-12-24 15:22:15
 * @Email: chuanfuliu@sohu-inc.com
 */
 const allConfig = require('../../config');
@@ -12,7 +12,7 @@ const namespace = cls.createNamespace('my-very-own-namespace');
 const Sequelize = require('sequelize');
 Sequelize.useCLS(namespace);
 
-const record = new Sequelize(config.DATABASE, config.USERNAME, config.PASSWORD, {
+const sequelize = new Sequelize(config.DATABASE, config.USERNAME, config.PASSWORD, {
 	host: config.HOST,
 	dialect: 'mysql',
 
@@ -28,4 +28,5 @@ const record = new Sequelize(config.DATABASE, config.USERNAME, config.PASSWORD, 
 });
 
 
-module.exports = record
+module.exports.sequelize = sequelize;
+module.exports.namespace = namespace;
