@@ -85,8 +85,10 @@ const Note = require('../models/note');
 // Opt.update(User,{name:'liuchaunfu'},{}).then(function(result){
 // 	console.log(result)
 // })
-// Opt.findAll(User,{});
-// console.log(result)
+Opt.findAll(User,{}).then(function(result){
+	console.log(result)
+});
+
 
 /*
  * User的实例对象将拥有getBirthdays、setBirthdays、addBirthday、createBirthday、removeBirthday、hasBirthday方法
