@@ -4,7 +4,7 @@
   "description": "A notepad",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -38,6 +38,8 @@
     "less": "^3.8.1",
     "less-loader": "^4.1.0",
     "mini-css-extract-plugin": "^0.4.4",
+    "mocha": "^5.2.0",
+    "mz": "^2.7.0",
     "os": "^0.1.1",
     "postcss-loader": "^3.0.0",
     "prop-types": "^15.6.2",
