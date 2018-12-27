@@ -10,7 +10,7 @@ cosnt userServices ={
 				}
 			}
 		)
-		if(!result.isErroe){
+		if(!result.isError){
 			return result[0].dataValues;
 		}
 		return result;

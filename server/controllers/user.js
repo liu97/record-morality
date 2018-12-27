@@ -18,16 +18,29 @@ const config = require('../../config');
 
 const userContrallers = {
     
-    async getUserInfo(ctx){
+    async getUserInfo(ctx){ // 获取用户信息
         let result = {
 			success: false,
-			message: '',
+			msg: '',
 			data: null,
         }
 
-        let query = ctx.request.query;
+        let body = ctx.request.body;
 
-        let userInfo = query.id && userServices.getUserInfo(query.id);
+        let userInfo = body.id && userServices.getUserInfo(body.id);
+
+        if(userInfo.isError){
+        	ctx.status = 404;
+        	result.msg = userInfo.msg;
+        }
+        else{
+        	result = {
+        		success: true,
+        		msg: 'It is 200 status',
+        		data: userInfo
+        	}
+        }
+        ctx.body = result;
     },
     
 }
