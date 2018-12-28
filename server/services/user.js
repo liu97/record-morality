@@ -1,7 +1,7 @@
 const User = require('../models/user');
 const Opt = require('./opt');
 
-cosnt userServices ={
+const userServices ={
 	async getUserInfofunction(id){
 		let result = await Opt.findAll(User,
 			{
