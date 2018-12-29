@@ -12,7 +12,7 @@ const fs = require('fs');
 // const birthdayServive = require('../services/birthday');
 // const folderServive = require('../services/folder');
 // const noteServive = require('../services/note');
-const userServive = require('../services/user');
+const userService = require('../services/user');
 const config = require('../../config');
 
 
@@ -26,8 +26,7 @@ const userContrallers = {
         }
 
         let body = ctx.request.body;
-
-        let userInfo = body.id && userServices.getUserInfo(body.id);
+        let userInfo = body.id && userService.getUserInfo(body.id);
 
         if(userInfo.isError){
         	ctx.status = 404;
@@ -40,6 +39,7 @@ const userContrallers = {
         		data: userInfo
         	}
         }
+        console.log(result)
         ctx.body = result;
     },
     

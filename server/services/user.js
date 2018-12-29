@@ -2,7 +2,7 @@ const User = require('../models/user');
 const Opt = require('./opt');
 
 const userServices ={
-	async getUserInfofunction(id){
+	getUserInfo: async function (id){
 		let result = await Opt.findAll(User,
 			{
 				where: {
@@ -11,8 +11,9 @@ const userServices ={
 			}
 		)
 		if(!result.isError){
-			return result[0].dataValues;
+			return result[0] && result[0].dataValues;
 		}
+		console.log(result)
 		return result;
 	}
 }
