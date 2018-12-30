@@ -11,19 +11,33 @@ const
 
 describe('#test koa app', () => {
 
-    let server = app.listen(9900);
+    let server = app.listen(9998);
 
     describe('#test server', () => {
 
-        it('#test GET /', async () => {
-            let res = await request(server)
-                .get('/user')
-                .send({id:3})
-                .expect(200)
-                .end((err, res) => {
-                   if (err) throw err;
-                });
-        });
+        it('#test GET /user', async () => {
+            try{
+                let res = await request(server)
+                                .get('/user?id=3')
+                                // .send({id:3})
+                                .expect(200);
+            }
+            catch(err){
+                throw err;
+            }
 
+        });
+        // it('#test POST /user/register', async () => {
+        //     try{
+        //         let res = await request(server)
+        //                         .post('/user/register')
+        //                         .send({name:'hhhhh', password:'liu970923', email:'1139472029@qq.com'})
+        //                         .expect(200);
+        //     }
+        //     catch(err){
+        //         throw err;
+        //     }
+
+        // });
     });
 });

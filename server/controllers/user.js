@@ -25,23 +25,60 @@ const userContrallers = {
 			data: null,
         }
 
-        let body = ctx.request.body;
-        let userInfo = body.id && userService.getUserInfo(body.id);
-
-        if(userInfo.isError){
-        	ctx.status = 404;
-        	result.msg = userInfo.msg;
+        let query = ctx.request.query;
+        if(!query.id){
+            ctx.status = 404;
+            result.msg = "未传入id";
         }
         else{
-        	result = {
-        		success: true,
-        		msg: 'It is 200 status',
-        		data: userInfo
-        	}
+            let userInfo = await userService.getUserInfo(query);
+
+            if(userInfo.isError){
+                ctx.status = 404;
+                result.msg = userInfo.msg;
+            }
+            else{
+                result = {
+                    success: true,
+                    msg: 'It is 200 status',
+                    data: userInfo
+                }
+            }
         }
         console.log(result)
         ctx.body = result;
     },
+
+    async register(ctx){ //注册
+        let result = {
+			success: false,
+			msg: '',
+			data: null,
+        }
+
+        let body = ctx.request.body;
+        if(!body.password || !body.name || !body.email){
+            ctx.status = 404;
+            result.msg = "填写信息不完全";
+        }
+        else{
+            let checkExist = await userService.getUserInfo({name: body.name});
+            let registerResult = await userService.registerUser(body);
+
+            if(registerResult.isError){
+                ctx.status = 404;
+                result.msg = registerResult.msg;
+            }
+            else{
+                result = {
+                    success: true,
+                    msg: 'It is 200 status',
+                    data: registerResult
+                }
+            }
+        }
+        ctx.body = result;
+    }
     
 }
 module.exports = userContrallers;
