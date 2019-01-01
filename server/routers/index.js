@@ -5,12 +5,16 @@
 const router = require('koa-router')();
 
 const user = require('./user');
+const note = require('./note');
+
 
 router.get('/', async(ctx)=>{
     ctx.redirect('/user/login');
 })
 
-router.use('/user', user.routes())
+router.use('/user', user.routes());
+router.use('/note', note.routes());
+
 
 module.exports = router
 

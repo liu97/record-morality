@@ -1,8 +1,6 @@
 const Types = require('../utils/type');
 const db = require('../sequelizes/db.js');
 
-const asyncECatch = require('../utils/asyncECatch');
-
 /**
  * 新增表数据快捷函数
  * @param  {[Object]} model   [对应的表模型]
