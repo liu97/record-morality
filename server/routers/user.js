@@ -1,6 +1,3 @@
-/**
- * restful user子路由
- */
 const router = require('koa-router')();
 const userController = require('./../controllers/user');
 

@@ -5,10 +5,12 @@ const Opt = require('./opt');
 
 const noteServices ={
 	async getNoteInfo(info){
+		let noteInfo = _.cloneDeep(info);
+
 		let result = await Opt.findAll(Note,
 			{
 				where: {
-					...info
+					...noteInfo
 				}
 			}
 		)

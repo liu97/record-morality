@@ -15,11 +15,10 @@ describe('#test koa app', () => {
 
     describe('#test server', () => {
 
-        // it('#test GET /user', async () => {
+        // it('#test GET /folder', async () => {
         //     try{
         //         let res = await request(server)
-        //                         .get('/user?id=3')
-        //                         // .send({id:3})
+        //                         .get('/folder')
         //                         .expect(200);
         //     }
         //     catch(err){
@@ -28,11 +27,11 @@ describe('#test koa app', () => {
 
         // });
 
-        // it('#test POST /user/register', async () => {
+        // it('#test POST /folder/addFolder', async () => {
         //     try{
         //         let res = await request(server)
-        //                         .post('/user/register')
-        //                         .send({name:'liu97', password:'liu970923', email:'1139472029@qq.com'})
+        //                         .post('/folder/addFolder')
+        //                         .send({userId:3, name:"前端技术", parentId:1})
         //                         .expect(200);
         //     }
         //     catch(err){
@@ -41,11 +40,24 @@ describe('#test koa app', () => {
 
         // });
 
-        it('#test POST /user/login', async () => {
+        // it('#test DEL /folder/deleteFolder', async () => {
+        //     try{
+        //         let res = await request(server)
+        //                         .del('/folder/deleteFolder')
+        //                         .send({id:1})
+        //                         .expect(200);
+        //     }
+        //     catch(err){
+        //         throw err;
+        //     }
+
+        // });
+
+        it('#test update /folder/updateFolderInfo', async () => {
             try{
                 let res = await request(server)
-                                .post('/user/login')
-                                .send({name:'liu97', password:'liu970923'})
+                                .put('/folder/updateFolderInfo')
+                                .send({id:1, name:"日记"})
                                 .expect(200);
             }
             catch(err){

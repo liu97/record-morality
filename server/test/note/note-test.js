@@ -7,7 +7,7 @@
 
 const
     request = require('supertest'),
-    app = require('../../server/app');
+    app = require('../../app');
 
 describe('#test koa app', () => {
 
@@ -18,7 +18,7 @@ describe('#test koa app', () => {
         it('#test GET /note', async () => {
             try{
                 let res = await request(server)
-                                .get('/user?id=1')
+                                .get('/note')
                                 .expect(200);
             }
             catch(err){

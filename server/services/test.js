@@ -85,9 +85,9 @@ const Note = require('../models/note');
 // Opt.update(User,{name:'liuchaunfu'},{}).then(function(result){
 // 	console.log(result)
 // })
-Opt.findAll(User,{}).then(function(result){
-	console.log(result)
-});
+// Opt.findAll(User,{}).then(function(result){
+// 	console.log(result)
+// });
 
 
 /*
@@ -144,7 +144,7 @@ Opt.findAll(User,{}).then(function(result){
 	// console.log(result)
 // })()
 
-tran =  async function(events){
+// tran =  async function(events){
 	// let transaction;    
 
 	// try {
@@ -200,6 +200,11 @@ tran =  async function(events){
 	//     console.log(err);
 	// }
 
-}
+// }
 // let result = tran();
 // console.log(result)
+
+(async function(){
+	let result = await Opt.transaction([]);
+	console.log(result)
+})()

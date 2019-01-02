@@ -7,10 +7,12 @@ const Opt = require('./opt');
 
 const userServices ={
 	async getUserInfo(info){
+		let userInfo = _.cloneDeep(info);
+
 		let result = await Opt.findAll(User,
 			{
 				where: {
-					...info
+					...userInfo
 				}
 			}
 		)

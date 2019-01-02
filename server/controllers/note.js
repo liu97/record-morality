@@ -9,9 +9,9 @@ const bcrypt = require('bcryptjs');
 const path = require('path');
 const fs = require('fs');
 
-// const birthdayServive = require('../services/birthday');
-// const folderServive = require('../services/folder');
-const noteServive = require('../services/note');
+// const birthdayService = require('../services/birthday');
+// const folderService = require('../services/folder');
+const noteService = require('../services/note');
 const userService = require('../services/user');
 const config = require('../../config');
 
@@ -26,23 +26,17 @@ const noteContrallers = {
         }
 
         let query = ctx.request.query;
-        if(!query.id){
+        let noteInfo = await noteService.getNoteInfo(query);
+
+        if(noteInfo.isError){
             ctx.status = 404;
-            result.msg = "未传入id";
+            result.msg = noteInfo.msg;
         }
         else{
-            let noteInfo = await noteService.getNoteInfo(query);
-
-            if(noteInfo.isError){
-                ctx.status = 404;
-                result.msg = noteInfo.msg;
-            }
-            else{
-                result = {
-                    success: true,
-                    msg: 'It is 200 status',
-                    data: noteInfo
-                }
+            result = {
+                success: true,
+                msg: 'It is 200 status',
+                data: noteInfo
             }
         }
         ctx.body = result;

@@ -1,5 +1,7 @@
 const Types = require('../utils/type');
 const db = require('../sequelizes/db.js');
+const User = require('../models/user');
+
 
 /**
  * 新增表数据快捷函数
@@ -17,7 +19,7 @@ module.exports.create = async function(model, message){
 		} catch(err){
 			result = {
 				isError: true,
-				msg: 'Errors were released during insertion!',
+				msg: '新增数据的时候发生了错误',
 			};
 		}
 	}
@@ -27,14 +29,14 @@ module.exports.create = async function(model, message){
 		} catch(err){
 			result = {
 				isError: true,
-				msg: 'Error occurred while insertion!',
+				msg: '新增多个数据的时候发生了错误',
 			};
 		}
 	}
 	else{
 		result = {
 			isError: true,
-			msg: 'Incorrect parameters!',
+			msg: '传入参数有误',
 		};
 	}
 	return result;
@@ -51,21 +53,19 @@ module.exports.destroy = async function(model, condition){
 	if(Types.isJSON(condition)){
 		try{
 			result = await model.destroy(
-				{
-					where : condition,
-				}
+				condition
 			);
 		} catch(err){
 			result = {
 				isError: true,
-				msg: 'Error occurred while deleting!',
+				msg: '删除数据的时候发生了错误',
 			};
 		}
 	}
 	else{
 		result = {
 			isError: true,
-			msg: 'Incorrect parameters!',
+			msg: '传入参数有误',
 		}
 	}
 	return result;
@@ -84,21 +84,19 @@ module.exports.update = async function(model, message, condition){
 		try{
 			result = await model.update(
 				message,
-				{
-					where : condition,
-				}
+				condition
 			)
 		} catch(err){
 			result = {
 				isError: true,
-				msg: 'Error occurred while updating!',
+				msg: '更新数据的时候发生了错误',
 			}
 		}
 	}
 	else{
 		result = {
 			isError: true,
-			msg: 'Incorrect parameters!',
+			msg: '传入参数有误',
 		}
 	}
 	return result;
@@ -115,19 +113,19 @@ module.exports.findAll = async function(model, message){
 	if(Types.isJSON(message)){
 		try{
 			result = await model.findAll(
-				message,
+				message
 			)
 		} catch(err){
 			result = {
 				isError: true,
-				msg: 'Error occurred while finding!',
+				msg: '查询数据的时候发生了错误',
 			}
 		}
 	}
 	else{
 		result = {
 			isError: true,
-			msg: 'Incorrect parameters!',
+			msg: '传入参数有误',
 		}
 	}
 	return result;
@@ -153,7 +151,7 @@ module.exports.findAll = async function(model, message){
 // 	else{
 // 		result = {
 // 			isError: true,
-// 			msg: 'Incorrect parameters!',
+// 			msg: '传入参数有误',
 // 		}
 // 	}
 // 	return result;
