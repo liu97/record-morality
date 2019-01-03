@@ -21,14 +21,25 @@ const noteServices ={
 			for(let i = 0; i < notes.length; i++){
 				let note = _.cloneDeep(notes[i].dataValues);
 				let parentFolder = await folderService.getFolderInfo({id: note.folderId});// 获取note的父文件夹
-				note.noteFrom = parentFolder[0].name; 
 
-				while(parentFolder[0].parentId){
-					parentFolder = await folderService.getFolderInfo({id:parentFolder[0].parentId});
-					note.noteFrom = parentFolder[0].name + ">" + note.noteFrom;
+				if(!parentFolder.isError){
+					note.noteFrom = parentFolder[0].name; 
+
+					while(parentFolder[0].parentId){
+						parentFolder = await folderService.getFolderInfo({id:parentFolder[0].parentId});
+						note.noteFrom = parentFolder[0].name + ">" + note.noteFrom;
+					}
+					
+					result.push(note);
+				}
+				else{
+					result = {
+						isError: true,
+						msg: '用户不存在',
+					};
+					break;
 				}
 				
-				result.push(note);
 			}
 			return result;
 		}
