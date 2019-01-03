@@ -2,12 +2,13 @@ const _ = require('lodash')
 
 const Note = require('../models/note');
 const Opt = require('./opt');
+const folderService = require('./folder');
 
 const noteServices ={
 	async getNoteInfo(info){
 		let noteInfo = _.cloneDeep(info);
 
-		let result = await Opt.findAll(Note,
+		let notes = await Opt.findAll(Note,
 			{
 				where: {
 					...noteInfo
@@ -15,14 +16,24 @@ const noteServices ={
 			}
 		)
         
-		if(!result.isError){
-			return result.map(function(item, index){
-				return item.dataValues;
-			})
-		}
-		return result;
-	},
+		if(!notes.isError){
+			let result = [];
+			for(let i = 0; i < notes.length; i++){
+				let note = _.cloneDeep(notes[i].dataValues);
+				let parentFolder = await folderService.getFolderInfo({id: note.folderId});// 获取note的父文件夹
+				note.noteFrom = parentFolder[0].name; 
 
+				while(parentFolder[0].parentId){
+					parentFolder = await folderService.getFolderInfo({id:parentFolder[0].parentId});
+					note.noteFrom = parentFolder[0].name + ">" + note.noteFrom;
+				}
+				
+				result.push(note);
+			}
+			return result;
+		}
+		return notes;
+	},
 }
 
 module.exports = noteServices;

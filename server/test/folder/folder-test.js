@@ -53,11 +53,23 @@ describe('#test koa app', () => {
 
         // });
 
-        it('#test update /folder/updateFolderInfo', async () => {
+        // it('#test update /folder/updateFolderInfo', async () => {
+        //     try{
+        //         let res = await request(server)
+        //                         .put('/folder/updateFolderInfo')
+        //                         .send({id:1, name:"日记",parentId:2})
+        //                         .expect(200);
+        //     }
+        //     catch(err){
+        //         throw err;
+        //     }
+
+        // });
+
+        it('#test get /folder/openFolder', async () => {
             try{
                 let res = await request(server)
-                                .put('/folder/updateFolderInfo')
-                                .send({id:1, name:"日记"})
+                                .get('/folder/openFolder?id=4')
                                 .expect(200);
             }
             catch(err){

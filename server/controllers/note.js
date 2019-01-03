@@ -18,7 +18,7 @@ const config = require('../../config');
 
 const noteContrallers = {
     
-    async getNoteInfo(ctx){ // 获取笔记信息
+    async getNoteInfo(ctx){ // 获取笔记基本信息
         let result = {
 			success: false,
 			msg: '',
@@ -39,6 +39,8 @@ const noteContrallers = {
                 data: noteInfo
             }
         }
+
+        console.log(result)
         ctx.body = result;
     },
     

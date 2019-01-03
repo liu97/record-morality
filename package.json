@@ -4,7 +4,7 @@
   "description": "A notepad",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha ./server/test"
   },
   "repository": {
     "type": "git",

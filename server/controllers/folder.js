@@ -92,17 +92,24 @@ const folderContrallers = {
         }
 
         let body = ctx.request.body;
-        let folderInfo = await folderService.updateFolderInfo(body);
 
-        if(folderInfo.isError){
+        if(body.id == body.parentId){
             ctx.status = 404;
-            result.msg = folderInfo.msg;
+            result.msg = "文件不能成为自己的子文件夹";
         }
         else{
-            result = {
-                success: true,
-                msg: 'It is 200 status',
-                data: folderInfo
+            let folderInfo = await folderService.updateFolderInfo(body);
+
+            if(folderInfo.isError){
+                ctx.status = 404;
+                result.msg = folderInfo.msg;
+            }
+            else{
+                result = {
+                    success: true,
+                    msg: 'It is 200 status',
+                    data: folderInfo
+                }
             }
         }
         console.log(result)
@@ -134,5 +141,46 @@ const folderContrallers = {
         ctx.body = result;
     },
     
+    async openFolder(ctx){ //展开文件夹
+        let result = {
+			success: false,
+			msg: '',
+			data: null,
+        }
+
+        let query = ctx.request.query;
+
+        if(!query.id){
+            ctx.status = 404;
+            result.msg = "未传入文件夹id";
+        }
+        else{
+            let folder = await folderService.getFolderInfo({
+                parentId: query.id,
+            });
+
+            let note = await noteService.getNoteInfo({
+                folderId: query.id,
+            });
+
+            if(!note.isError && !folder.isError){
+                result = {
+                    success: true,
+                    msg: 'It is 200 status',
+                    data: {
+                        folder,
+                        note,
+                    }
+                }
+            }
+            else{
+                note.isError && (result.msg = result.msg + note.isError);
+                folder.isError && (result.msg = result.msg +' '+ folder.isError);
+            }
+        }
+
+        console.log(result);
+        ctx.body = result;
+    }
 }
 module.exports = folderContrallers;
