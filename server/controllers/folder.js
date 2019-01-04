@@ -4,16 +4,12 @@
 * @Last Modified time: 2018-12-28 10:22:00
 * @Email: chuanfuliu@sohu-inc.com
 */
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const path = require('path');
-const fs = require('fs');
+const _ = require('lodash');
 
 // const birthdayService = require('../services/birthday');
 const folderService = require('../services/folder');
 const noteService = require('../services/note');
 const userService = require('../services/user');
-const config = require('../../config');
 
 
 const folderContrallers = {
@@ -24,7 +20,7 @@ const folderContrallers = {
 			data: null,
         }
 
-        let body = ctx.request.body;
+        let body = _.cloneDeep(ctx.request.body);
 
         if(!body.userId){
             ctx.status = 404;
@@ -57,7 +53,7 @@ const folderContrallers = {
 			data: null,
         }
 
-        let body = ctx.request.body;
+        let body = _.cloneDeep(ctx.request.body);
 
         if(!body.id){
             ctx.status = 404;
@@ -91,7 +87,7 @@ const folderContrallers = {
 			data: null,
         }
 
-        let body = ctx.request.body;
+        let body = _.cloneDeep(ctx.request.body);
 
         if(body.id == body.parentId){
             ctx.status = 404;
@@ -123,7 +119,7 @@ const folderContrallers = {
 			data: null,
         }
 
-        let query = ctx.request.query;
+        let query = _.cloneDeep(ctx.request.query);
         let folderInfo = await folderService.getFolderInfo(query);
 
         if(folderInfo.isError){
@@ -148,7 +144,7 @@ const folderContrallers = {
 			data: null,
         }
 
-        let query = ctx.request.query;
+        let query = _.cloneDeep(ctx.request.query);
 
         if(!query.id){
             ctx.status = 404;

@@ -37,7 +37,7 @@ async function mkdir(dirname, hasFileDir) {
     return false;
 }
 
-module.exports.file = {
+module.exports = {
 	getFile,
 	mkdir
 }

@@ -4,28 +4,27 @@
 * @Last Modified time: 2018-12-28 10:22:00
 * @Email: chuanfuliu@sohu-inc.com
 */
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const path = require('path');
-const fs = require('fs');
+const _ = require('lodash');
 
 // const birthdayService = require('../services/birthday');
 // const folderService = require('../services/folder');
 const noteService = require('../services/note');
 const userService = require('../services/user');
 const config = require('../../config');
+const file = require('../utils/file');
 
 
 const noteContrallers = {
     
-    async getNoteInfo(ctx){ // 获取笔记基本信息
+    async getNoteInfo(ctx){ // 获取笔记信息
         let result = {
 			success: false,
 			msg: '',
 			data: null,
         }
 
-        let query = ctx.request.query;
+        let query = _.cloneDeep(ctx.request.query);
+        delete query.content; // 过滤conten参数
         let noteInfo = await noteService.getNoteInfo(query);
 
         if(noteInfo.isError){
@@ -33,6 +32,12 @@ const noteContrallers = {
             result.msg = noteInfo.msg;
         }
         else{
+            if(ctx.request.query.content){
+                for(let i = 0; i < noteInfo.length; i++){
+                    let item = noteInfo[i];
+                    item.notePath && (item.content = await file.getFile(item.notePath));
+                }
+            }
             result = {
                 success: true,
                 msg: 'It is 200 status',
@@ -44,5 +49,6 @@ const noteContrallers = {
         ctx.body = result;
     },
     
+
 }
 module.exports = noteContrallers;

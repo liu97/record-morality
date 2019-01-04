@@ -18,7 +18,7 @@ describe('#test koa app', () => {
         it('#test GET /note', async () => {
             try{
                 let res = await request(server)
-                                .get('/note?id=4')
+                                .get('/note?id=4&content=true')
                                 .expect(200);
             }
             catch(err){

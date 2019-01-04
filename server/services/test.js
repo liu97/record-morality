@@ -56,13 +56,17 @@ const Note = require('../models/note');
 // h(true);
 // h(false);
 
-// opt.insert(user,[
-// 	{
-// 		password: '123',
-// 		name: 'liu97',
-// 		undefined,
-// 		register_time: Date.now(),
-// 	},
+let find = async function(){
+	let result = await Opt.findAll(User,
+		{
+			where: {
+				password: '123',
+				name: 'liu97',
+				hah:1,
+			}
+		});
+}
+find();
 // 	{
 // 		password: '123',
 // 		name: 'liu97',
@@ -203,8 +207,3 @@ const Note = require('../models/note');
 // }
 // let result = tran();
 // console.log(result)
-
-(async function(){
-	let result = await Opt.transaction([]);
-	console.log(result)
-})()

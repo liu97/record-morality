@@ -6,8 +6,7 @@
 */
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const path = require('path');
-const fs = require('fs');
+const _ = require('lodash');
 
 // const birthdayServive = require('../services/birthday');
 // const folderServive = require('../services/folder');
@@ -25,7 +24,7 @@ const userContrallers = {
 			data: null,
         }
 
-        let query = ctx.request.query;
+        let query = _.cloneDeep(ctx.request.query);
         if(!query.id){
             ctx.status = 404;
             result.msg = "未传入id";
@@ -55,7 +54,7 @@ const userContrallers = {
 			data: null,
         }
 
-        let body = ctx.request.body;
+        let body = _.cloneDeep(ctx.request.body);
         if(!body.password || !body.name || !body.email){
             ctx.status = 404;
             result.msg = "填写信息不完全";
@@ -91,7 +90,7 @@ const userContrallers = {
 			data: null,
         }
 
-        let body = ctx.request.body;
+        let body = _.cloneDeep(ctx.request.body);
         if(!body.password || !body.name){
             ctx.status = 404;
             result.msg = "填写信息不完全";
