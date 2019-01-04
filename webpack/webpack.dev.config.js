@@ -10,7 +10,7 @@ const os = require('os');
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
 const rootPath = path.join(__dirname, '..');
-const appPath = path.join(rootPath, 'server/views/admin');
+const appPath = path.join(rootPath, 'client');
 
 const HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
     template: path.join(appPath, 'index.html'),
@@ -21,7 +21,7 @@ const HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
 module.exports = {
     devtool: 'eval-source-map', // 生产环境应该去掉，否则打包文件会很大
     entry: [ // 项目入口
-        path.join(rootPath, 'server/views/admin/index.js'),
+        path.join(appPath, 'index.js'),
     ],
     output: { // 项目产出
         path: path.join(rootPath, 'dist'),

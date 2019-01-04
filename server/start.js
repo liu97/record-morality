@@ -4,6 +4,9 @@
 * @Last Modified time: 2018-12-28 10:10:44
 * @Email: chuanfuliu@sohu-inc.com
 */
+
+const config = require('./../config');
+
 const app = require('./app');
 
 // 监听启动端口
