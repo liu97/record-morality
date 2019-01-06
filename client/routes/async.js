@@ -6,7 +6,7 @@ import ArticleEdit from 'pages/Article/Edit';
 import MessageList from 'pages/Message/List';
 import MessageDetail from 'pages/Message/Detail';
 
-const AsyncLogin = asyncComponent(() => import(/* webpackChunkName: "login" */ 'pages/Login'));
+const AsyncLaR = asyncComponent(() => import(/* webpackChunkName: "LaR" */ 'pages/LaR'));
 const AsyncApp = asyncComponent(() => import(/* webpackChunkName: "app" */ 'containers/App'));
 const AsyncHome = asyncComponent(() => import(/* webpackChunkName: "home" */ 'pages/Home'));
 const AsyncErrorPage = asyncComponent(() => import(/* webpackChunkName: "errorPage" */ 'pages/Error/ErrorPage'));
@@ -15,7 +15,7 @@ const AsyncArticleList = asyncComponent(() => import(/* webpackChunkName: "artic
 const AsyncArticleAdd = asyncComponent(() => import(/* webpackChunkName: "articleAdd" */ 'pages/Article/Add'));
 
 export {
-    AsyncLogin,
+    AsyncLaR,
     AsyncApp,
     AsyncHome,
     AsyncErrorPage,

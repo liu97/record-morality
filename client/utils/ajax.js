@@ -29,14 +29,9 @@ const send = (url, options, cb, method = 'post') => {
 	if(requestFront){
 		url = requestFront + url;
 	}
-	if (method == 'get' || method == 'delete') { // 如果是GET请求，拼接url
-		if(Object.keys(options).indexOf('id') != -1){
-			url += '/' + options['id'];
-		}
-		else{
-			const searchStr = obj2String(options);
-			url += '?' + searchStr;
-		}
+	if (method == 'get') { // 如果是GET请求，拼接url
+		const searchStr = obj2String(options);
+		url += '?' + searchStr;
 		initObj = {
 		  	method: method,
 			credentials: 'include',

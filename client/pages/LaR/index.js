@@ -1,11 +1,14 @@
 import './index.less';
 import React, { Component } from 'react';
-import LoginForm from './LoginForm';
 import { connect } from 'react-redux';
+
+import LoginForm from './LoginForm';
+import RegisterForm from './RegisterForm';
 import { PostLoginMessage } from 'actions/login';
-import { message } from 'antd';
-import { getCookie } from 'utils/cookie';
-import { setCookie } from 'utils/cookie';
+import { message, Tabs, Icon } from 'antd';
+import { getCookie, setCookie } from 'utils/cookie';
+
+const TabPane = Tabs.TabPane;
 
 @connect(
 	// eslint-disable-next-line no-unused-vars
@@ -35,17 +38,29 @@ class Home extends Component{
 			}
 		}
 	}
-	handleSubmit = (values) => {
+	// 提交登录表单
+	handleLoginSubmit = (values) => {
+		console.log('Received values of form: ', values);
+		this.props.dispatch(PostLoginMessage(values));
+	}
+	// 提交注册表单
+	handleRegisterSubmit = (values) => {
 		console.log('Received values of form: ', values);
 		this.props.dispatch(PostLoginMessage(values));
 	}
 	render(){
 		return (
-			<div className={'login'}>
-				<div className={'login-cover'}></div>
-				<div className={'login-main'}>
-					<div className={'main-header'}>博客管理系统</div>
-					<LoginForm handleSubmit={this.handleSubmit}></LoginForm>
+			<div className={'lag'}>
+				<div className={'lag-main'}>
+					<h1 className={'main-header'}>记德笔记</h1>
+					<Tabs defaultActiveKey="login">
+					    <TabPane tab={<span>登录</span>} key="login">
+					      	<LoginForm handleSubmit={this.handleLoginSubmit}></LoginForm>
+					    </TabPane>
+					    <TabPane tab={<span>注册</span>} key="register">
+					      	<RegisterForm handleSubmit={this.handleRegisterSubmit}></RegisterForm>
+					    </TabPane>
+					 </Tabs>
 				</div>
 			</div>
 		)

@@ -1,5 +1,5 @@
 import {
-  AsyncLogin,
+  AsyncLaR,
   AsyncApp,
   AsyncHome,
   AsyncErrorPage,
@@ -15,13 +15,13 @@ import {
 const routes = [
   {
     path: '/',
-    component: AsyncLogin,
+    component: AsyncLaR,
     exact: true,
     requiresAuth: false,
   },
   {
-    path: '/login',
-    component: AsyncLogin,
+    path: '/LaR',
+    component: AsyncLaR,
     requiresAuth: false,
   },
   {
