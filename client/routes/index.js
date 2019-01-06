@@ -1,43 +1,45 @@
-import Login from 'pages/Login';
-import App from 'containers/App';
-import Home from 'pages/Home';
-import ErrorPage from 'pages/Error/ErrorPage';
-import Error from 'pages/Error';
-import ArticleList from 'pages/Article/List';
-import ArticleAdd from 'pages/Article/Add';
-import ArticleDetail from 'pages/Article/Detail';
-import ArticleEdit from 'pages/Article/Edit';
-import MessageList from 'pages/Message/List';
-import MessageDetail from 'pages/Message/Detail';
+import {
+  AsyncLogin,
+  AsyncApp,
+  AsyncHome,
+  AsyncErrorPage,
+  AsyncError,
+  AsyncArticleList,
+  AsyncArticleAdd,
+  ArticleDetail,
+  ArticleEdit,
+  MessageList,
+  MessageDetail,
+} from './async'
 
 const routes = [
   {
     path: '/',
-    component: Login,
+    component: AsyncLogin,
     exact: true,
     requiresAuth: false,
   },
   {
     path: '/login',
-    component: Login,
+    component: AsyncLogin,
     requiresAuth: false,
   },
   {
     path: '/admin',
-    component: App,
+    component: AsyncApp,
     requiresAuth: true,
     routes: [
       { path: '/admin/',
         exact: true,
-        component: Home,
+        component: AsyncHome,
       },
       {
         path: '/admin/article/add',
-        component: ArticleAdd,
+        component: AsyncArticleAdd,
       },
       {
         path: '/admin/article/list',
-        component: ArticleList,
+        component: AsyncArticleList,
       },
       {
         path: '/admin/article/detail',
@@ -56,18 +58,18 @@ const routes = [
         component: MessageDetail,
       },
       {
-        component: Error,
+        component: AsyncError,
         requiresAuth: false,
       },
     ]
   },
   {
     path: '/ErrorPage',
-    component: ErrorPage,
+    component: AsyncErrorPage,
     requiresAuth: false,
   },
   {
-    component: Error,
+    component: AsyncError,
     requiresAuth: false,
   },
 ]
