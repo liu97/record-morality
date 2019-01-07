@@ -11,24 +11,20 @@ class Head extends Component{
 			{
 				title: '笔记',
 				className: 'note',
-				to: '/note/',
+				to: '/admin/note/',
 				addition: 'note'
 			},
 			{
 				title: '生日提醒',
 				className: 'birthday',
-				to: '/birthday/',
+				to: '/admin/birthday/',
 				addition: 'birthday'
 			}
 		]
 	}
 	getActiveKey(url = this.props.history.location.pathname){
-		let reg = /^\/(.+?)\//;
-		let result = reg.exec(url);
-		if(typeof result[1] == "string"){
-			return result[1];
-		}
-		return '';
+		let result = url.split('/');
+		return result[2];
 	}
 	render(){
 		const activeKey = this.getActiveKey();
