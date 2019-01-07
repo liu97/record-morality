@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import reduexs from 'reducers';
-import ConfirmLogin from 'pages/ConfirmLogin';
+import ConfirmLogin from 'components/ConfirmLogin';
 
 let store = createStore(
 	reduexs,

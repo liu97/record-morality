@@ -25,37 +25,52 @@ const routes = [
     requiresAuth: false,
   },
   {
-    path: '/admin',
+    path: '/note',
     component: AsyncApp,
     requiresAuth: true,
     routes: [
-      { path: '/admin/',
-        exact: true,
-        component: AsyncHome,
-      },
       {
-        path: '/admin/article/add',
+        path: '/note/new',
         component: AsyncArticleAdd,
       },
       {
-        path: '/admin/article/list',
-        component: AsyncArticleList,
+        path: '/note/folder/:id',
+        component: AsyncArticleAdd,
       },
       {
-        path: '/admin/article/detail',
-        component: ArticleDetail,
+        path: '/note/trendMap',
+        component: AsyncArticleAdd,
       },
       {
-        path: '/admin/article/edit',
-        component: ArticleEdit,
+        path: '/note/unsaved',
+        component: AsyncArticleAdd,
       },
       {
-        path: '/admin/message/list',
-        component: MessageList,
+        component: AsyncError,
+        requiresAuth: false,
+      },
+    ]
+  },
+  {
+    path: '/birthday',
+    component: AsyncApp,
+    requiresAuth: true,
+    routes: [
+      {
+        path: '/birthday/new',
+        component: AsyncArticleAdd,
       },
       {
-        path: '/admin/message/detail',
-        component: MessageDetail,
+        path: '/birthday/folder/:id',
+        component: AsyncArticleAdd,
+      },
+      {
+        path: '/birthday/trendMap',
+        component: AsyncArticleAdd,
+      },
+      {
+        path: '/birthday/unsaved',
+        component: AsyncArticleAdd,
       },
       {
         component: AsyncError,
