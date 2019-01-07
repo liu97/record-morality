@@ -72,10 +72,23 @@ const userContrallers = {
                     result.msg = registerResult.msg;
                 }
                 else{
-                    result = {
-                        success: true,
-                        msg: 'It is 200 status',
-                        data: registerResult,
+                    try{
+                        const userToken = { // 用户token
+                            name: registerResult[0].name,
+                            id: registerResult[0].id
+                        };
+                        const token = jwt.sign(userToken, config.secret, {expiresIn: '6h'});  // 签发token
+
+                        result = {
+                            success: true,
+                            msg: 'It is 200 status',
+                            data: token,
+                        }
+
+                    }
+                    catch(err){
+                        ctx.status = 404;
+                        result.msg = err;
                     }
                 }
             }
@@ -107,8 +120,8 @@ const userContrallers = {
                     try{
                         if (bcrypt.compareSync(body.password, userInfo[0].password)) { // 判断数据库密码和用户输入密码是否相同
                             const userToken = { // 用户token
-                                name: userInfo[0].user_name,
-                                id: userInfo[0].user_id
+                                name: userInfo[0].name,
+                                id: userInfo[0].id
                             };
                             const token = jwt.sign(userToken, config.secret, {expiresIn: '6h'});  // 签发token
     

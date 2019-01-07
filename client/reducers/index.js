@@ -19,7 +19,8 @@ import {
 import {
 	postLoginResult,
 	getLoginStatus,
-} from './login';
+	postRegisterResult,
+} from './lar';
 
 const rootReducer = combineReducers({
 	reducerResult,
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
 	putMessageResult,
 	postLoginResult,
 	getLoginStatus,
+	postRegisterResult,
 });
 
 export default rootReducer;

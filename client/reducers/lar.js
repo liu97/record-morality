@@ -16,3 +16,4 @@ export const getLoginStatus = handleActions(
 );
 
 export const postLoginResult = createSimpleAjaxReduce('PostLoginMessage');
+export const postRegisterResult = createSimpleAjaxReduce('PostRegisterMessage');

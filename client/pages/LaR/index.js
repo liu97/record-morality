@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
-import { PostLoginMessage } from 'actions/login';
+import { PostLoginMessage, PostRegisterMessage } from 'actions/lar';
 import { message, Tabs, Icon } from 'antd';
 import { getCookie, setCookie } from 'utils/cookie';
 
@@ -13,7 +13,8 @@ const TabPane = Tabs.TabPane;
 @connect(
 	// eslint-disable-next-line no-unused-vars
 	(state, props) => ({
-		postLoginResult: state.postLoginResult
+		postLoginResult: state.postLoginResult,
+		postRegisterResult: state.postRegisterResult
 	})
 )
 class Home extends Component{
@@ -24,29 +25,33 @@ class Home extends Component{
 		}
 	}
 	UNSAFE_componentWillReceiveProps(newProps){
-		let { postLoginResult } = newProps;
+		let { postLoginResult, postRegisterResult } = newProps;
 		const props = this.props;
 		if(postLoginResult !== props.postLoginResult && postLoginResult && postLoginResult.isLoading === false){
-			if(postLoginResult.code == 1){
-				setCookie('isLogin', true);
-				window.localStorage.setItem('access_token', postLoginResult.token);
-				const bcakURL = props.location.state ? props.location.state.from.pathname : '/admin';
-				props.history.push(bcakURL);
-			}
-			else{
-				message.error(postLoginResult.message);
-			}
+			this.checkIsLogin(postLoginResult)
+		}
+		if(postRegisterResult !== props.postRegisterResult && postRegisterResult && postRegisterResult.isLoading === false){
+			this.checkIsLogin(postRegisterResult)
+		}
+	}
+	checkIsLogin(result){
+		if(result.success){
+			setCookie('isLogin', true);
+			window.localStorage.setItem('access_token', result.data);
+			const bcakURL = this.props.location.state ? this.props.location.state.from.pathname : '/admin';
+			this.props.history.push(bcakURL);
+		}
+		else{
+			message.error(result.msg);
 		}
 	}
 	// 提交登录表单
 	handleLoginSubmit = (values) => {
-		console.log('Received values of form: ', values);
 		this.props.dispatch(PostLoginMessage(values));
 	}
 	// 提交注册表单
 	handleRegisterSubmit = (values) => {
-		console.log('Received values of form: ', values);
-		this.props.dispatch(PostLoginMessage(values));
+		this.props.dispatch(PostRegisterMessage(values));
 	}
 	render(){
 		return (

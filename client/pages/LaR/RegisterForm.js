@@ -41,7 +41,7 @@ class RegisterForm extends Component{
                     </FormItem>
                     <FormItem>
                         <Button type="primary" htmlType="submit" className="lag-form-button">
-                            Log in
+                            注册
                         </Button>
                     </FormItem>
                 </Form>

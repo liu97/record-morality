@@ -34,7 +34,7 @@ class LoginForm extends Component{
                     </FormItem>
                     <FormItem>
                         <Button type="primary" htmlType="submit" className="lag-form-button">
-                            Log in
+                            登录
                         </Button>
                     </FormItem>
                 </Form>
