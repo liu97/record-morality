@@ -24,23 +24,23 @@ const routes = [
     requiresAuth: true,
     routes: [
       {
-        path: '/note',
+        path: '/admin/note',
         component: AsyncNote,
         routes: [
           {
-            path: '/note/new',
+            path: '/admin/note/recent',
             component: AsyncNote,
           },
           {
-            path: '/note/folder/:id',
+            path: '/admin/note/folder/:id',
             component: AsyncNote,
           },
           {
-            path: '/note/trendMap',
+            path: '/admin/note/trendMap',
             component: AsyncNote,
           },
           {
-            path: '/note/unsaved',
+            path: '/admin/note/unsaved',
             component: AsyncNote,
           },
           {

@@ -1,21 +1,83 @@
 import './index.less';
 import React, { Component } from 'react';
-import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+import { Layout, Menu, Breadcrumb, Icon, Tree } from 'antd';
 
+const { TreeNode } = Tree;
 const { Content, Sider } = Layout;
 
 class Home extends Component{
+    constructor(props){
+		super(props);
+		this.list =[
+			{
+				title: '最新笔记',
+				className: 'recent',
+				to: '/admin/note/recent',
+                addition: 'recent',
+                type: 'menu'
+			},
+			{
+				title: '我的文件夹',
+				className: 'folder',
+				to: '/admin/note/folder',
+                addition: 'folder',
+                type: 'tree'
+			},
+			{
+				title: '笔记趋势图',
+				className: 'trendMap',
+				to: '/admin/note/trendMap',
+                addition: 'trendMap',
+                type: 'menu'
+			},
+			{
+				title: '草稿',
+				className: 'unsaved',
+				to: '/admin/note/unsaved',
+                addition: 'unsaved',
+                type: 'menu'
+			}
+		]
+    }
+    getNavList(){
+        let list = this.list.map((item, index)=>{
+            if(item.type == menu){}
+        });
+    }
 	render(){
 		return (
 			<Layout>
                 <Sider width={200} style={{ background: '#fff' }}>
                     <Menu
                         mode="inline"
-                        defaultSelectedKeys={['1']}
-                        defaultOpenKeys={['sub1']}
                         style={{ height: '100%', borderRight: 0 }}
                     >
-                        <Menu.Item key="1">
+                        <Menu.Item key="recent">
+                            <Icon type="pie-chart" />
+                            <span>Option 1</span>
+                        </Menu.Item>
+                        <Tree
+                            showIcon
+                            defaultExpandAll
+                            defaultSelectedKeys={['0-0-0']}
+                            switcherIcon={<Icon type="down" />}
+                        >
+                            <TreeNode icon={<Icon type="smile-o" />} title="parent 1" key="0-0">
+                            <TreeNode icon={<Icon type="meh-o" />} title="leaf" key="0-0-0" />
+                            <TreeNode
+                                icon={({ selected }) => (
+                                <Icon type={selected ? 'frown' : 'frown-o'} />
+                                )}
+                                title="leaf"
+                                key="0-0-1"
+                            />
+                            </TreeNode>
+                        </Tree>
+                        <Menu.Item key="trendMap">
+                            <Icon type="pie-chart" />
+                            <span>Option 1</span>
+                        </Menu.Item>
+                        <Menu.Item key="unsaved">
                             <Icon type="pie-chart" />
                             <span>Option 1</span>
                         </Menu.Item>
