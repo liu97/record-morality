@@ -23,7 +23,6 @@ class App extends Component {
 
   render() {
     const authed = getCookie('isLogin') == 'true';
-    debugger
     return (
       <Layout>
         <Header />
