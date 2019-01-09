@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { Tree } from 'antd';
+import { Tree, Icon } from 'antd';
 import { TREE } from 'constants/treeNav';
 
 const { TreeNode } = Tree;
@@ -80,13 +80,26 @@ class TreeNav extends Component {
     render() {
         const loop = data => data.map((item) => {
             if (item.children && item.children.length) {
-                return <TreeNode key={item.id} title={item.name}>{loop(item.children)}</TreeNode>;
+                return (<TreeNode 
+                            key={item.id} 
+                            title={item.name}
+                            icon={(props) => {
+                                return (<Icon type={props.expanded ? 'folder-open' : 'folder'} />)
+                            }}
+                        >
+                            {loop(item.children)}
+                        </TreeNode>);
             }
-            return <TreeNode key={item.id} title={item.name} />;
+            return (<TreeNode 
+                        key={item.id} 
+                        title={item.name}  
+                        icon={<Icon type= 'folder'/>}
+                    />);
         });
         return (
         <Tree
             className="draggable-tree"
+            showIcon
             draggable
             onDragEnter={this.onDragEnter}
             onDrop={this.onDrop}

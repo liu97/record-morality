@@ -1,7 +1,7 @@
 import './index.less';
 import React, { Component } from 'react';
 import { Layout, Menu, Breadcrumb, Icon, Tree } from 'antd';
-import TreeNav from './TreeNav';
+import TreeNav from './Component/TreeNav';
 
 const { TreeNode } = Tree;
 const { Content, Sider } = Layout;
@@ -53,6 +53,9 @@ class Home extends Component{
                         mode="inline"
                         style={{ height: '100%', borderRight: 0 }}
                     >
+                        {
+                            
+                        }
                         <Menu.Item key="recent">
                             <Icon type="pie-chart" />
                             <span>Option 1</span>
