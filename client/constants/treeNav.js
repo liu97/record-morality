@@ -7,6 +7,20 @@ export const NAVLIST = [
         key: '/admin/note/recent',
     },
     {
+        title: '笔记趋势图',
+        to: '/admin/note/trendMap',
+        icon: 'bar-chart',
+        type: 'nav',
+        key: '/admin/note/trendMap',
+    },
+    {
+        title: '草稿',
+        to: '/admin/note/unsaved',
+        icon: 'file-unknown',
+        type: 'nav',
+        key: '/admin/note/unsaved',
+    },
+    {
         title: '我的文件夹',
         to: '/admin/note/folder',
         type: 'tree',
@@ -39,19 +53,5 @@ export const NAVLIST = [
                 ],
             }
         ]
-    },
-    {
-        title: '笔记趋势图',
-        to: '/admin/note/trendMap',
-        icon: 'bar-chart',
-        type: 'nav',
-        key: '/admin/note/trendMap',
-    },
-    {
-        title: '草稿',
-        to: '/admin/note/unsaved',
-        icon: 'file-unknown',
-        type: 'nav',
-        key: '/admin/note/unsaved',
     }
 ]

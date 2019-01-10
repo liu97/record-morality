@@ -8,14 +8,69 @@
             height: 100%;
             background-color: #FFFFFF;
             .ant-menu-item {
-                margin-top: 0;
+                margin: 0;
                 padding-left: 34px !important;
+                color: rgba(0, 0, 0, 0.65);
                 a {
                     display: inline-block;
+                    color: rgba(0, 0, 0, 0.65);
+                }
+            }
+            .ant-menu-item-active {
+                background-color: rgba(0, 0, 0, 0.1);
+                color: @themeColor;
+                a {
+                    color: @themeColor;
                 }
             }
             .ant-menu-item-selected {
                 background-color: @themeColor;
+                color: #FFFFFF;
+                a {
+                    color: #FFFFFF;
+                }
+            }
+            .ant-tree {
+                li{
+                    padding: 0;
+                    line-height: 30px;
+                }
+                .ant-tree-switcher{
+                    z-index: 1;
+                }
+                .ant-tree-node-content-wrapper {
+                    z-index: 1;
+                    &::before {
+                        content: '';
+                        position: absolute;
+                        left: 0;
+                        right: 0;
+                        height: 30px;
+                        -webkit-transition: all .3s;
+                        transition: all .3s;
+                        z-index: 0;
+                    }
+                    &:hover {
+                        color: @themeColor;
+                        background-color: transparent;
+                        &::before {
+                            background-color: rgba(0, 0, 0, 0.1);
+                        }
+                    }
+                }
+                .ant-tree-node-selected {
+                    background-color: transparent;
+                    &:hover {
+                        background-color: transparent;
+                        &::before {
+                            background-color: rgba(0, 0, 0, 0.1);
+                        }
+                    }
+                    &::before {
+                        background-color: rgba(0, 0, 0, 0.1);
+                    }
+                }
+                
             }
         }
     }
