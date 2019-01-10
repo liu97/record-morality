@@ -1,28 +1,54 @@
-export const TREE = [
+export const NAVLIST = [
     {
-        name: '我的文件夹',
-        id: 1,
-        children: [
+        title: '最新笔记',
+        to: '/admin/note/recent',
+        type: 'nav',
+        key: '/admin/note/recent',
+    },
+    {
+        title: '我的文件夹',
+        to: '/admin/note/folder',
+        type: 'tree',
+        key: '/admin/note/folder',
+        tree: [
             {
-                name: '语文',
-                id: 2,
+                title: '我的文件夹',
+                key: 1,
                 children: [
                     {
-                        name: '初一',
-                        id: 4,
+                        title: '语文',
+                        key: 2,
+                        children: [
+                            {
+                                title: '初一',
+                                key: 4,
+                                children: [
+                                    
+                                ],
+                            },
+                        ],
+                    },
+                    {
+                        title: '数学',
+                        key: 3,
                         children: [
                             
                         ],
                     },
                 ],
-            },
-            {
-                name: '数学',
-                id: 3,
-                children: [
-                    
-                ],
-            },
-        ],
+            }
+        ]
+    },
+    {
+        title: '笔记趋势图',
+        to: '/admin/note/trendMap',
+        type: 'nav',
+        key: '/admin/note/trendMap',
+    },
+    {
+        title: '草稿',
+        to: '/admin/note/unsaved',
+        type: 'nav',
+        key: '/admin/note/unsaved',
     }
 ]

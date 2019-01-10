@@ -10,11 +10,17 @@ class TreeNav extends Component {
         super(props);
         this.state = {
             navTree: props.navTree.tree,
+            selectedKeys: []
         }
     }
 
-    onDragEnter = (info) => {
-
+    UNSAFE_componentWillReceiveProps(nextProps) {
+        let { treeSelectedKeys } = nextProps;
+        if(treeSelectedKeys && !_.isEqual(treeSelectedKeys, this.props.treeSelectedKeys)){
+            this.setState({
+                selectedKeys: treeSelectedKeys
+            })
+        }
     }
 
     onDrop = (info) => {
@@ -25,7 +31,7 @@ class TreeNav extends Component {
 
         const loop = (data, key, callback) => {
             data.forEach((item, index, arr) => {
-                if (item.id == key) {
+                if (`${this.props.navTree.key}/${item.key}` == key) {
                     return callback(item, index, arr);
                 }
                 if (item.children) {
@@ -43,12 +49,12 @@ class TreeNav extends Component {
         });
 
         if (!info.dropToGap) {
-        // Drop on the content
-        loop(data, dropKey, (item) => {
-            item.children = item.children || [];
-            // where to insert 示例添加到尾部，可以是随意位置
-            item.children.push(dragObj);
-        });
+            // Drop on the content
+            loop(data, dropKey, (item) => {
+                item.children = item.children || [];
+                // where to insert 示例添加到尾部，可以是随意位置
+                item.children.push(dragObj);
+            });
         } 
         else if ((info.node.props.children || []).length > 0 && info.node.props.expanded && dropPosition == 1) {
             loop(data, dropKey, (item) => {
@@ -74,43 +80,56 @@ class TreeNav extends Component {
             navTree: data,
         });
 
-        this.props.onDrop && this.props.onDrop(info);
+        this.props.onTreeDrop && this.props.onTreeDrop(info);
     }
 
-    onSelect = (selectedKeys, e) => {
-        this.props.history.push(`${this.props.navTree.to}?key=${selectedKeys[0]}`);
-        this.props.onSelect && this.props.onSelect(selectedKeys, e);
+    onSelect = (selectedKeys, e) => { // 点击tree节点
+        if(selectedKeys.length){
+            this.props.navTree && this.props.history.push(selectedKeys[0]);
+            this.props.onTreeSelect && this.props.onTreeSelect(selectedKeys, e);
+        }
     }
 
-    getTreeNode = (data) => {
-        data.map((item) => {
+    onExpand = (info) => { // 展开tree节点
+        this.props.onTreeExpand && this.props.onTreeExpand(info);
+    }
+
+    onRightClick = (info) => { // 右键tree节点
+        this.props.onTreeRightClick && this.props.onTreeRightClick(info); 
+    }
+
+    getTreeNode = (data) => { 
+        let result = data.map((item) => {
             if (item.children && item.children.length) {
                 return (<TreeNode 
-                            key={item.id} 
-                            title={item.name}
+                            key={`${this.props.navTree.key}/${item.key}`} 
+                            title={item.title}
                             icon={(props) => {
                                 return (<Icon type={props.expanded ? 'folder-open' : 'folder'} />)
                             }}
                         >
-                            {loop(item.children)}
+                            {this.getTreeNode(item.children)}
                         </TreeNode>);
             }
             return (<TreeNode 
-                        key={item.id} 
-                        title={item.name}  
+                        key={`${this.props.navTree.key}/${item.key}`} 
+                        title={item.title}  
                         icon={<Icon type= 'folder'/>}
                     />);
         });
+        return result;
     }
     render() {
         return (
         <Tree
-            className="draggable-tree"
             showIcon
             draggable
+            selectedKeys={this.state.selectedKeys}
             onDragEnter={this.onDragEnter}
             onDrop={this.onDrop}
             onSelect={this.onSelect}
+            onExpand={this.onExpand}
+            onRightClick={this.onRightClick}
         >
             {this.getTreeNode(this.state.navTree)}
         </Tree>
