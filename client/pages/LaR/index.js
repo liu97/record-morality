@@ -21,7 +21,7 @@ class Home extends Component{
 	UNSAFE_componentWillMount(){
 		const authed = getCookie('isLogin') == 'true';
 		if(authed){
-			this.props.history.push('/admin');
+			this.props.history.push('/admin/note/');
 		}
 	}
 	UNSAFE_componentWillReceiveProps(newProps){

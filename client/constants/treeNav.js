@@ -2,6 +2,7 @@ export const NAVLIST = [
     {
         title: '最新笔记',
         to: '/admin/note/recent',
+        icon: 'profile',
         type: 'nav',
         key: '/admin/note/recent',
     },
@@ -42,12 +43,14 @@ export const NAVLIST = [
     {
         title: '笔记趋势图',
         to: '/admin/note/trendMap',
+        icon: 'bar-chart',
         type: 'nav',
         key: '/admin/note/trendMap',
     },
     {
         title: '草稿',
         to: '/admin/note/unsaved',
+        icon: 'file-unknown',
         type: 'nav',
         key: '/admin/note/unsaved',
     }

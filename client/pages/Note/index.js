@@ -5,6 +5,7 @@ import NavMenu from 'components/NavMenu';
 import { NAVLIST } from 'constants/treeNav';
 
 const { Content, Sider } = Layout;
+const PREFIX = 'note';
 
 class Home extends Component{
     constructor(props){
@@ -13,11 +14,11 @@ class Home extends Component{
     }
 	render(){
 		return (
-			<Layout>
-                <Sider width={200} style={{ background: '#fff' }}>
+            <Layout className={PREFIX}>
+                <Sider className={`${PREFIX}-sider`}>
                     <Menu
                         mode="inline"
-                        style={{ height: '100%', borderRight: 0 }}
+                        className={`${PREFIX}-menu`}
                     >
                         <NavMenu 
                             navList={NAVLIST}
@@ -28,8 +29,8 @@ class Home extends Component{
                         />
                     </Menu>
                 </Sider>
-                <Layout style={{ padding: '0 24px 24px' }}>
-                    <Breadcrumb style={{ margin: '16px 0' }}>
+                <Layout>
+                    <Breadcrumb>
                         <Breadcrumb.Item>Home</Breadcrumb.Item>
                         <Breadcrumb.Item>List</Breadcrumb.Item>
                         <Breadcrumb.Item>App</Breadcrumb.Item>

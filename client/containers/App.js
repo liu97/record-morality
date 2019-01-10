@@ -11,6 +11,8 @@ import { authPath } from 'utils/config';
 import { getCookie } from 'utils/cookie';
 import Header from 'containers/Header';
 
+const PREFIX = 'app';
+
 @connect(
 	// eslint-disable-next-line no-unused-vars
 	(state, props) => ({
@@ -24,7 +26,7 @@ class App extends Component {
   render() {
     const authed = getCookie('isLogin') == 'true';
     return (
-      <Layout>
+      <Layout className={`${PREFIX}`}>
         <Header />
         {renderRoutes(this.props.route.routes, authed, authPath)}
       </Layout>
