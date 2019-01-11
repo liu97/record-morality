@@ -31,27 +31,46 @@ export const NAVLIST = [
         to: '/admin/note/folder',
         type: 'tree',
         key: '/admin/note/folder',
-        tree: [
+        id: 0,
+        children: [
             {
                 title: '我的文件夹',
-                key: 1,
+                id: 1,
                 children: [
                     {
                         title: '语文',
-                        key: 2,
+                        id: 2,
                         children: [
                             {
                                 title: '初一',
-                                key: 4,
+                                id: 4,
                                 children: [
-                                    
+                                    {
+                                        title: '初一',
+                                        id: 5,
+                                        children: [
+                                            {
+                                                title: '初一',
+                                                id: 6,
+                                                children: [
+                                                    {
+                                                        title: '初一',
+                                                        id: 7,
+                                                        children: [
+                                                            
+                                                        ],
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                    },
                                 ],
                             },
                         ],
                     },
                     {
                         title: '数学',
-                        key: 3,
+                        id: 3,
                         children: [
                             
                         ],

@@ -9,7 +9,7 @@ class TreeNav extends Component {
     constructor(props){
         super(props);
         this.state = {
-            navTree: props.navTree.tree,
+            tree: props.navTree,
             selectedKeys: []
         }
     }
@@ -31,7 +31,7 @@ class TreeNav extends Component {
 
         const loop = (data, key, callback) => {
             data.forEach((item, index, arr) => {
-                if (`${this.props.navTree.key}/${item.key}` == key) {
+                if (`${this.props.navTree.key}/${item.id}` == key) {
                     return callback(item, index, arr);
                 }
                 if (item.children) {
@@ -39,7 +39,7 @@ class TreeNav extends Component {
                 }
             });
         };
-        const data = _.cloneDeep(this.state.navTree);
+        const data = _.cloneDeep(this.state.tree);
 
         // Find dragObject
         let dragObj;
@@ -77,7 +77,7 @@ class TreeNav extends Component {
             }
         }
         this.setState({
-            navTree: data,
+            tree: data,
         });
 
         this.props.onTreeDrop && this.props.onTreeDrop(info);
@@ -85,7 +85,7 @@ class TreeNav extends Component {
 
     onSelect = (selectedKeys, e) => { // 点击tree节点
         if(selectedKeys.length){
-            this.props.navTree && this.props.history.push(selectedKeys[0]);
+            this.props.history.push(selectedKeys[0]);
             this.props.onTreeSelect && this.props.onTreeSelect(selectedKeys, e);
         }
     }
@@ -102,7 +102,7 @@ class TreeNav extends Component {
         let result = data.map((item) => {
             if (item.children && item.children.length) {
                 return (<TreeNode 
-                            key={`${this.props.navTree.key}/${item.key}`} 
+                            key={`${this.props.navTree.key}/${item.id}`} 
                             title={item.title}
                             icon={(props) => {
                                 return (<Icon type={props.expanded ? 'folder-open' : 'folder'} />)
@@ -112,7 +112,7 @@ class TreeNav extends Component {
                         </TreeNode>);
             }
             return (<TreeNode 
-                        key={`${this.props.navTree.key}/${item.key}`} 
+                        key={`${this.props.navTree.key}/${item.id}`} 
                         title={item.title}  
                         icon={<Icon type= 'folder'/>}
                     />);
@@ -120,6 +120,8 @@ class TreeNav extends Component {
         return result;
     }
     render() {
+        let tree = _.cloneDeep(this.state.tree);
+        tree = _.isArray(tree) ? tree : [tree];
         return (
         <Tree
             showIcon
@@ -131,7 +133,7 @@ class TreeNav extends Component {
             onExpand={this.onExpand}
             onRightClick={this.onRightClick}
         >
-            {this.getTreeNode(this.state.navTree)}
+            {this.getTreeNode(tree)}
         </Tree>
         );
     }

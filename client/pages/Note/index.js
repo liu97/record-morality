@@ -1,17 +1,34 @@
 import './index.less';
 import React, { Component } from 'react';
-import { Layout, Menu, Breadcrumb, Icon, Tree } from 'antd';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { routerActions } from 'react-router-redux';
+import { Layout, Menu, Icon, Tree } from 'antd';
 import NavMenu from 'components/NavMenu';
 import { NAVLIST } from 'constants/treeNav';
+import { fetchFolderTree } from 'actions/note/index';
 
 const { Content, Sider } = Layout;
 const PREFIX = 'note';
 
+@connect(
+    (state, props) => ({
+        config: state.config,
+    }),
+    (dispatch) => ({
+        actions: bindActionCreators(routerActions, dispatch),
+        dispatch: dispatch
+    })
+)
 class Home extends Component{
     constructor(props){
 		super(props);
-		
     }
+
+    componentDidMount(){
+        this.props.dispatch(fetchFolderTree());
+    }
+
 	render(){
 		return (
             <Layout className={PREFIX}>
@@ -30,11 +47,6 @@ class Home extends Component{
                     </Menu>
                 </Sider>
                 <Layout>
-                    <Breadcrumb>
-                        <Breadcrumb.Item>Home</Breadcrumb.Item>
-                        <Breadcrumb.Item>List</Breadcrumb.Item>
-                        <Breadcrumb.Item>App</Breadcrumb.Item>
-                    </Breadcrumb>
                     <Content style={{
                         background: '#fff', padding: 24, margin: 0, minHeight: 280,
                     }}

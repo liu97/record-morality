@@ -7,6 +7,7 @@
     min-height: calc(100% - 64px);
     background-color: transparent;
     .note-sider{
+        border-top-left-radius: 3px;
         background-color: rgba(255, 255, 255, 0.6);
         margin-left: 20px;
         font-size: @menuFontSize;
@@ -18,9 +19,16 @@
             background-color: transparent;
             .ant-menu-item {
                 margin: 0;
-                padding-left: 34px !important;
                 color: @menuFontColor;
                 font-size: @menuFontSize;
+                &:first-child {
+                    padding: 0 !important;
+                    height: 50px;
+                    border-bottom: 1px solid #ccc;
+                    line-height: 50px;
+                    text-align: center;
+                    border-top-left-radius: 3px;
+                }
                 a {
                     display: inline-block;
                     color: @menuFontColor;
@@ -28,7 +36,7 @@
                 }
             }
             .ant-menu-item-active {
-                background-color: #99CCFF;
+                background-color: #e4edff;
             }
             .ant-menu-item-selected {
                 background-color: @themeColor;
@@ -60,7 +68,7 @@
                         padding-left: 30px;
                         color: @menuFontColor;
                         &:hover {
-                            background-color: #99CCFF;
+                            background-color: #e4edff;
                         }
                         .ant-tree-iconEle{
                             line-height: @menuLineHeight;
