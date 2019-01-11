@@ -22,12 +22,12 @@ class Home extends Component{
 		return result;
     }
     onItemClick = (item, e) => {
-        if(item.type && item.type != 'tree'){
+        if(item.type && item.type == 'nav'){
             this.setState({
                 selectedKeys : [item.key]
             })
         }
-        else{
+        else if(!item.type){
             this.setState({
                 selectedKeys : item
             })

@@ -1,5 +1,11 @@
 export const NAVLIST = [
     {
+        title: '添加笔记',
+        icon: 'plus',
+        type: 'text',
+        key: 'new',
+    },
+    {
         title: '最新笔记',
         to: '/admin/note/recent',
         icon: 'profile',
