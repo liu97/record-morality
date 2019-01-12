@@ -1,4 +1,5 @@
-import './index.less'
+import './index.less';
+import './style/reset.css';
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';

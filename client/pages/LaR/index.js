@@ -38,7 +38,7 @@ class Home extends Component{
 		if(result.success){
 			setCookie('isLogin', true);
 			window.localStorage.setItem('access_token', result.data);
-			const bcakURL = this.props.location.state ? this.props.location.state.from.pathname : '/admin';
+			const bcakURL = this.props.location.state ? this.props.location.state.from.pathname : '/admin/note/';
 			this.props.history.push(bcakURL);
 		}
 		else{

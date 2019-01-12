@@ -1,3 +1,5 @@
+import Error from 'pages/Error';
+import ErrorPage from 'pages/Error/ErrorPage';
 import {
   AsyncLaR,
   AsyncApp,
@@ -44,7 +46,7 @@ const routes = [
             component: AsyncNote,
           },
           {
-            component: AsyncError,
+            component: Error,
             requiresAuth: false,
           },
         ]
@@ -71,20 +73,24 @@ const routes = [
             component: AsyncNote,
           },
           {
-            component: AsyncError,
+            component: Error,
             requiresAuth: false,
           },
         ]
+      },
+      {
+        component: Error,
+        requiresAuth: false,
       }
     ]
   },
   {
     path: '/ErrorPage',
-    component: AsyncErrorPage,
+    component: ErrorPage,
     requiresAuth: false,
   },
   {
-    component: AsyncError,
+    component: Error,
     requiresAuth: false,
   },
 ]

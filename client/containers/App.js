@@ -1,4 +1,3 @@
-import '../style/reset.css';
 import './index.less';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';

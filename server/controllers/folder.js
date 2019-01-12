@@ -120,6 +120,7 @@ const folderContrallers = {
         }
 
         let query = _.cloneDeep(ctx.request.query);
+        console.log(ctx.header.authorization)
         let folderInfo = await folderService.getFolderInfo(query);
 
         if(folderInfo.isError){
