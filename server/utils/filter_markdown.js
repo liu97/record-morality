@@ -6,4 +6,4 @@ async function filter_markdown(content){
 	return content;
 }
 
-module.exports = filter_markdown;
+module.exports = {filter_markdown};

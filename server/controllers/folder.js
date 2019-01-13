@@ -27,7 +27,7 @@ const folderContrallers = {
             result.msg = "未传入用户id";
         }
         else{
-            let folderInfo = await folderService.addFolder(body);
+            let folderInfo = await folderService.addFolder(body, ctx);
 
             if(folderInfo.isError){
                 ctx.status = 404;

@@ -4,77 +4,51 @@ const db = require('../sequelizes/db.js');
 const User = require('../models/user');
 const Folder = require('../models/folder');
 const Note = require('../models/note');
-const Opt = require('./opt');
+const opt = require('./opt');
+const token = require('../utils/token');
 
 const folderServices ={
-	async addFolder(info){ // 添加文件夹
+	async addFolder(info, ctx){ // 添加文件夹
+		const userId = ctx && token.getTokenMessage().id;
 		let folderInfo = _.cloneDeep(info);
 		let result = {
 			isError: true,
 			msg: "代码逻辑有问题",
 		};
 
-		let user = await Opt.findAll(User, // 先获取外键userId对应的user对象
-			{
-				where: {
-					id: folderInfo.userId
-				}
-			}
-		);
+		if(!folderInfo.name){
+			folderInfo.name = "新建文件夹";
+		}
 
-		if(user.length){ // 外键对应的用户存在
-			if(!folderInfo.name){
-				folderInfo.name = "新建文件夹";
-			}
-
-			if(folderInfo.parentId){ // 如果传入父文件夹，判断父文件夹是否存在
-				var parentFolder = await Opt.findAll(Folder,
-					{
-						where: {
-							id: folderInfo.parentId
-						}
+		if(folderInfo.parentId){ // 如果传入父文件夹，判断父文件夹是否存在
+			var parentFolder = await opt.findAll(Folder,
+				{
+					where: {
+						id: folderInfo.parentId
 					}
-				)
-				if(!parentFolder.isError && parentFolder.length){
-					var folder = await Opt.create(Folder, folderInfo);
-				}
-				else{
-					var folder = {
-						isError: true,
-						msg: '父文件夹不存在',
-					}
-				}
+				},
+				userId
+			)
+			if(!parentFolder.isError && parentFolder.length){
+				folderInfo.userId = userId;
+				result = await opt.create(Folder, folderInfo);
 			}
 			else{
-				var folder = await Opt.create(Folder, folderInfo);
-			}
-
-			if(!folder.isError){
-				try{
-					result = user[0].addFolder(folder);
+				result = parentFolder.isError ? parentFolder : {
+					isError: true,
+					msg: '父文件夹不存在',
 				}
-				catch(err){
-					result = {
-						isError: true,
-						msg: err,
-					};
-				}
-			}
-			else{
-				result = folder;
 			}
 		}
 		else{
-			result = {
-				isError: true,
-				msg: '用户不存在',
-			};
+			result = await opt.create(Folder, folderInfo);
 		}
 
 		return result;
 	},
 
-	async deleteFolder(info){ // 删除文件夹
+	async deleteFolder(info, ctx){ // 删除文件夹
+		const userId = ctx && token.getTokenMessage().id;
 		let folderInfo = _.cloneDeep(info);
 		let result = {
 			isError: true,
@@ -83,12 +57,13 @@ const folderServices ={
 		let dFolderCond = [];
 		let needDeleteList = []; // 需要删除的元素（包括folder和note）
 
-		dFolderCond = await Opt.findAll(Folder,  // 查询所有需要删除的folder
+		dFolderCond = await opt.findAll(Folder,  // 查询所有需要删除的folder
 			{
 				where: {
 					...folderInfo
 				}
-			}
+			},
+			userId
 		);
 		if(dFolderCond.isError){ // 预防查询结果出错
 			result = dFolderCond;
@@ -101,12 +76,13 @@ const folderServices ={
 				for(let i = 0; i < dFolderCond.length; i++){
 					let item = dFolderCond[i];
 
-					let childrenFolder = await Opt.findAll(Folder, // 找到所有需要删除的folder的子folder
+					let childrenFolder = await opt.findAll(Folder, // 找到所有需要删除的folder的子folder
 						{
 							where: {
 								parentId: item.dataValues.id
 							}
-						}	
+						},
+						userId	
 					);
 
 					if(childrenFolder.isError){ // 预防查询结果出错
@@ -117,12 +93,13 @@ const folderServices ={
 					else{
 						childrenList.push(...childrenFolder);
 				
-						let childrenNote = await Opt.findAll(Note, // 找到所有需要删除的folder的子note
+						let childrenNote = await opt.findAll(Note, // 找到所有需要删除的folder的子note
 							{
 								where: {
 									folderId: item.dataValues.id
 								}
-							}	
+							},
+							userId
 						);
 						if(childrenNote.isError){ // 预防查询结果出错
 							result = childrenNote;
@@ -162,33 +139,36 @@ const folderServices ={
 		return result;
 	},
 
-	async updateFolderInfo(info){ // 修改文件夹
+	async updateFolderInfo(info, ctx){ // 修改文件夹
+		const userId = ctx && token.getTokenMessage().id;
 		let folderInfo = _.cloneDeep(info);
 		let result = {
 			isError: true,
 			msg: "代码逻辑有问题",
 		};
-
-		result = await Opt.update(Folder, folderInfo,
+		result = await opt.update(Folder, folderInfo,
 			{
 				where: {
 					id: folderInfo.id
 				}
-			}
+			},
+			userId
 		);
 		
 		return result;
 	},
 
-	async getFolderInfo(info){ // 获取文件夹信息
+	async getFolderInfo(info, ctx){ // 获取文件夹信息
+		const userId = ctx && token.getTokenMessage().id;
 		let folderInfo = _.cloneDeep(info);
 
-		let result = await Opt.findAll(Folder,
+		let result = await opt.findAll(Folder,
 			{
 				where: {
 					...folderInfo
 				}
-			}
+			},
+			userId
 		);
         
 		if(!result.isError){

@@ -24,7 +24,6 @@ describe('#test koa app', () => {
         //     catch(err){
         //         throw err;
         //     }
-
         // });
 
         // it('#test POST /folder/addFolder', async () => {
@@ -37,7 +36,6 @@ describe('#test koa app', () => {
         //     catch(err){
         //         throw err;
         //     }
-
         // });
 
         // it('#test DEL /folder/deleteFolder', async () => {
@@ -50,7 +48,6 @@ describe('#test koa app', () => {
         //     catch(err){
         //         throw err;
         //     }
-
         // });
 
         // it('#test update /folder/updateFolderInfo', async () => {
@@ -63,19 +60,17 @@ describe('#test koa app', () => {
         //     catch(err){
         //         throw err;
         //     }
-
         // });
 
-        it('#test get /folder/openFolder', async () => {
-            try{
-                let res = await request(server)
-                                .get('/folder/openFolder?id=4')
-                                .expect(200);
-            }
-            catch(err){
-                throw err;
-            }
-
-        });
+        // it('#test get /folder/openFolder', async () => {
+        //     try{
+        //         let res = await request(server)
+        //                         .get('/folder/openFolder?id=4')
+        //                         .expect(200);
+        //     }
+        //     catch(err){
+        //         throw err;
+        //     }
+        // });
     });
 });
