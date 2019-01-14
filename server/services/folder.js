@@ -9,7 +9,7 @@ const token = require('../utils/token');
 
 const folderServices ={
 	async addFolder(info, ctx){ // 添加文件夹
-		const userId = ctx && token.getTokenMessage().id;
+		const userId = ctx && token.getTokenMessage(ctx).id;
 		let folderInfo = _.cloneDeep(info);
 		let result = {
 			isError: true,
@@ -19,6 +19,7 @@ const folderServices ={
 		if(!folderInfo.name){
 			folderInfo.name = "新建文件夹";
 		}
+		folderInfo.userId = userId;
 
 		if(folderInfo.parentId){ // 如果传入父文件夹，判断父文件夹是否存在
 			var parentFolder = await opt.findAll(Folder,
@@ -30,7 +31,6 @@ const folderServices ={
 				userId
 			)
 			if(!parentFolder.isError && parentFolder.length){
-				folderInfo.userId = userId;
 				result = await opt.create(Folder, folderInfo);
 			}
 			else{
@@ -48,7 +48,7 @@ const folderServices ={
 	},
 
 	async deleteFolder(info, ctx){ // 删除文件夹
-		const userId = ctx && token.getTokenMessage().id;
+		const userId = ctx && token.getTokenMessage(ctx).id;
 		let folderInfo = _.cloneDeep(info);
 		let result = {
 			isError: true,
@@ -140,7 +140,7 @@ const folderServices ={
 	},
 
 	async updateFolderInfo(info, ctx){ // 修改文件夹
-		const userId = ctx && token.getTokenMessage().id;
+		const userId = ctx && token.getTokenMessage(ctx).id;
 		let folderInfo = _.cloneDeep(info);
 		let result = {
 			isError: true,
@@ -159,7 +159,7 @@ const folderServices ={
 	},
 
 	async getFolderInfo(info, ctx){ // 获取文件夹信息
-		const userId = ctx && token.getTokenMessage().id;
+		const userId = ctx && token.getTokenMessage(ctx).id;
 		let folderInfo = _.cloneDeep(info);
 
 		let result = await opt.findAll(Folder,

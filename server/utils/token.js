@@ -1,18 +1,17 @@
 const jwt = require('jsonwebtoken');
 const util = require('util');
-const verify = util.promisify(jwt.verify) // 解密
 const config = require('../../config');
 // 获取解析token存储的信息
 function getTokenMessage(ctx){
-    const dataString = ctx.header.authorization;
+    const dataString = ctx.request.header.authorization;
     try {
         const dataArr = dataString.split(' ');
         const token = dataArr[1];
-        let playload = verify(token, config.secret)
-        const { data } = playload;
-        return data;
+        let playload = jwt.verify(token, config.secret);
+        return playload;
 
     } catch (err) {
+        console.log(err);
         return {
             isError: true,
             msg: err,

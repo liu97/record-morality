@@ -15,6 +15,39 @@ const file = require('../utils/file');
 
 
 const noteContrallers = {
+
+    async addNoteInfo(ctx){ // 增加笔记
+        let result = {
+			success: false,
+			msg: '',
+			data: null,
+        }
+
+        let body = _.cloneDeep(ctx.request.body);
+        if(!body.noteType){
+            ctx.status = 404;
+            result.msg = "未传入文件类型";
+        }
+        else{
+            let noteInfo = await noteService.addNote(body, ctx);
+
+            if(noteInfo.isError){
+                ctx.status = 404;
+                result.msg = noteInfo.msg;
+            }
+            else{
+                result = {
+                    success: true,
+                    msg: 'It is 200 status',
+                    data: noteInfo
+                }
+            }
+        }
+
+        console.log(result)
+        ctx.body = result;
+
+    },
     
     async getNoteInfo(ctx){ // 获取笔记信息
         let result = {
@@ -24,7 +57,13 @@ const noteContrallers = {
         }
 
         let query = _.cloneDeep(ctx.request.query);
+
         delete query.content; // 过滤conten参数
+        if(query.fuzzy_name){
+            query.name = {like: `%${query.fuzzy_name}%`}
+            delete query.fuzzy_name;
+        }
+
         let noteInfo = await noteService.getNoteInfo(query);
 
         if(noteInfo.isError){
@@ -49,6 +88,5 @@ const noteContrallers = {
         ctx.body = result;
     },
     
-
 }
 module.exports = noteContrallers;

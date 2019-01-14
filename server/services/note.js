@@ -1,14 +1,57 @@
 const _ = require('lodash')
 
 const Note = require('../models/note');
-const Opt = require('./opt');
+const Folder = require('../models/folder');
+const opt = require('./opt');
 const folderService = require('./folder');
+const token = require('../utils/token');
 
 const noteServices ={
+
+	async addNote(info, ctx){
+		const userId = ctx && token.getTokenMessage(ctx).id;
+		let noteInfo = _.cloneDeep(info);
+		let result = {
+			isError: true,
+			msg: "代码逻辑有问题",
+		};
+
+		if(!noteInfo.title){
+			noteInfo.title = "新建文档";
+		}
+		noteInfo.userId = userId;
+
+		if(noteInfo.folderId){ // 如果传入所在文件夹id
+			var folder = await opt.findAll(Folder,
+				{
+					where: {
+						id: noteInfo.folderId
+					}
+				},
+				userId
+			)
+			if(!folder.isError && folder.length){
+				
+				result = await opt.create(Note, noteInfo);
+			}
+			else{
+				result = folder.isError ? folder : {
+					isError: true,
+					msg: '文件夹不存在',
+				}
+			}
+		}
+		else{
+			result = await opt.create(Note, noteInfo);
+		}
+
+		return result;
+	},
+
 	async getNoteInfo(info){
 		let noteInfo = _.cloneDeep(info);
 
-		let notes = await Opt.findAll(Note,
+		let notes = await opt.findAll(Note,
 			{
 				where: {
 					...noteInfo

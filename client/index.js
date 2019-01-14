@@ -1,6 +1,7 @@
 import './index.less';
 import './style/reset.css';
 import 'babel-polyfill';
+import 'url-search-params-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {HashRouter as Router} from 'react-router-dom';

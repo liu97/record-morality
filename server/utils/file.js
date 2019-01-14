@@ -1,17 +1,64 @@
 const fs = require('fs');
 const path = require('path');
 const config = require('../../config')
+
 /**
  * 读取文件
  * @param  {[String]} filePath [文件路径]
  * @return {[String]}          [文件内容]
  */
-async function getFile ( filePath ) {
+async function readFile ( filePath ) {
+	let content, result = {
+		isError: true,
+		msg: ''
+	}
 	if(!path.isAbsolute(filePath)){
 		filePath = path.join(config.root,filePath);
 	}
-    let content = await fs.readFile(filePath, 'utf-8');
-    return content.toString();
+	
+    content = await new Promise(function (resolve, reject) {
+		fs.readFile(filePath, 'utf-8', function(err, data) {
+			if (err) reject(err);
+			else resolve(data);
+		});
+	});
+
+	result = {
+		absolutePath: filePath,
+		relativePath: filePath.replace(config.root,''),
+		content
+	}
+    console.log( result );
+}
+
+async function writeFile(filePath, text){
+	let content, result = {
+		isError: true,
+		msg: ''
+	}
+	if(!path.isAbsolute(filePath)){
+		filePath = path.join(config.root,filePath);
+	}
+
+	if(await mkdir(filePath, true)){ // 判断是否存在路径，不存在的话就创建
+		content = await new Promise(function(resolve, reject) {
+			fs.writeFile(filePath, text, function(err, data) {
+				if (err) reject(err);
+				else resolve(true);
+			});
+		});
+
+		result = {
+			absolutePath: filePath,
+			relativePath: filePath.replace(config.root,''),
+			content
+		}
+	}
+	else{
+		result.msg = '路径有问题'
+	}
+	
+	console.log( result );
 }
 
 /**
@@ -27,17 +74,23 @@ async function mkdir(dirname, hasFileDir) {
 	if(!path.isAbsolute(dirname)){
 		dirname = path.join(config.root,dirname);
 	}
-    if (await fs.exists(dirname)) {
+    if (fs.existsSync(dirname)) {
         return true;
     } 
     else if (await mkdir(path.dirname(dirname))) {
-        await fs.mkdir(dirname);
-        return true;
+        await new Promise(function (resolve, reject) {
+			fs.mkdir(dirname, function(err, data) {
+				if (err) reject(err);
+				else resolve(true);
+			});
+		});
+		return true;
     }
     return false;
 }
 
 module.exports = {
-	getFile,
+	readFile,
+	writeFile,
 	mkdir
 }

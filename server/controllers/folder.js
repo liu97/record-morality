@@ -5,11 +5,12 @@
 * @Email: chuanfuliu@sohu-inc.com
 */
 const _ = require('lodash');
+const token = require('../utils/token');
 
 // const birthdayService = require('../services/birthday');
 const folderService = require('../services/folder');
 const noteService = require('../services/note');
-const userService = require('../services/user');
+// const userService = require('../services/user');
 
 
 const folderContrallers = {
@@ -21,24 +22,17 @@ const folderContrallers = {
         }
 
         let body = _.cloneDeep(ctx.request.body);
+        let folderInfo = await folderService.addFolder(body, ctx);
 
-        if(!body.userId){
+        if(folderInfo.isError){
             ctx.status = 404;
-            result.msg = "未传入用户id";
+            result.msg = folderInfo.msg;
         }
         else{
-            let folderInfo = await folderService.addFolder(body, ctx);
-
-            if(folderInfo.isError){
-                ctx.status = 404;
-                result.msg = folderInfo.msg;
-            }
-            else{
-                result = {
-                    success: true,
-                    msg: 'It is 200 status',
-                    data: folderInfo
-                }
+            result = {
+                success: true,
+                msg: 'It is 200 status',
+                data: folderInfo
             }
         }
 
@@ -60,7 +54,7 @@ const folderContrallers = {
             result.msg = "未传入文件夹id";
         }
         else{
-            let folderInfo = await folderService.deleteFolder(body);
+            let folderInfo = await folderService.deleteFolder(body, ctx);
 
             if(folderInfo.isError){
                 ctx.status = 404;
@@ -94,7 +88,7 @@ const folderContrallers = {
             result.msg = "文件不能成为自己的子文件夹";
         }
         else{
-            let folderInfo = await folderService.updateFolderInfo(body);
+            let folderInfo = await folderService.updateFolderInfo(body, ctx);
 
             if(folderInfo.isError){
                 ctx.status = 404;
@@ -112,22 +106,37 @@ const folderContrallers = {
         ctx.body = result;
     },
 
-    async getFolderInfo(ctx){ // 获取文件夹信息
+    async findChildList(folders, ctx){ // 辅助函数（返回文件夹树结构）
+        for(let i = 0; i< folders.length; i++){
+            folders[i].childFolder = await folderService.getFolderInfo({parentId: folders[i].id}, ctx);
+            if(folders[i].childFolder.isError){
+                ctx.status = 404;
+                ctx.body = {
+                    success: false,
+                    message: folders[i].childFolder.msg
+                }
+                return;
+            }
+            await folderContrallers.findChildList(folders[i].childFolder, ctx);
+        }
+    },
+
+    async getFolderTree(ctx){ // 获取文件夹树信息
+        const userId = ctx && token.getTokenMessage(ctx).id;
         let result = {
 			success: false,
 			msg: '',
 			data: null,
         }
 
-        let query = _.cloneDeep(ctx.request.query);
-        console.log(ctx.header.authorization)
-        let folderInfo = await folderService.getFolderInfo(query);
-
+        let folderInfo = await folderService.getFolderInfo({userId, parentId:null}, ctx);
         if(folderInfo.isError){
             ctx.status = 404;
             result.msg = folderInfo.msg;
         }
         else{
+            await folderContrallers.findChildList(folderInfo, ctx);
+            
             result = {
                 success: true,
                 msg: 'It is 200 status',
@@ -138,7 +147,7 @@ const folderContrallers = {
         ctx.body = result;
     },
     
-    async openFolder(ctx){ //展开文件夹
+    async openFolder(ctx){ //打开文件夹
         let result = {
 			success: false,
 			msg: '',
@@ -152,27 +161,28 @@ const folderContrallers = {
             result.msg = "未传入文件夹id";
         }
         else{
-            let folder = await folderService.getFolderInfo({
-                parentId: query.id,
-            });
+            let folder = await folderService.getFolderInfo({id: query.id}, ctx);
 
-            let note = await noteService.getNoteInfo({
-                folderId: query.id,
-            });
+            let childFolder = await folderService.getFolderInfo({parentId: query.id}, ctx);
 
-            if(!note.isError && !folder.isError){
+            let childNote = await noteService.getNoteInfo({folderId: query.id}, ctx);
+
+            if(!childNote.isError && !childFolder.isError){
                 result = {
                     success: true,
                     msg: 'It is 200 status',
                     data: {
                         folder,
-                        note,
+                        children: {
+                            childFolder,
+                            childNote,
+                        }
                     }
                 }
             }
             else{
-                note.isError && (result.msg = result.msg + note.isError);
-                folder.isError && (result.msg = result.msg +' '+ folder.isError);
+                childNote.isError && (result.msg = result.msg + childNote.isError);
+                childFolder.isError && (result.msg = result.msg +' '+ childFolder.isError);
             }
         }
 
