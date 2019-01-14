@@ -16,21 +16,30 @@ async function readFile ( filePath ) {
 		filePath = path.join(config.root,filePath);
 	}
 	
-    content = await new Promise(function (resolve, reject) {
-		fs.readFile(filePath, 'utf-8', function(err, data) {
-			if (err) reject(err);
-			else resolve(data);
+    try{
+		content = await new Promise(function (resolve, reject) {
+			fs.readFile(filePath, 'utf-8', function(err, data) {
+				if (err) reject(err);
+				else resolve(data);
+			});
 		});
-	});
-
-	result = {
-		absolutePath: filePath,
-		relativePath: filePath.replace(config.root,''),
-		content
+		result = {
+			absolutePath: filePath,
+			relativePath: filePath.replace(`${config.root}/`,''),
+			content
+		}
 	}
-    console.log( result );
+	catch(err){
+		result.msg = err
+	}
+	return result;
 }
 
+/**
+ * 写入文件函数
+ * @param {[String]} filePath 
+ * @param {[String]} text 
+ */
 async function writeFile(filePath, text){
 	let content, result = {
 		isError: true,
@@ -41,24 +50,28 @@ async function writeFile(filePath, text){
 	}
 
 	if(await mkdir(filePath, true)){ // 判断是否存在路径，不存在的话就创建
-		content = await new Promise(function(resolve, reject) {
-			fs.writeFile(filePath, text, function(err, data) {
-				if (err) reject(err);
-				else resolve(true);
+		try{
+			content = await new Promise(function(resolve, reject) {
+				fs.writeFile(filePath, text, function(err, data) {
+					if (err) reject(err);
+					else resolve(true);
+				});
 			});
-		});
-
-		result = {
-			absolutePath: filePath,
-			relativePath: filePath.replace(config.root,''),
-			content
+	
+			result = {
+				absolutePath: filePath,
+				relativePath: filePath.replace(`${config.root}/`,''),
+				content
+			}
+		}
+		catch(err){
+			result.msg = err;
 		}
 	}
 	else{
 		result.msg = '路径有问题'
 	}
-	
-	console.log( result );
+	return result;
 }
 
 /**

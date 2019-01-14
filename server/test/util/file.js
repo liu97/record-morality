@@ -1,5 +1,6 @@
 const file = require('../../utils/file');
 
-file.writeFile('/static/note/1', {});
+// file.writeFile('static/note/1.js', "hahah");
 
-file.readFile('/static/note/1.js')
+// file.readFile('/static/note/11.js')
+console.log(__dirname)

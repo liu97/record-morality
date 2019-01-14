@@ -31,7 +31,7 @@ describe('#test koa app', () => {
             try{
                 let res = await request(server)
                                 .post('/note/addNoteInfo')
-                                .send({name:'liu97', password:'liu970923', email:'1139472029@qq.com'})
+                                .send({title:'liu97', noteType:'md', content:'1139472029@qq.com'})
                                 .set('Authorization', 'Bearer ' + token) // header处加入token验证
                                 .expect(200);
             }

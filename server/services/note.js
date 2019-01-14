@@ -16,9 +16,6 @@ const noteServices ={
 			msg: "代码逻辑有问题",
 		};
 
-		if(!noteInfo.title){
-			noteInfo.title = "新建文档";
-		}
 		noteInfo.userId = userId;
 
 		if(noteInfo.folderId){ // 如果传入所在文件夹id
