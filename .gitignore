@@ -1,6 +1,5 @@
 node_modules/
-resources/
-static/upload_images/
+static/
 .vscode/
 *.log
 dist/
