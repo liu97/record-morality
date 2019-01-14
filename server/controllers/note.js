@@ -40,7 +40,7 @@ const noteContrallers = {
             result.msg = "未传入文件内容";
         }
         else{
-            let writeMessage = await file.writeFile(`static/${userId}/note/${datatime.parseStampToFormat('YYYY/MM/DD')}/${body.title}${+new Date()}.${body.noteType}`, body.content)
+            let writeMessage = await file.writeFile(`static/users/${userId}/note/${datatime.parseStampToFormat('YYYY/MM/DD')}/${body.title}${+new Date()}.${body.noteType}`, body.content)
             if(writeMessage.isError){
                 ctx.status = 404;
                 result.msg = writeMessage.msg;
