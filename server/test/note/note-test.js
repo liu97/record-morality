@@ -19,7 +19,7 @@ describe('#test koa app', () => {
         // it('#test GET /note', async () => {
         //     try{
         //         let res = await request(server)
-        //                         .get('/note?id=4&content=true')
+        //                         .get('/note?id=14&content=true')
         //                         .expect(200);
         //     }
         //     catch(err){
@@ -27,11 +27,37 @@ describe('#test koa app', () => {
         //     }
         // });
 
-        it('#test POST /note/addNoteInfo', async () => {
+        // it('#test POST /note/addNoteInfo', async () => {
+        //     try{
+        //         let res = await request(server)
+        //                         .post('/note/addNoteInfo')
+        //                         .send({title:'liu97', noteType:'md'})
+        //                         .set('Authorization', 'Bearer ' + token) // header处加入token验证
+        //                         .expect(200);
+        //     }
+        //     catch(err){
+        //         throw err;
+        //     }
+        // });
+
+        // it('#test DELETE /note/deleteNoteInfo', async () => {
+        //     try{
+        //         let res = await request(server)
+        //                         .del('/note/deleteNoteInfo')
+        //                         .send({id:3})
+        //                         .set('Authorization', 'Bearer ' + token) // header处加入token验证
+        //                         .expect(200);
+        //     }
+        //     catch(err){
+        //         throw err;
+        //     }
+        // });
+
+        it('#test PUT /note/updateNoteInfo', async () => {
             try{
                 let res = await request(server)
-                                .post('/note/addNoteInfo')
-                                .send({title:'liu97', noteType:'md', content:'1139472029@qq.com'})
+                                .put('/note/updateNoteInfo')
+                                .send({title:'liuchaunfu', noteType:'md', id: 14, content: 'hahha'})
                                 .set('Authorization', 'Bearer ' + token) // header处加入token验证
                                 .expect(200);
             }
@@ -39,18 +65,5 @@ describe('#test koa app', () => {
                 throw err;
             }
         });
-
-        // it('#test POST /note/login', async () => {
-        //     try{
-        //         let res = await request(server)
-        //                         .post('/note/login')
-        //                         .send({name:'liu97', password:'liu970923'})
-        //                         .expect(200);
-        //     }
-        //     catch(err){
-        //         throw err;
-        //     }
-
-        // });
     });
 });

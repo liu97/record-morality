@@ -1,5 +1,5 @@
 node_modules/
-static/users/
+resource/
 .vscode/
 *.log
 dist/

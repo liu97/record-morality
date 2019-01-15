@@ -60,7 +60,7 @@ const create = async function(model, message){
 }
 
 /**
- * 删除表数据，未删除，删除标志为is_delete:true
+ * 删除表数据
  * @param  {[Object]} model   [对应的表模型]
  * @param  {[Object|Array]} condition [对应删除条件，删除多行时键值对的值为数组]
  * @return {[Array]}         [修改数据的行数]

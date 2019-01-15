@@ -40,7 +40,7 @@ const noteContrallers = {
             result.msg = "未传入文件内容";
         }
         else{
-            let writeMessage = await file.writeFile(`static/users/${userId}/note/${datatime.parseStampToFormat('YYYY/MM/DD')}/${body.title}${+new Date()}.${body.noteType}`, body.content)
+            let writeMessage = await file.writeFile(`resource/users/${userId}/note/${datatime.parseStampToFormat('YYYY/MM/DD')}/${body.title}${+new Date()}.${body.noteType}`, body.content)
             if(writeMessage.isError){
                 ctx.status = 404;
                 result.msg = writeMessage.msg;
@@ -68,6 +68,85 @@ const noteContrallers = {
         ctx.body = result;
 
     },
+
+    async deleteNoteInfo(ctx){ // 删除note
+        let result = {
+			success: false,
+			msg: '',
+			data: null,
+        }
+
+        let body = _.cloneDeep(ctx.request.body);
+
+        if(!body.id){
+            ctx.status = 404;
+            result.msg = "未传入文件id";
+        }
+        else{
+            let noteInfo = await noteService.deleteNote(body, ctx);
+
+            if(noteInfo.isError){
+                ctx.status = 404;
+                result.msg = noteInfo.msg;
+            }
+            else{
+                result = {
+                    success: true,
+                    msg: 'It is 200 status',
+                    data: noteInfo
+                }
+            }
+        }
+        console.log(result);
+        ctx.body = result;
+
+    },
+
+    async updateNoteInfo(ctx){ // 修改note
+        let result = {
+			success: false,
+			msg: '',
+			data: null,
+        }
+
+        let body = _.cloneDeep(ctx.request.body);
+
+        if(!body.id){
+            ctx.status = 404;
+            result.msg = "未传入文件id";
+        }
+        else{
+            if(body.content){ // 如果传了笔记内容，更新笔记内容
+                let oldNote = await noteService.getNoteInfo({id: body.id});
+                if(!oldNote.isError && oldNote.length){
+                    let writeMessage = await file.writeFile(oldNote[0].notePath, body.content);
+                    if(writeMessage.isError){
+                        ctx.status = 404;
+                        result.msg = writeMessage.msg;
+                    }
+                }
+                else{
+                    body.status = 404;
+                    result.msg = oldNote.isError ? oldNote.msg : '需要修改的文件不存在';
+                }
+            }
+
+            let noteInfo = await noteService.updateNote(body, ctx);
+            if(noteInfo.isError){
+                ctx.status = 404;
+                result.msg = noteInfo.msg;
+            }
+            else{
+                result = {
+                    success: true,
+                    msg: 'It is 200 status',
+                    data: noteInfo
+                }
+            }
+        }
+        console.log(result);
+        ctx.body = result;
+    },
     
     async getNoteInfo(ctx){ // 获取笔记信息
         let result = {
@@ -94,7 +173,8 @@ const noteContrallers = {
             if(ctx.request.query.content){
                 for(let i = 0; i < noteInfo.length; i++){
                     let item = noteInfo[i];
-                    item.notePath && (item.content = await file.readFile(item.notePath));
+                    let readMessage = await file.readFile(item.notePath);
+                    item.content = readMessage.isError ? readMessage.msg : readMessage.content;
                 }
             }
             result = {

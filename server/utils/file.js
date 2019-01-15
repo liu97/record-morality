@@ -25,7 +25,7 @@ async function readFile ( filePath ) {
 		});
 		result = {
 			absolutePath: filePath,
-			relativePath: filePath.replace(`${config.root}/`,''),
+			relativePath: filePath.replace(`${config.root}`,'').replace(/^(\/|\\)/, ''),
 			content
 		}
 	}
@@ -60,7 +60,7 @@ async function writeFile(filePath, text){
 	
 			result = {
 				absolutePath: filePath,
-				relativePath: filePath.replace(`${config.root}/`,''),
+				relativePath: filePath.replace(`${config.root}`,'').replace(/^(\/|\\)/, ''),
 				content
 			}
 		}

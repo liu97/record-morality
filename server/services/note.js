@@ -28,7 +28,6 @@ const noteServices ={
 				userId
 			)
 			if(!folder.isError && folder.length){
-				
 				result = await opt.create(Note, noteInfo);
 			}
 			else{
@@ -45,7 +44,37 @@ const noteServices ={
 		return result;
 	},
 
-	async getNoteInfo(info){
+	async deleteNote(info, ctx){
+		const userId = ctx && token.getTokenMessage(ctx).id;
+		let noteInfo = _.cloneDeep(info);
+
+		let result = await opt.destroy(Note, {
+			where: {
+				...noteInfo
+			}
+		}, userId)
+		return result;
+	},
+
+	async updateNote(info, ctx){
+		const userId = ctx && token.getTokenMessage(ctx).id;
+		let noteInfo = _.cloneDeep(info);
+
+		let result = await opt.update(Note, 
+			{
+				...noteInfo
+			},
+			{
+				where: {
+					id: noteInfo.id
+				}
+			}
+		, userId)
+		return result;
+	},
+
+	async getNoteInfo(info, ctx){
+		const userId = ctx && token.getTokenMessage(ctx).id;
 		let noteInfo = _.cloneDeep(info);
 
 		let notes = await opt.findAll(Note,
@@ -53,21 +82,22 @@ const noteServices ={
 				where: {
 					...noteInfo
 				}
-			}
+			},
+			userId
 		)
         
 		if(!notes.isError){
 			let result = [];
 			for(let i = 0; i < notes.length; i++){
 				let note = _.cloneDeep(notes[i].dataValues);
-				let parentFolder = await folderService.getFolderInfo({id: note.folderId});// 获取note的父文件夹
+				let folder = await folderService.getFolderInfo({id: note.folderId}, ctx);// 获取note的父文件夹
 
-				if(!parentFolder.isError){
-					note.noteFrom = parentFolder[0].name; 
+				if(!folder.isError && folder.length){
+					note.noteFrom = folder[0].name; 
 
-					while(parentFolder[0].parentId){
-						parentFolder = await folderService.getFolderInfo({id:parentFolder[0].parentId});
-						note.noteFrom = parentFolder[0].name + ">" + note.noteFrom;
+					while(folder[0].parentId){
+						folder = await folderService.getFolderInfo({id:folder[0].parentId}, ctx);
+						note.noteFrom = folder[0].name + ">" + note.noteFrom;
 					}
 					
 					result.push(note);
@@ -75,7 +105,7 @@ const noteServices ={
 				else{
 					result = {
 						isError: true,
-						msg: '用户不存在',
+						msg: '文件夹不存在',
 					};
 					break;
 				}
