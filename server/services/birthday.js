@@ -7,7 +7,7 @@ const opt = require('./opt');
 const token = require('../utils/token');
 
 const birthdayServices ={
-	async addBirthday(info, ctx){
+	async addBirthday(info, ctx){ // 添加生日提醒
         const userId = ctx && token.getTokenMessage(ctx).id;
         let result = {
 			isError: true,
@@ -45,6 +45,65 @@ const birthdayServices ={
         return result;
     },
     
+    async deleteBirthday(info, ctx){
+        const userId = ctx && token.getTokenMessage(ctx).id;
+        let result = {
+			isError: true,
+			msg: "代码逻辑有问题",
+        };
+        let birthdayInfo = _.cloneDeep(info);
+
+        result = await opt.destroy(Birthday, {
+            where: {
+                ...birthdayInfo
+            }
+        }, userId);
+
+        return result;
+    },
+
+    async updateBirthday(info, ctx){
+        const userId = ctx && token.getTokenMessage(ctx).id;
+        let result = {
+			isError: true,
+			msg: "代码逻辑有问题",
+        };
+        let birthdayInfo = _.cloneDeep(info);
+
+        result = await opt.update(Birthday, {
+            ...birthdayInfo
+        },
+        {
+            id: birthdayInfo.id
+        }, userId);
+
+        return result;
+    },
+
+    async getBirthdayInfo(info, ctx){
+        const userId = ctx && token.getTokenMessage(ctx).id;
+        let result = {
+			isError: true,
+			msg: "代码逻辑有问题",
+        };
+        let birthdayInfo = _.cloneDeep(info);
+
+        result = await opt.findAll(Birthday,
+			{
+				where: {
+					...birthdayInfo
+				}
+			},
+			userId
+        )
+        
+        if(!result.isError){
+			result.dataValues = result.map((item, index)=>{
+				return item.dataValues;
+			})
+		}
+        return result;
+    }
 }
 
 module.exports = birthdayServices;
