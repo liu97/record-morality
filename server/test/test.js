@@ -1,4 +1,4 @@
-const Opt = require('./opt');
+const Opt = require('../services/opt');
 const db = require('../sequelizes/db');
 const User = require('../models/user');
 const Birthday = require('../models/birthday');

@@ -46,9 +46,14 @@ const noteServices ={
 
 	async deleteNote(info, ctx){
 		const userId = ctx && token.getTokenMessage(ctx).id;
+		let result = {
+			isError: true,
+			msg: "代码逻辑有问题",
+		};
+
 		let noteInfo = _.cloneDeep(info);
 
-		let result = await opt.destroy(Note, {
+		result = await opt.destroy(Note, {
 			where: {
 				...noteInfo
 			}
@@ -58,9 +63,13 @@ const noteServices ={
 
 	async updateNote(info, ctx){
 		const userId = ctx && token.getTokenMessage(ctx).id;
+		let result = {
+			isError: true,
+			msg: "代码逻辑有问题",
+		};
 		let noteInfo = _.cloneDeep(info);
 
-		let result = await opt.update(Note, 
+		result = await opt.update(Note, 
 			{
 				...noteInfo
 			},
@@ -75,6 +84,10 @@ const noteServices ={
 
 	async getNoteInfo(info, ctx){
 		const userId = ctx && token.getTokenMessage(ctx).id;
+		let result = {
+			isError: true,
+			msg: "代码逻辑有问题",
+		};
 		let noteInfo = _.cloneDeep(info);
 
 		let notes = await opt.findAll(Note,
@@ -87,7 +100,7 @@ const noteServices ={
 		)
         
 		if(!notes.isError){
-			let result = [];
+			result = [];
 			for(let i = 0; i < notes.length; i++){
 				let note = _.cloneDeep(notes[i].dataValues);
 				let folder = await folderService.getFolderInfo({id: note.folderId}, ctx);// 获取note的父文件夹
@@ -109,11 +122,19 @@ const noteServices ={
 					};
 					break;
 				}
-				
 			}
-			return result;
 		}
-		return notes;
+		else{
+			result = notes;
+		}
+
+		if(!result.isError){
+			result.dataValues = result.map((item, index)=>{
+				return item.dataValues;
+			})
+		}
+
+		return result;
 	},
 }
 

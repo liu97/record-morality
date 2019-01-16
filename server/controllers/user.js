@@ -37,6 +37,7 @@ const userContrallers = {
                 result.msg = userInfo.msg;
             }
             else{
+                userInfo = userInfo.dataValues;
                 result = {
                     success: true,
                     msg: 'It is 200 status',
@@ -73,9 +74,10 @@ const userContrallers = {
                 }
                 else{
                     try{
+                        registerResult = registerResult.dataValues;
                         const userToken = { // 用户token
-                            name: registerResult[0].name,
-                            id: registerResult[0].id
+                            name: registerResult.name,
+                            id: registerResult.id
                         };
                         const token = jwt.sign(userToken, config.secret, {expiresIn: '6h'});  // 签发token
 
@@ -93,6 +95,7 @@ const userContrallers = {
                 }
             }
         }
+        console.log(result);
         ctx.body = result;
     },
 
@@ -145,6 +148,7 @@ const userContrallers = {
                 }
             }
         }
+        console.log(result);
         ctx.body = result;
     }
     

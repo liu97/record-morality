@@ -156,7 +156,8 @@ const findAll = async function(model, message, authId){
 			);
 			if(authId){
 				for(let i = 0; i < result.length; i++){
-					if(result[i].dataValues.userId != authId){
+					let id = result[i].userId ? result[i].userId : result[i].id
+					if(id != authId){
 						result = {
 							isError: true,
 							msg: '无权限查看该数据',

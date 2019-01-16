@@ -7,9 +7,13 @@ const Opt = require('./opt');
 
 const userServices ={
 	async getUserInfo(info){
+		let result = {
+			isError: true,
+			msg: "代码逻辑有问题",
+		};
 		let userInfo = _.cloneDeep(info);
 
-		let result = await Opt.findAll(User,
+		result = await Opt.findAll(User,
 			{
 				where: {
 					...userInfo
@@ -18,7 +22,7 @@ const userServices ={
 		)
 
 		if(!result.isError){
-			return result.map(function(item, index){
+			result.dataValues = result.map((item, index)=>{
 				return item.dataValues;
 			})
 		}
@@ -26,16 +30,17 @@ const userServices ={
 	},
 
 	async registerUser(info){
+		let result = {
+			isError: true,
+			msg: "代码逻辑有问题",
+		};
 		let registerInfo = _.cloneDeep(info);
 
 		let salt = bcrypt.genSaltSync(10);// 10 is by default
 		registerInfo.password = bcrypt.hashSync(registerInfo.password, salt); // salt is inclued in generated hash
 		
-		let result = await Opt.create(User, registerInfo);
+		result = await Opt.create(User, registerInfo);
 		
-		if(!result.isError){
-			return [result.dataValues];
-		}
 		return result;
 	},
 

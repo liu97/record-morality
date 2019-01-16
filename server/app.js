@@ -49,7 +49,7 @@ app.use(koaStatic(
 // }))
 
 app.use(jwtKoa({secret:config.secret}).unless({
-        path: [/^((?!\/admin).)*$/, /admin\/articles\/uploadImg/] //数组中的路径不需要通过jwt验证
+        path: [/^\/user\/login/, /^\/user\/register/] //数组中的路径不需要通过jwt验证
 }))
 // 初始化路由中间件
 app.use(routers.routes()).use(routers.allowedMethods())

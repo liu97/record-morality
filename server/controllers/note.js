@@ -40,7 +40,7 @@ const noteContrallers = {
             result.msg = "未传入文件内容";
         }
         else{
-            let writeMessage = await file.writeFile(`resource/users/${userId}/note/${datatime.parseStampToFormat('YYYY/MM/DD')}/${body.title}${+new Date()}.${body.noteType}`, body.content)
+            let writeMessage = await file.writeFile(`resource/users/${userId}/note/${datatime.parseStampToFormat('YYYY/MM/DD')}/${body.title}${+new Date()}.md`, body.content)
             if(writeMessage.isError){
                 ctx.status = 404;
                 result.msg = writeMessage.msg;
@@ -119,6 +119,8 @@ const noteContrallers = {
             if(body.content){ // 如果传了笔记内容，更新笔记内容
                 let oldNote = await noteService.getNoteInfo({id: body.id});
                 if(!oldNote.isError && oldNote.length){
+                    oldNote = oldNote.dataValues;
+
                     let writeMessage = await file.writeFile(oldNote[0].notePath, body.content);
                     if(writeMessage.isError){
                         ctx.status = 404;
@@ -170,6 +172,7 @@ const noteContrallers = {
             result.msg = noteInfo.msg;
         }
         else{
+            noteInfo = noteInfo.dataValues;
             if(ctx.request.query.content){
                 for(let i = 0; i < noteInfo.length; i++){
                     let item = noteInfo[i];

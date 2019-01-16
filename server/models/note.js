@@ -13,7 +13,7 @@ const Note = db.sequelize.define('note',{
     },
     title: Sequelize.STRING(255),  // 笔记标题
     notePath: Sequelize.STRING(255),  // 笔记存储路径
-    noteType: Sequelize.STRING(255), // 笔记类型（txt、md）
+    noteType: Sequelize.STRING(20), // 笔记类型（txt、md）
 },{
     paranoid: true,
 });

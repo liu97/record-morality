@@ -79,7 +79,7 @@ const folderServices ={
 					let childrenFolder = await opt.findAll(Folder, // 找到所有需要删除的folder的子folder
 						{
 							where: {
-								parentId: item.dataValues.id
+								parentId: item.id
 							}
 						},
 						userId	
@@ -96,7 +96,7 @@ const folderServices ={
 						let childrenNote = await opt.findAll(Note, // 找到所有需要删除的folder的子note
 							{
 								where: {
-									folderId: item.dataValues.id
+									folderId: item.id
 								}
 							},
 							userId
@@ -160,9 +160,13 @@ const folderServices ={
 
 	async getFolderInfo(info, ctx){ // 获取文件夹信息
 		const userId = ctx && token.getTokenMessage(ctx).id;
+		let result = {
+			isError: true,
+			msg: "代码逻辑有问题",
+		};
 		let folderInfo = _.cloneDeep(info);
 
-		let result = await opt.findAll(Folder,
+		result = await opt.findAll(Folder,
 			{
 				where: {
 					...folderInfo
@@ -170,9 +174,9 @@ const folderServices ={
 			},
 			userId
 		);
-        
+		
 		if(!result.isError){
-			return result.map(function(item, index){
+			result.dataValues = result.map((item, index)=>{
 				return item.dataValues;
 			})
 		}

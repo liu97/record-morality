@@ -10,7 +10,7 @@ const Folder = db.sequelize.define('folder',{
         unique: true,
         autoIncrement: true
     },
-    name: Sequelize.STRING(255),  // 文件夹名称
+    name: Sequelize.STRING(20),  // 文件夹名称
     parentId: Sequelize.INTEGER(12), // 文件夹父id
 },{
     paranoid: true,

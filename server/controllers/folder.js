@@ -108,8 +108,8 @@ const folderContrallers = {
 
     async findChildList(folders, ctx){ // 辅助函数（返回文件夹树结构）
         for(let i = 0; i< folders.length; i++){
-            folders[i].childFolder = await folderService.getFolderInfo({parentId: folders[i].id}, ctx);
-            if(folders[i].childFolder.isError){
+            let folderInfo = await folderService.getFolderInfo({parentId: folders[i].id}, ctx);
+            if(folderInfo.isError){
                 ctx.status = 404;
                 ctx.body = {
                     success: false,
@@ -117,6 +117,7 @@ const folderContrallers = {
                 }
                 return;
             }
+            folders[i].childFolder = folderInfo.dataValues;
             await folderContrallers.findChildList(folders[i].childFolder, ctx);
         }
     },
@@ -135,6 +136,7 @@ const folderContrallers = {
             result.msg = folderInfo.msg;
         }
         else{
+            folderInfo = folderInfo.dataValues;
             await folderContrallers.findChildList(folderInfo, ctx);
             
             result = {
@@ -167,20 +169,21 @@ const folderContrallers = {
 
             let childNote = await noteService.getNoteInfo({folderId: query.id}, ctx);
 
-            if(!childNote.isError && !childFolder.isError){
+            if(!folder.isError && !childNote.isError && !childFolder.isError){
                 result = {
                     success: true,
                     msg: 'It is 200 status',
                     data: {
-                        folder,
+                        folder: folder.dataValues,
                         children: {
-                            childFolder,
-                            childNote,
+                            childFolder: childFolder.dataValues,
+                            childNote: childNote.dataValues,
                         }
                     }
                 }
             }
             else{
+                folder.isError && (result.msg = result.msg + folder.isError);
                 childNote.isError && (result.msg = result.msg + childNote.isError);
                 childFolder.isError && (result.msg = result.msg +' '+ childFolder.isError);
             }
