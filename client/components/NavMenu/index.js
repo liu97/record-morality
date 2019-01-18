@@ -5,12 +5,22 @@ import TreeNav from 'components/TreeNav'
 class Home extends Component{
     constructor(props){
         super(props);
-        this.navList = this.props.navList;
         this.state = {
+            navList: this.props.navList,
             selectedKeys: [],
         }
 		
     }
+
+    UNSAFE_componentWillReceiveProps(nextProps) {
+        let { navList } = nextProps;
+        if(navList && !_.isEqual(navList, this.props.navList)){
+            this.setState({
+                navList
+            })
+        }
+    }
+
     componentDidMount(){
         this.setState({
             selectedKeys: [this.getActiveKey()]
@@ -44,7 +54,7 @@ class Home extends Component{
         this.props.onTreeDrop && this.props.onTreeDrop(info);
     }
     getNavList(){
-        let navList = this.navList.map((item, index)=>{
+        let navList = this.state.navList.map((item, index)=>{
             if(item.type == 'nav'){
                 return (
                     <Menu.Item key={item.key} onClick={(e)=>{ this.onItemClick(item, e) }}>

@@ -27,56 +27,11 @@ export const NAVLIST = [
         key: '/admin/note/unsaved',
     },
     {
-        title: '我的文件夹',
+        name: '我的文件夹',
         to: '/admin/note/folder',
         type: 'tree',
         key: '/admin/note/folder',
         id: 0,
-        children: [
-            {
-                title: '我的文件夹',
-                id: 1,
-                children: [
-                    {
-                        title: '语文',
-                        id: 2,
-                        children: [
-                            {
-                                title: '初一',
-                                id: 4,
-                                children: [
-                                    {
-                                        title: '初一',
-                                        id: 5,
-                                        children: [
-                                            {
-                                                title: '初一',
-                                                id: 6,
-                                                children: [
-                                                    {
-                                                        title: '初一',
-                                                        id: 7,
-                                                        children: [
-                                                            
-                                                        ],
-                                                    },
-                                                ],
-                                            },
-                                        ],
-                                    },
-                                ],
-                            },
-                        ],
-                    },
-                    {
-                        title: '数学',
-                        id: 3,
-                        children: [
-                            
-                        ],
-                    },
-                ],
-            }
-        ]
+        children: [],
     }
 ]

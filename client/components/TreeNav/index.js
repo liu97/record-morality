@@ -15,10 +15,15 @@ class TreeNav extends Component {
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
-        let { treeSelectedKeys } = nextProps;
+        let { treeSelectedKeys, navTree } = nextProps;
         if(treeSelectedKeys && !_.isEqual(treeSelectedKeys, this.props.treeSelectedKeys)){
             this.setState({
                 selectedKeys: treeSelectedKeys
+            })
+        }
+        if(navTree && !_.isEqual(navTree, this.props.navTree)){
+            this.setState({
+                tree: navTree
             })
         }
     }
@@ -103,7 +108,7 @@ class TreeNav extends Component {
             if (item.children && item.children.length) {
                 return (<TreeNode 
                             key={`${this.props.navTree.key}/${item.id}`} 
-                            title={item.title}
+                            title={item.name}
                             icon={(props) => {
                                 return (<Icon type={props.expanded ? 'folder-open' : 'folder'} />)
                             }}
@@ -113,7 +118,7 @@ class TreeNav extends Component {
             }
             return (<TreeNode 
                         key={`${this.props.navTree.key}/${item.id}`} 
-                        title={item.title}  
+                        title={item.name}  
                         icon={<Icon type= 'folder'/>}
                     />);
         });

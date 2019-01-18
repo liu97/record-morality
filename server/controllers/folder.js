@@ -26,6 +26,7 @@ const folderContrallers = {
 
         if(folderInfo.isError){
             ctx.status = 404;
+            ctx.data = null;
             result.msg = folderInfo.msg;
         }
         else{
@@ -51,6 +52,7 @@ const folderContrallers = {
 
         if(!body.id){
             ctx.status = 404;
+            ctx.data = null;
             result.msg = "未传入文件夹id";
         }
         else{
@@ -58,6 +60,7 @@ const folderContrallers = {
 
             if(folderInfo.isError){
                 ctx.status = 404;
+                ctx.data = null;
                 result.msg = folderInfo.msg;
             }
             else{
@@ -85,6 +88,7 @@ const folderContrallers = {
 
         if(body.id == body.parentId){
             ctx.status = 404;
+            ctx.data = null;
             result.msg = "文件不能成为自己的子文件夹";
         }
         else{
@@ -92,6 +96,7 @@ const folderContrallers = {
 
             if(folderInfo.isError){
                 ctx.status = 404;
+                ctx.data = null;
                 result.msg = folderInfo.msg;
             }
             else{
@@ -111,14 +116,15 @@ const folderContrallers = {
             let folderInfo = await folderService.getFolderInfo({parentId: folders[i].id}, ctx);
             if(folderInfo.isError){
                 ctx.status = 404;
+                ctx.data = null;
                 ctx.body = {
                     success: false,
-                    message: folders[i].childFolder.msg
+                    message: folderInfo.msg
                 }
                 return;
             }
-            folders[i].childFolder = folderInfo.dataValues;
-            await folderContrallers.findChildList(folders[i].childFolder, ctx);
+            folders[i].children = folderInfo.dataValues;
+            await folderContrallers.findChildList(folders[i].children, ctx);
         }
     },
 
@@ -133,6 +139,7 @@ const folderContrallers = {
         let folderInfo = await folderService.getFolderInfo({userId, parentId:null}, ctx);
         if(folderInfo.isError){
             ctx.status = 404;
+            ctx.data = null;
             result.msg = folderInfo.msg;
         }
         else{
@@ -160,6 +167,7 @@ const folderContrallers = {
 
         if(!query.id){
             ctx.status = 404;
+            ctx.data = null;
             result.msg = "未传入文件夹id";
         }
         else{

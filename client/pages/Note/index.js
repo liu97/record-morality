@@ -6,27 +6,52 @@ import { routerActions } from 'react-router-redux';
 import { Layout, Menu, Icon, Tree } from 'antd';
 import NavMenu from 'components/NavMenu';
 import { NAVLIST } from 'constants/treeNav';
-import { fetchFolderTree } from 'actions/note/index';
+import { fetchFolderTree } from 'actions/note/';
 
 const { Content, Sider } = Layout;
 const PREFIX = 'note';
 
 @connect(
     (state, props) => ({
-        config: state.config,
+        fetchFolderTreeResult: state.fetchFolderTreeResult,
     }),
     (dispatch) => ({
         actions: bindActionCreators(routerActions, dispatch),
         dispatch: dispatch
     })
 )
-class Home extends Component{
+class Note extends Component{
     constructor(props){
-		super(props);
+        super(props);
+        this.state = {
+            navList : NAVLIST
+        }
+    }
+
+    UNSAFE_componentWillReceiveProps(nextProps){
+        let { fetchFolderTreeResult } = nextProps;
+
+        if(!_.isEqual(fetchFolderTreeResult, this.props.fetchFolderTreeResult) && !fetchFolderTreeResult.isLoading){
+            this.addAsyncList(fetchFolderTreeResult);
+        }
     }
 
     componentDidMount(){
         this.props.dispatch(fetchFolderTree());
+    }
+
+    addAsyncList = (treeList) => { // 把从数据库获取出来的文件夹信息加入到nav中
+        let list = _.cloneDeep(NAVLIST)
+
+        list.forEach(item => {
+            if(item.key == '/admin/note/folder'){
+                item.children = treeList.data;
+            }
+        });
+
+        this.setState({
+            navList: list
+        })
     }
 
 	render(){
@@ -38,7 +63,7 @@ class Home extends Component{
                         className={`${PREFIX}-menu`}
                     >
                         <NavMenu 
-                            navList={NAVLIST}
+                            navList={this.state.navList}
                             onDrop={this.onDrop}
                             onSelect={this.onClick}
                             onExpand={this.onExpand}
@@ -59,4 +84,4 @@ class Home extends Component{
 	}
 }
 
-export default Home
+export default Note

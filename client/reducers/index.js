@@ -1,41 +1,21 @@
 import { combineReducers } from 'redux';
 
 import {
-	reducerResult,
-	getArticleResult,
-	getArticleMessageResult,
-	getPutArticleResult,
-	deleteArticleResult,
-	postArticleResult,
-} from './article';
-
-import {
-	getMessageListResult,
-	deleteMessageResult,
-	getMessageResult,
-	putMessageResult,
-} from './message';
-
-import {
 	postLoginResult,
 	getLoginStatus,
 	postRegisterResult,
 } from './lar';
 
+import {
+	fetchFolderTreeResult,
+} from './note';
+
 const rootReducer = combineReducers({
-	reducerResult,
-	getArticleResult,
-	getArticleMessageResult,
-	getPutArticleResult,
-	deleteArticleResult,
-	postArticleResult,
-	getMessageListResult,
-	deleteMessageResult,
-	getMessageResult,
-	putMessageResult,
 	postLoginResult,
 	getLoginStatus,
 	postRegisterResult,
+
+	fetchFolderTreeResult,
 });
 
 export default rootReducer;
