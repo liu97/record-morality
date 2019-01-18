@@ -20,6 +20,7 @@ describe('#test koa app', () => {
         //     try{
         //         let res = await request(server)
         //                         .get('/birthday')
+        //                         .set('Authorization', 'Bearer ' + token) // header处加入token验证
         //                         .expect(200);
         //     }
         //     catch(err){
@@ -27,24 +28,25 @@ describe('#test koa app', () => {
         //     }
         // });
 
-        it('#test POST /birthday/addBirthday', async () => {
-            try{
-                let res = await request(server)
-                                .post('/birthday/addBirthday')
-                                .send({ name:"奶奶", date:new Date(), content: '奶奶不喜欢奶油'})
-                                .set('Authorization', 'Bearer ' + token) // header处加入token验证
-                                .expect(200);
-            }
-            catch(err){
-                throw err;
-            }
-        });
-
-        // it('#test DEL /birthday/deletebirthday', async () => {
+        // it('#test POST /birthday/addBirthday', async () => {
         //     try{
         //         let res = await request(server)
-        //                         .del('/birthday/deletebirthday')
+        //                         .post('/birthday/addBirthday')
+        //                         .send({ name:"奶奶", date:new Date(), content: '奶奶不喜欢奶油'})
+        //                         .set('Authorization', 'Bearer ' + token) // header处加入token验证
+        //                         .expect(200);
+        //     }
+        //     catch(err){
+        //         throw err;
+        //     }
+        // });
+
+        // it('#test DEL /birthday/deleteBirthday', async () => {
+        //     try{
+        //         let res = await request(server)
+        //                         .del('/birthday/deleteBirthday')
         //                         .send({id:1})
+        //                         .set('Authorization', 'Bearer ' + token) // header处加入token验证
         //                         .expect(200);
         //     }
         //     catch(err){
@@ -52,11 +54,12 @@ describe('#test koa app', () => {
         //     }
         // });
 
-        // it('#test update /birthday/updatebirthdayInfo', async () => {
+        // it('#test update /birthday/updateBirthday', async () => {
         //     try{
         //         let res = await request(server)
-        //                         .put('/birthday/updatebirthdayInfo')
-        //                         .send({id:1, name:"日记",parentId:2})
+        //                         .put('/birthday/updateBirthday')
+        //                         .send({id:1, name:"爷爷"})
+        //                         .set('Authorization', 'Bearer ' + token) // header处加入token验证
         //                         .expect(200);
         //     }
         //     catch(err){
@@ -64,15 +67,5 @@ describe('#test koa app', () => {
         //     }
         // });
 
-        // it('#test get /birthday/openbirthday', async () => {
-        //     try{
-        //         let res = await request(server)
-        //                         .get('/birthday/openbirthday?id=4')
-        //                         .expect(200);
-        //     }
-        //     catch(err){
-        //         throw err;
-        //     }
-        // });
     });
 });

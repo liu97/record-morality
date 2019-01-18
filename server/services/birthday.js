@@ -74,7 +74,9 @@ const birthdayServices ={
             ...birthdayInfo
         },
         {
-            id: birthdayInfo.id
+            where: {
+                id: birthdayInfo.id
+            }
         }, userId);
 
         return result;

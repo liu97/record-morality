@@ -156,7 +156,7 @@ const findAll = async function(model, message, authId){
 			);
 			if(authId){
 				for(let i = 0; i < result.length; i++){
-					let id = result[i].userId ? result[i].userId : result[i].id
+					let id = result[i].userId !== undefined ? result[i].userId : result[i].id
 					if(id != authId){
 						result = {
 							isError: true,

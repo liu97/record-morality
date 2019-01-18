@@ -151,6 +151,7 @@ const birthdayContrallers = {
     },
 
     async getBirthdayInfo(ctx){
+        const userId = token.getTokenMessage(ctx).id;
         let result = {
 			success: false,
 			msg: '',
@@ -159,6 +160,7 @@ const birthdayContrallers = {
 
         let query = _.cloneDeep(ctx.request.query);
 
+        query.userId = userId;
         let birthdayInfo = await birthdayService.getBirthdayInfo(query, ctx);
 
         if(birthdayInfo.isError){

@@ -165,7 +165,7 @@ const folderServices ={
 			msg: "代码逻辑有问题",
 		};
 		let folderInfo = _.cloneDeep(info);
-
+		console.log(folderInfo)
 		result = await opt.findAll(Folder,
 			{
 				where: {
