@@ -35,13 +35,14 @@ class Home extends Component{
         if(item.type && item.type == 'nav'){
             this.setState({
                 selectedKeys : [item.key]
-            })
+            });
+            item = item.key;
         }
         else if(!item.type){
             this.setState({
-                selectedKeys : item
+                selectedKeys : [item]
             })
-        }
+        }                     
         this.props.onItemClick && this.props.onItemClick(item, e);
     }
     onTreeExpand = (info) => {

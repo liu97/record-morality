@@ -11,9 +11,7 @@
         background-color: rgba(255, 255, 255, 0.6);
         margin-left: 20px;
         font-size: @menuFontSize;
-        .ant-menu{
-            background-color: transparent;
-        }
+        position: relative;
         .note-menu {
             height: 100%;
             background-color: transparent;
@@ -90,5 +88,16 @@
                 
             }
         }
+        .self-right-menu{
+            width: 100px;
+            box-shadow: 1px 1px 3px #ccc,0px -1px 3px #ccc;
+        }
+    }
+}
+.ant-menu-submenu{
+    width: 100px;
+    .ant-menu-sub{
+        min-width: 100px;
+        box-shadow: 1px 1px 3px #ccc,0px -1px 3px #ccc;
     }
 }

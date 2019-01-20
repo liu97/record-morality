@@ -91,7 +91,7 @@ class TreeNav extends Component {
     onSelect = (selectedKeys, e) => { // 点击tree节点
         if(selectedKeys.length){
             this.props.history.push(selectedKeys[0]);
-            this.props.onTreeSelect && this.props.onTreeSelect(selectedKeys, e);
+            this.props.onTreeSelect && this.props.onTreeSelect(selectedKeys[0], e);
         }
     }
 
