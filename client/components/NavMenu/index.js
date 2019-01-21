@@ -4,7 +4,8 @@ import { Link, withRouter } from 'react-router-dom';
 import { Menu, Icon } from 'antd';
 import classNames from 'classnames';
 import TreeNav from 'components/TreeNav';
-class Home extends Component{
+import ContextMenu from 'components/ContextMenu';
+class NavMenu extends Component{
     constructor(props){
         super(props);
         this.state = {
@@ -57,7 +58,7 @@ class Home extends Component{
         this.props.onTreeDrop && this.props.onTreeDrop(info);
     }
     getNavList(){
-        let navList = this.state.navList.map((item, index)=>{
+        let navList = this.state.navList && this.state.navList.map((item, index)=>{
             if(item.type == 'nav'){
                 return (
                     <Menu.Item key={item.key} onClick={(e)=>{ this.onItemClick(item, e) }}>
@@ -70,7 +71,7 @@ class Home extends Component{
             }
             else if(item.type == 'tree'){
                 return (
-                    <TreeNav 
+                    <ContextMenu 
                         key={item.key}
                         treeSelectedKeys={this.state.selectedKeys}
                         navTree={item}
@@ -103,7 +104,6 @@ class Home extends Component{
             <Menu
                 theme={props.theme ? props.theme : "light"}
                 mode={props.mode ? props.mode : "inline"}
-                style={props.style ? props.style : { height: '100%', borderRight: 0 }}
                 className={navMenuClass}
                 selectedKeys={this.state.selectedKeys}
             >
@@ -113,4 +113,4 @@ class Home extends Component{
 	}
 }
 
-export default withRouter(Home)
+export default withRouter(NavMenu)

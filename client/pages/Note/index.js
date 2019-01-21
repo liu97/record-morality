@@ -48,7 +48,6 @@ class Note extends Component{
                 item.children = treeList.data;
             }
         });
-
         this.setState({
             navList: list
         })

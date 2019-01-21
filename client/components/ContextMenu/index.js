@@ -2,12 +2,12 @@ import './index.less';
 import 'react-contexify/dist/ReactContexify.min.css';
 import React, { Component } from 'react';
 import { Menu, Item, Separator, Submenu, animation } from 'react-contexify';
-import NavMenu from 'components/NavMenu';
+import TreeNav from 'components/TreeNav';
 
 class ContextMenu extends Component{
 
-    onItemClick = (item, e) => {                    
-        this.props.onItemClick && this.props.onItemClick(item, e);
+    onTreeSelect = (item, e) => {                    
+        this.props.onTreeSelect && this.props.onTreeSelect(item, e);
     }
     onTreeExpand = (info) => {
         this.props.onTreeExpand && this.props.onTreeExpand(info);
@@ -33,13 +33,15 @@ class ContextMenu extends Component{
         )
     }
     render(){
+        let { treeSelectedKeys, navTree } = this.props;
         return (
             <React.Fragment>
                 <div id="context-menu"> 
-                    <NavMenu 
-                        navList={this.props.navList ? this.props.navList : []}
+                    <TreeNav 
+                        treeSelectedKeys = {treeSelectedKeys}
+                        navTree = {navTree}
                         onTreeDrop={this.onTreeDrop}
-                        onItemClick={this.onItemClick}
+                        onTreeSelect={this.onTreeSelect}
                         onTreeExpand={this.onTreeExpand}
                         onTreeRightClick={this.onTreeRightClick}
                     />
