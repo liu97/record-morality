@@ -1,0 +1,50 @@
+@themeColor: #1890ff;
+@menuFontSize: 14px;
+@menuLineHeight: 40px;
+@menuFontColor: #393939;
+.tree-menu{
+    .ant-tree {
+        color: @menuFontColor;
+        font-size: @menuFontSize;
+        li{
+            padding: 0;
+            line-height: @menuLineHeight;
+            vertical-align: center;
+            .ant-tree-switcher{
+                position: absolute;
+                height: @menuLineHeight;
+                line-height: @menuLineHeight;
+            }
+            .ant-tree-node-content-wrapper{
+                margin: 0;
+                padding: 0;
+                border: 0;
+                display: inline-block;
+                width: 100%;
+                height: @menuLineHeight;
+                line-height: @menuLineHeight;
+                padding-left: 30px;
+                color: @menuFontColor;
+                &:hover {
+                    background-color: #e4edff;
+                }
+                .ant-tree-iconEle{
+                    line-height: @menuLineHeight;
+                }
+            }
+        }
+        .ant-tree-treenode-selected{
+            &>span{
+                color: #FFFFFF;
+            }
+            .ant-tree-node-selected {
+                color: #FFFFFF;
+                background-color: @themeColor;
+                &:hover {
+                    background-color: @themeColor;
+                }
+            }
+        }
+        
+    }
+}

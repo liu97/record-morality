@@ -1,7 +1,9 @@
+import './index.less';
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Menu, Icon } from 'antd';
-import TreeNav from 'components/TreeNav'
+import classNames from 'classnames';
+import TreeNav from 'components/TreeNav';
 class Home extends Component{
     constructor(props){
         super(props);
@@ -93,16 +95,19 @@ class Home extends Component{
     }
 	render(){
         const props = this.props;
+        const navMenuClass = classNames({
+            [props.className]: props.className != undefined,
+            'nav-menu': true
+        })
 		return (
             <Menu
                 theme={props.theme ? props.theme : "light"}
                 mode={props.mode ? props.mode : "inline"}
                 style={props.style ? props.style : { height: '100%', borderRight: 0 }}
+                className={navMenuClass}
                 selectedKeys={this.state.selectedKeys}
             >
-                {
-                    this.getNavList()
-                }
+                {this.getNavList()}
             </Menu>
 		)
 	}

@@ -3,13 +3,11 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
-import { Layout, Menu, Icon, Tree } from 'antd';
+import { Layout, Icon } from 'antd';
 import NavMenu from 'components/NavMenu';
 import { NAVLIST } from 'constants/treeNav';
 import { fetchFolderTree } from 'actions/note/';
 
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
 const { Content, Sider } = Layout;
 const PREFIX = 'note';
 
@@ -56,43 +54,6 @@ class Note extends Component{
         })
     }
 
-    onTreeRightClick = (info) => {
-        this.setState({
-            rightClickTreeItem: {
-                pageX: info.event.pageX,
-                pageY: info.event.pageY,
-                id: info.node.props["eventKey"],
-                categoryName: info.node.props["title"]
-            }
-          });
-
-    }
-
-    getTreeRightClickMenu = () => {
-        const { pageX, pageY, id, categoryName } = { ...this.state.rightClickTreeItem };
-        const tmpStyle = {
-            position: "absolute",
-            left: `${pageX - 20}px`,
-            top: `${pageY - 60 }px`
-        };
-        const menu = (
-            <div style={tmpStyle} className="self-right-menu">
-                <Menu mode="vertical">
-                    <SubMenu key="sub1" title={<span>新建</span>}>
-                        <Menu.Item key="1">笔记</Menu.Item>
-                        <Menu.Item key="2">Markdown</Menu.Item>
-                        <Menu.Item key="3">文件</Menu.Item>
-                    </SubMenu>
-                    <Menu.Item key="5">重命名</Menu.Item>
-                    <Menu.Item key="6">删除</Menu.Item>
-                </Menu>
-            </div>
-        );
-        return this.state.rightClickTreeItem == null ? "" : menu;
-    };
-
-    
-
     onItemClick = (info, e) => {
         console.log(info);
     }
@@ -101,19 +62,15 @@ class Note extends Component{
 		return (
             <Layout className={PREFIX}>
                 <Sider className={`${PREFIX}-sider`}>
-                    <Menu
-                        mode="inline"
+                    <NavMenu 
                         className={`${PREFIX}-menu`}
-                    >
-                        <NavMenu 
-                            navList={this.state.navList}
-                            onTreeDrop={this.onTreeDrop}
-                            onItemClick={this.onItemClick}
-                            onTreeExpand={this.onTreeExpand}
-                            onTreeRightClick={this.onTreeRightClick}
-                        />
-                    </Menu>
-                    {this.getTreeRightClickMenu()}
+                        navList={this.state.navList}
+                        onTreeDrop={this.onTreeDrop}
+                        onItemClick={this.onItemClick}
+                        onTreeExpand={this.onTreeExpand}
+                        onTreeRightClick={this.onTreeRightClick}
+                    />
+            
                 </Sider>
                 <Layout>
                     <Content style={{

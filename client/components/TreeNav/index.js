@@ -1,5 +1,7 @@
+import './index.less';
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import classNames from 'classnames';
 import _ from 'lodash';
 import { Tree, Icon } from 'antd';
 
@@ -125,21 +127,29 @@ class TreeNav extends Component {
         return result;
     }
     render() {
+        const props = this.props;
         let tree = _.cloneDeep(this.state.tree);
         tree = _.isArray(tree) ? tree : [tree];
+
+        const treeNavClass = classNames({
+            [props.className]: props.className != undefined,
+            'tree-menu': true
+        })
         return (
-        <Tree
-            showIcon
-            draggable
-            selectedKeys={this.state.selectedKeys}
-            onDragEnter={this.onDragEnter}
-            onDrop={this.onDrop}
-            onSelect={this.onSelect}
-            onExpand={this.onExpand}
-            onRightClick={this.onRightClick}
-        >
-            {this.getTreeNode(tree)}
-        </Tree>
+            <div className={treeNavClass}>
+                <Tree
+                    showIcon
+                    draggable
+                    selectedKeys={this.state.selectedKeys}
+                    onDragEnter={this.onDragEnter}
+                    onDrop={this.onDrop}
+                    onSelect={this.onSelect}
+                    onExpand={this.onExpand}
+                    onRightClick={this.onRightClick}
+                >
+                    {this.getTreeNode(tree)}
+                </Tree>
+            </div>
         );
     }
 }

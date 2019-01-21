@@ -81,6 +81,7 @@
     "mysql2": "^1.6.4",
     "rc-queue-anim": "^1.6.5",
     "react": "^16.4.1",
+    "react-contexify": "^4.0.1",
     "react-dom": "^16.4.1",
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",
