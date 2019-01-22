@@ -103,7 +103,7 @@ const folderContrallers = {
                 result = {
                     success: true,
                     msg: 'It is 200 status',
-                    data: folderInfo
+                    data: body
                 }
             }
         }

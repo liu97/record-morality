@@ -3,8 +3,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Menu, Icon } from 'antd';
 import classNames from 'classnames';
-import TreeNav from 'components/TreeNav';
-import ContextMenu from 'components/ContextMenu';
+import ContextMenu from '../TreeNav';
 class NavMenu extends Component{
     constructor(props){
         super(props);
@@ -46,7 +45,7 @@ class NavMenu extends Component{
                 selectedKeys : [item]
             })
         }                     
-        this.props.onItemClick && this.props.onItemClick(item, e);
+        this.props.onClick && this.props.onClick(item, e);
     }
     onTreeExpand = (info) => {
         this.props.onTreeExpand && this.props.onTreeExpand(info);

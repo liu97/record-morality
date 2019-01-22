@@ -34,4 +34,116 @@ export const NAVLIST = [
         id: 0,
         children: [],
     }
+];
+
+export const CONTEXT_MENU = [
+    {
+        type: 'Menu',
+        id: 'item-context-menu',
+        animation: 'fade',
+        children: [
+            {
+                type: 'Submenu',
+                label: '新建',
+                children: [
+                    {
+                        type: 'Item',
+                        label: '笔记',
+                        onClick: {
+                            opt: 'new',
+                            extra: {
+                                type: 'txt',
+                            }
+                        }
+                    },
+                    {
+                        type: 'Item',
+                        label: 'Markdown',
+                        onClick: {
+                            opt: 'new',
+                            extra: {
+                                type: 'md',
+                            }
+                        }
+                    },
+                    {
+                        type: 'Item',
+                        label: '文件夹',
+                        onClick: {
+                            opt: 'new',
+                            extra: {
+                                type: 'folder',
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                type: 'Separator'
+            },
+            {
+                type: 'Item',
+                label: '重命名',
+                onClick: {
+                    opt: 'rename',
+                    extra: {
+                        type: 'folder',
+                    }
+                }
+            },
+            {
+                type: 'Item',
+                label: '删除',
+                onClick: {
+                    opt: 'delete',
+                    extra: {
+                        type: 'folder',
+                    }
+                }
+            }
+        ]
+    },
+    {
+        type: 'Menu',
+        id: 'root-context-menu',
+        animation: 'fade',
+        children: [
+            {
+                type: 'Submenu',
+                label: '新建',
+                children: [
+                    {
+                        type: 'Item',
+                        label: '笔记',
+                        onClick: {
+                            opt: 'new',
+                            extra: {
+                                type: 'txt',
+                            }
+                        }
+                    },
+                    {
+                        type: 'Item',
+                        label: 'Markdown',
+                        onClick: {
+                            opt: 'new',
+                            extra: {
+                                type: 'md',
+                            }
+                        }
+                    },
+                    {
+                        type: 'Item',
+                        label: '文件夹',
+                        onClick: {
+                            opt: 'new',
+                            extra: {
+                                type: 'folder',
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
+    }
 ]

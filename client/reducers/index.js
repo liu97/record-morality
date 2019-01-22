@@ -8,6 +8,7 @@ import {
 
 import {
 	fetchFolderTreeResult,
+	updateFolderTreeResult,
 } from './note';
 
 const rootReducer = combineReducers({
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
 	postRegisterResult,
 
 	fetchFolderTreeResult,
+	updateFolderTreeResult,
 });
 
 export default rootReducer;
