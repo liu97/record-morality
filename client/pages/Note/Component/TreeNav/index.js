@@ -8,8 +8,8 @@ import { routerActions } from 'react-router-redux';
 import classNames from 'classnames';
 import _ from 'lodash';
 import { Menu, Item, Separator, Submenu, animation, contextMenu } from 'react-contexify';
-import { Tree, Icon } from 'antd';
-import { fetchFolderTree, updateFolderTree } from 'actions/note.js';
+import { Tree, Icon, Input, Modal } from 'antd';
+import { fetchFolderTree, updateFolderTree, addFolder } from 'actions/note.js';
 
 import { CONTEXT_MENU } from 'constants/treeNav';
 
@@ -19,6 +19,7 @@ const { TreeNode } = Tree;
     (state, props) => ({
         fetchFolderTreeResult: state.fetchFolderTreeResult,
         updateFolderTreeResult: state.updateFolderTreeResult,
+        addFolderResult: state.addFolderResult,
     }),
     (dispatch) => ({
         actions: bindActionCreators(routerActions, dispatch),
@@ -30,12 +31,15 @@ class TreeNav extends Component {
         super(props);
         this.state = {
             tree: props.navTree,
-            selectedKeys: []
+            selectedKeys: [],
+            modalVisible: false,
+            modalValue: ''
         }
+        this.currentRight = {}; // 当前右键操作
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
-        let { treeSelectedKeys, fetchFolderTreeResult, updateFolderTreeResult } = nextProps;
+        let { treeSelectedKeys, fetchFolderTreeResult, updateFolderTreeResult, addFolderResult } = nextProps;
         if(treeSelectedKeys && !_.isEqual(treeSelectedKeys, this.props.treeSelectedKeys)){
             this.setState({
                 selectedKeys: treeSelectedKeys
@@ -45,6 +49,10 @@ class TreeNav extends Component {
             this.addAsyncList(fetchFolderTreeResult);
         }
         if(!_.isEqual(updateFolderTreeResult, this.props.updateFolderTreeResult) && !updateFolderTreeResult.isLoading){
+            this.props.dispatch(fetchFolderTree());
+        }
+        if(!_.isEqual(addFolderResult, this.props.addFolderResult) && !addFolderResult.isLoading){
+            this.hiddenModal();
             this.props.dispatch(fetchFolderTree());
         }
     }
@@ -73,7 +81,6 @@ class TreeNav extends Component {
         const dropId = this.getFolderId(info.node.props.eventKey);
         const dragId = this.getFolderId(info.dragNode.props.eventKey);
 
-        
         this.props.dispatch(updateFolderTree({id: dragId, parentId: dropId}))
         
         this.props.onTreeDrop && this.props.onTreeDrop(info);
@@ -91,9 +98,7 @@ class TreeNav extends Component {
     }
 
     onRightClick = (info) => { // 右键tree节点
-        this.setState({
-            currentRightKey : info.node
-        });
+        this.currentRight.key = info.node;
         let navTree = this.props.navTree;
         if(info.node.props.eventKey == `${navTree.key}/${navTree.id}`){
             contextMenu.show({ // 显示右键菜单
@@ -110,15 +115,10 @@ class TreeNav extends Component {
         this.props.onTreeRightClick && this.props.onTreeRightClick(info); 
     }
 
-    onContextClick = ({opt, extra}) => {
-        let currentRightKey = this.state.currentRightKey;
-
-        let info = {
-            currentRightKey,
-            opt,
-            extra,
-        }
-        this.props.onContextClick && this.props.onContextClick(info);
+    onContextClick = (info) => { // 点击右键菜单的内容
+        Object.assign(this.currentRight, info);
+        this.showModal();
+        this.props.onContextClick && this.props.onContextClick(this.currentRight);
     }
 
     getTreeNode = (data) => { 
@@ -188,9 +188,42 @@ class TreeNav extends Component {
 
         return loop(tree);
     }
+
+    showModal = () => {
+        this.setState({
+            modalVisible: true,
+        });
+    }
+
+    hiddenModal = () => {
+        this.setState({
+            modalVisible: false,
+        });
+    }
+
+    handleOk = () => {
+       if(this.currentRight.opt == 'new'){
+           if(this.currentRight.extra.type == 'folder'){
+               let parentId = this.getFolderId(this.currentRight.key.props.eventKey)
+               this.props.dispatch(addFolder({name: this.state.modalValue, parentId}))
+           }
+       }
+    }
+
+    handleCancel = () => {
+        this.setState({
+            modalVisible: false,
+        });
+    }
+
+    modalChange = (e) => {
+        this.setState({
+            modalValue: e.nativeEvent.data
+        })
+    }
+
     render() {
         const props = this.props;
-
         const treeNavClass = classNames({
             [props.className]: props.className != undefined,
             'tree-menu': true
@@ -210,6 +243,15 @@ class TreeNav extends Component {
                     {this.getTreeNode(this.state.tree)}
                 </Tree>
                 {this.getContent(CONTEXT_MENU)}
+                <Modal
+                    title={this.currentRight.extra && this.currentRight.extra.type == 'folder' ? '请输入文件夹名' : '请输入文件名'}
+                    visible={this.state.modalVisible}
+                    onOk={this.handleOk}
+                    confirmLoading={props.addFolderResult.isLoading}
+                    onCancel={this.handleCancel}
+                >
+                    <Input value={this.state.modalValue} onChange={this.modalChange} />
+                </Modal>
             </div>
         );
     }

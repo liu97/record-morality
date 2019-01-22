@@ -7,3 +7,6 @@ export const fetchFolderTree = createSimpleAjaxAction('/folder', 'fetchFolderTre
 
 // 移动文件夹
 export const updateFolderTree = createSimpleAjaxAction('/folder/updateFolder', 'updateFolderTree', 'put');
+
+// 添加文件夹
+export const addFolder = createSimpleAjaxAction('/folder/addFolder', 'addFolder', 'post');

@@ -9,6 +9,7 @@ import {
 import {
 	fetchFolderTreeResult,
 	updateFolderTreeResult,
+	addFolderResult,
 } from './note';
 
 const rootReducer = combineReducers({
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
 
 	fetchFolderTreeResult,
 	updateFolderTreeResult,
+	addFolderResult,
 });
 
 export default rootReducer;
