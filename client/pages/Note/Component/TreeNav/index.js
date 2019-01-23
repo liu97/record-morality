@@ -31,7 +31,6 @@ class TreeNav extends Component {
         super(props);
         this.state = {
             tree: props.navTree,
-            selectedKeys: [],
             expandedKeys: [],
             modalVisible: false,
             modalValue: ''
@@ -40,10 +39,7 @@ class TreeNav extends Component {
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
-        let { treeSelectedKeys, fetchFolderTreeResult, updateFolderTreeResult, addFolderResult } = nextProps;
-        if(treeSelectedKeys && !_.isEqual(treeSelectedKeys, this.props.treeSelectedKeys)){
-            this.setSelectedKeys(treeSelectedKeys);
-        }
+        let { fetchFolderTreeResult, updateFolderTreeResult, addFolderResult } = nextProps;
         if(!_.isEqual(fetchFolderTreeResult, this.props.fetchFolderTreeResult) && !fetchFolderTreeResult.isLoading){
             this.addAsyncList(fetchFolderTreeResult);
         }
@@ -51,6 +47,8 @@ class TreeNav extends Component {
             this.props.dispatch(fetchFolderTree());
         }
         if(!_.isEqual(addFolderResult, this.props.addFolderResult) && !addFolderResult.isLoading){
+            let navTree = this.props.navTree;
+            this.props.setSelectedKeys && this.props.setSelectedKeys([`${navTree.key}/${addFolderResult.data.id}`])
             this.hiddenModal();
             this.props.dispatch(fetchFolderTree());
         }
@@ -60,21 +58,58 @@ class TreeNav extends Component {
         this.props.dispatch(fetchFolderTree());
     }
 
-    setSelectedKeys = (treeSelectedKeys) => {
-        this.setState({
-            selectedKeys: treeSelectedKeys
-        })
+    setExpandedKeys = (treeSelectedKeys) => { // selectedKeys改变时设置展开的节点
+        let selectedItem = this.getFolderItem(treeSelectedKeys[0]);
+        if(selectedItem){
+            let expandedKeys = selectedItem.ancestors.map((item, index) => {
+                if(!item){
+                    return 0;
+                }
+                return item;
+            });
+            
+            let oldExpandedKeys = _.cloneDeep(this.state.expandedKeys);
+    
+            expandedKeys = [...new Set([...expandedKeys, ...oldExpandedKeys])];
+    
+            this.setState({
+                expandedKeys
+            });
+        }
     }
 
     addAsyncList = (treeList) => { // 把从数据库获取出来的文件夹信息加入到nav中
         let tree = _.cloneDeep(this.state.tree);
         tree.children = treeList.data;
-        this.setState({
-            tree
+        this.setState({tree}, ()=>{
+            this.setExpandedKeys(this.props.treeSelectedKeys);
         })
     }
+
+    getFolderItem = (key) => { // 根据文件夹key获取节点元素信息
+        let tree = _.cloneDeep(this.state.tree);
+        tree = _.isArray(tree) ? tree : [tree];
+
+        let selectedItem;
+        let id = this.getFolderId(key);
+        const loop = (data, id, callback) => {
+            data.forEach((item, index, arr) => {
+                if (item.id === id) {
+                    return callback(item, index, arr);
+                }
+                if (item.children) {
+                    return loop(item.children, id, callback);
+                }
+            });
+        };
+        loop(tree, id, (item, index, arr) => {
+            selectedItem = item;
+        });
+
+        return selectedItem;
+    }
     
-    getFolderId = (key) => {
+    getFolderId = (key) => { // 根据文件夹key回去文件夹id
         let id =  key.split('/').pop();
         if(id == '0' || !id){
             id = null;
@@ -98,8 +133,12 @@ class TreeNav extends Component {
         }
     }
 
-    onExpand = (info) => { // 展开tree节点
-        this.props.onTreeExpand && this.props.onTreeExpand(info);
+    onExpand = (expandedKeys, info) => { // 展开tree节点
+        this.setState({
+            expandedKeys
+        })
+
+        this.props.onTreeExpand && this.props.onTreeExpand(expandedKeys, info);
     }
 
     onRightClick = (info) => { // 右键tree节点
@@ -126,7 +165,7 @@ class TreeNav extends Component {
         this.props.onContextClick && this.props.onContextClick(this.currentRight);
     }
 
-    getTreeNode = (data) => { 
+    getTreeNode = (data) => { // 返回文件夹树 
         let tree = _.cloneDeep(data);
         tree = _.isArray(tree) ? tree : [tree];
 
@@ -150,7 +189,7 @@ class TreeNav extends Component {
         });
         return result;
     }
-    getContent = (data) => {
+    getContent = (data) => { // 返回contextMenu的内容
         let tree = _.cloneDeep(data);
 
         const loop = (arr) => {
@@ -194,20 +233,20 @@ class TreeNav extends Component {
         return loop(tree);
     }
 
-    showModal = () => {
+    showModal = () => { // 显示modal
         this.setState({
             modalVisible: true,
         });
     }
 
-    hiddenModal = () => {
+    hiddenModal = () => { // 隐藏modal
         this.setState({
             modalVisible: false,
             modalValue: ''
         });
     }
 
-    handleOk = () => {
+    handleOk = () => { // modal返回确认
        if(this.currentRight.opt == 'new'){
            if(this.currentRight.extra.type == 'folder'){
                let parentId = this.getFolderId(this.currentRight.key.props.eventKey)
@@ -217,7 +256,7 @@ class TreeNav extends Component {
        else if(this.currentRight.opt == 'new'){}
     }
 
-    modalChange = (e) => {
+    modalChange = (e) => { // 修改modal里的值
         this.setState({
             modalValue: e.nativeEvent.data
         })
@@ -228,13 +267,14 @@ class TreeNav extends Component {
         const treeNavClass = classNames({
             [props.className]: props.className != undefined,
             'tree-menu': true
-        })
+        });
+
         return (
             <div className={treeNavClass}>
                 <Tree
                     showIcon
                     draggable
-                    selectedKeys={this.state.selectedKeys}
+                    selectedKeys={this.props.treeSelectedKeys}
                     expandedKeys={this.state.expandedKeys}
                     onDragEnter={this.onDragEnter}
                     onDrop={this.onDrop}
