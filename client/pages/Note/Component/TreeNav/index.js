@@ -32,6 +32,7 @@ class TreeNav extends Component {
         this.state = {
             tree: props.navTree,
             selectedKeys: [],
+            expandedKeys: [],
             modalVisible: false,
             modalValue: ''
         }
@@ -41,9 +42,7 @@ class TreeNav extends Component {
     UNSAFE_componentWillReceiveProps(nextProps) {
         let { treeSelectedKeys, fetchFolderTreeResult, updateFolderTreeResult, addFolderResult } = nextProps;
         if(treeSelectedKeys && !_.isEqual(treeSelectedKeys, this.props.treeSelectedKeys)){
-            this.setState({
-                selectedKeys: treeSelectedKeys
-            })
+            this.setSelectedKeys(treeSelectedKeys);
         }
         if(!_.isEqual(fetchFolderTreeResult, this.props.fetchFolderTreeResult) && !fetchFolderTreeResult.isLoading){
             this.addAsyncList(fetchFolderTreeResult);
@@ -59,6 +58,12 @@ class TreeNav extends Component {
 
     componentDidMount(){
         this.props.dispatch(fetchFolderTree());
+    }
+
+    setSelectedKeys = (treeSelectedKeys) => {
+        this.setState({
+            selectedKeys: treeSelectedKeys
+        })
     }
 
     addAsyncList = (treeList) => { // 把从数据库获取出来的文件夹信息加入到nav中
@@ -198,6 +203,7 @@ class TreeNav extends Component {
     hiddenModal = () => {
         this.setState({
             modalVisible: false,
+            modalValue: ''
         });
     }
 
@@ -208,12 +214,7 @@ class TreeNav extends Component {
                this.props.dispatch(addFolder({name: this.state.modalValue, parentId}))
            }
        }
-    }
-
-    handleCancel = () => {
-        this.setState({
-            modalVisible: false,
-        });
+       else if(this.currentRight.opt == 'new'){}
     }
 
     modalChange = (e) => {
@@ -234,6 +235,7 @@ class TreeNav extends Component {
                     showIcon
                     draggable
                     selectedKeys={this.state.selectedKeys}
+                    expandedKeys={this.state.expandedKeys}
                     onDragEnter={this.onDragEnter}
                     onDrop={this.onDrop}
                     onSelect={this.onSelect}
@@ -248,7 +250,7 @@ class TreeNav extends Component {
                     visible={this.state.modalVisible}
                     onOk={this.handleOk}
                     confirmLoading={props.addFolderResult.isLoading}
-                    onCancel={this.handleCancel}
+                    onCancel={this.hiddenModal}
                 >
                     <Input value={this.state.modalValue} onChange={this.modalChange} />
                 </Modal>

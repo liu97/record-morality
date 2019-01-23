@@ -111,7 +111,7 @@ const folderContrallers = {
         ctx.body = result;
     },
 
-    async findChildList(folders, ctx){ // 辅助函数（返回文件夹树结构）
+    async findChildList(ancestors, folders, ctx){ // 辅助函数（返回文件夹树结构）
         for(let i = 0; i< folders.length; i++){
             let folderInfo = await folderService.getFolderInfo({parentId: folders[i].id}, ctx);
             if(folderInfo.isError){
@@ -124,7 +124,13 @@ const folderContrallers = {
                 return;
             }
             folders[i].children = folderInfo.dataValues;
-            await folderContrallers.findChildList(folders[i].children, ctx);
+
+            folders[i].ancestors = _.cloneDeep(ancestors); // 祖先数组
+
+            let itemAncestors = _.cloneDeep(ancestors);
+            itemAncestors.push(folders[i].id);
+
+            await folderContrallers.findChildList(itemAncestors, folders[i].children, ctx);
         }
     },
 
@@ -144,7 +150,7 @@ const folderContrallers = {
         }
         else{
             folderInfo = folderInfo.dataValues;
-            await folderContrallers.findChildList(folderInfo, ctx);
+            await folderContrallers.findChildList([null], folderInfo, ctx);
             
             result = {
                 success: true,
