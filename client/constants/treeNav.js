@@ -32,6 +32,7 @@ export const NAVLIST = [
         type: 'tree',
         key: '/admin/note/folder',
         id: 0,
+        ancestors: [],
         children: [],
     }
 ];
