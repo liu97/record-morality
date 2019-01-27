@@ -8,8 +8,8 @@ import { routerActions } from 'react-router-redux';
 import classNames from 'classnames';
 import _ from 'lodash';
 import { Menu, Item, Separator, Submenu, animation, contextMenu } from 'react-contexify';
-import { Tree, Icon, Input, Modal } from 'antd';
-import { fetchFolderTree, updateFolderTree, addFolder } from 'actions/note.js';
+import { Tree, Icon, Input, Modal, message } from 'antd';
+import { fetchFolderTree, updateFolderTree, addFolder, deleteFolder } from 'actions/note.js';
 
 import { CONTEXT_MENU } from 'constants/treeNav';
 
@@ -20,6 +20,7 @@ const { TreeNode } = Tree;
         fetchFolderTreeResult: state.fetchFolderTreeResult,
         updateFolderTreeResult: state.updateFolderTreeResult,
         addFolderResult: state.addFolderResult,
+        deleteFolderResult: state.deleteFolderResult,
     }),
     (dispatch) => ({
         actions: bindActionCreators(routerActions, dispatch),
@@ -40,12 +41,16 @@ class TreeNav extends Component {
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
-        let { fetchFolderTreeResult, updateFolderTreeResult, addFolderResult } = nextProps;
+        let { fetchFolderTreeResult, updateFolderTreeResult, addFolderResult, deleteFolderResult } = nextProps;
         if(!_.isEqual(fetchFolderTreeResult, this.props.fetchFolderTreeResult) && !fetchFolderTreeResult.isLoading){
             this.addAsyncList(fetchFolderTreeResult);
         }
         if(!_.isEqual(updateFolderTreeResult, this.props.updateFolderTreeResult) && !updateFolderTreeResult.isLoading){
             this.props.dispatch(fetchFolderTree());
+
+            this.hiddenModal();
+
+            message.success('修改成功');
         }
         if(!_.isEqual(addFolderResult, this.props.addFolderResult) && !addFolderResult.isLoading){
             this.props.setSelectedKeys && this.props.setSelectedKeys([this.getFolderKey(addFolderResult.data.id)]);
@@ -54,6 +59,14 @@ class TreeNav extends Component {
             this.props.history.push(this.getFolderKey(addFolderResult.data.id));
 
             this.props.dispatch(fetchFolderTree());
+
+            message.success('新建成功');
+        }
+        if(!_.isEqual(deleteFolderResult, this.props.deleteFolderResult) && !deleteFolderResult.isLoading){
+
+            this.props.dispatch(fetchFolderTree());
+
+            message.success('删除成功');
         }
     }
 
@@ -64,7 +77,11 @@ class TreeNav extends Component {
     componentDidUpdate(prevProps, prevState){
         if(this.state.modalVisible && this.state.modalVisible != prevState.modalVisible){
             setTimeout(()=>{
-                this.inputRef.current && this.inputRef.current.focus();
+                if(this.inputRef.current){
+                    this.inputRef.current.focus();
+                    this.inputRef.current.select();
+                }
+                
             },500)
         }
         
@@ -181,7 +198,20 @@ class TreeNav extends Component {
 
     onContextClick = (info) => { // 点击右键菜单的内容
         Object.assign(this.currentRight, info);
-        this.showModal();
+
+        let { opt, extra, key } = this.currentRight;
+
+        if(opt == "rename"){
+            this.showModal(key.props.title);
+        }
+        else if(this.currentRight.opt == "delete"){
+            let id = this.getFolderId(this.currentRight.key.props.eventKey);
+            this.props.dispatch(deleteFolder({id}))
+        }
+        else{
+            this.showModal();
+        }
+
         this.props.onContextClick && this.props.onContextClick(this.currentRight);
     }
 
@@ -235,7 +265,7 @@ class TreeNav extends Component {
                     return (
                         <Item 
                             key={item.label}
-                            onClick = {this.onContextClick.bind(this, item.onClick)}
+                            onClick = {this.onContextClick.bind(this, item.clickInfo)}
                         >
                             {item.label}
                         </Item>
@@ -252,9 +282,10 @@ class TreeNav extends Component {
         return loop(tree);
     }
 
-    showModal = () => { // 显示modal
+    showModal = (modalValue) => { // 显示modal
         this.setState({
             modalVisible: true,
+            modalValue
         });
     }
 
@@ -276,7 +307,10 @@ class TreeNav extends Component {
                 this.setExpandedKeys(key.props.eventKey);
             }
         }
-        else if(this.currentRight.opt == 'new'){}
+        else if(this.currentRight.opt == 'rename'){
+            let id = this.getFolderId(key.props.eventKey);
+            this.props.dispatch(updateFolderTree({name: this.state.modalValue, id}))
+        }
     }
 
     modalChange = (e) => { // 修改modal里的值
@@ -285,12 +319,30 @@ class TreeNav extends Component {
         })
     }
 
+    getTypeName = (type) => {
+        switch(type){
+            case 'folder':
+                return '文件夹';
+                break;
+            case 'txt':
+                return '笔记';
+                break;
+            case 'md':
+                return 'markdown';
+                break;
+            default:
+                return '';
+        }
+            
+    }
+
     render() {
         const props = this.props;
         const treeNavClass = classNames({
             [props.className]: props.className != undefined,
             'tree-menu': true
         });
+        let typeName = this.currentRight.extra && this.getTypeName(this.currentRight.extra.type)
 
         return (
             <div className={treeNavClass}>
@@ -309,13 +361,17 @@ class TreeNav extends Component {
                 </Tree>
                 {this.getContent(CONTEXT_MENU)}
                 <Modal
-                    title={this.currentRight.extra && this.currentRight.extra.type == 'folder' ? '请输入文件夹名' : '请输入文件名'}
+                    title={`请输入${typeName}名`}
                     visible={this.state.modalVisible}
                     onOk={this.handleOk}
                     confirmLoading={props.addFolderResult.isLoading}
                     onCancel={this.hiddenModal}
                 >
-                    <Input ref={this.inputRef} value={this.state.modalValue} onChange={this.modalChange} />
+                    <Input 
+                        ref={this.inputRef} 
+                        value={this.state.modalValue} 
+                        onChange={this.modalChange} 
+                        placeholder={typeName} />
                 </Modal>
             </div>
         );

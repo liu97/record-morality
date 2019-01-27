@@ -10,3 +10,6 @@ export const updateFolderTree = createSimpleAjaxAction('/folder/updateFolder', '
 
 // 添加文件夹
 export const addFolder = createSimpleAjaxAction('/folder/addFolder', 'addFolder', 'post');
+
+// 删除文件夹
+export const deleteFolder = createSimpleAjaxAction('/folder/deleteFolder', 'deleteFolder', 'delete');

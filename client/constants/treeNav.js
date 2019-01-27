@@ -50,7 +50,7 @@ export const CONTEXT_MENU = [
                     {
                         type: 'Item',
                         label: '笔记',
-                        onClick: {
+                        clickInfo: {
                             opt: 'new',
                             extra: {
                                 type: 'txt',
@@ -60,7 +60,7 @@ export const CONTEXT_MENU = [
                     {
                         type: 'Item',
                         label: 'Markdown',
-                        onClick: {
+                        clickInfo: {
                             opt: 'new',
                             extra: {
                                 type: 'md',
@@ -70,7 +70,7 @@ export const CONTEXT_MENU = [
                     {
                         type: 'Item',
                         label: '文件夹',
-                        onClick: {
+                        clickInfo: {
                             opt: 'new',
                             extra: {
                                 type: 'folder',
@@ -85,7 +85,7 @@ export const CONTEXT_MENU = [
             {
                 type: 'Item',
                 label: '重命名',
-                onClick: {
+                clickInfo: {
                     opt: 'rename',
                     extra: {
                         type: 'folder',
@@ -95,7 +95,7 @@ export const CONTEXT_MENU = [
             {
                 type: 'Item',
                 label: '删除',
-                onClick: {
+                clickInfo: {
                     opt: 'delete',
                     extra: {
                         type: 'folder',
@@ -116,7 +116,7 @@ export const CONTEXT_MENU = [
                     {
                         type: 'Item',
                         label: '笔记',
-                        onClick: {
+                        clickInfo: {
                             opt: 'new',
                             extra: {
                                 type: 'txt',
@@ -126,7 +126,7 @@ export const CONTEXT_MENU = [
                     {
                         type: 'Item',
                         label: 'Markdown',
-                        onClick: {
+                        clickInfo: {
                             opt: 'new',
                             extra: {
                                 type: 'md',
@@ -136,7 +136,7 @@ export const CONTEXT_MENU = [
                     {
                         type: 'Item',
                         label: '文件夹',
-                        onClick: {
+                        clickInfo: {
                             opt: 'new',
                             extra: {
                                 type: 'folder',
