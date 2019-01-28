@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
 import { Layout, Icon } from 'antd';
 import NavMenu from './Component/NavMenu';
+import ContentList from './Component/ContentList';
 import { NAVLIST } from 'constants/treeNav';
 
 const { Content, Sider } = Layout;
@@ -52,11 +53,8 @@ class Note extends Component{
             
                 </Sider>
                 <Layout>
-                    <Content style={{
-                        background: '#fff', padding: 24, margin: 0, minHeight: 280,
-                    }}
-                    >
-                        Content
+                    <Content>
+                        <ContentList  className={`${PREFIX}-list`}/>
                     </Content>
                 </Layout>
             </Layout>

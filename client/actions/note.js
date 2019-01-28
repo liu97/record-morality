@@ -13,3 +13,6 @@ export const addFolder = createSimpleAjaxAction('/folder/addFolder', 'addFolder'
 
 // 删除文件夹
 export const deleteFolder = createSimpleAjaxAction('/folder/deleteFolder', 'deleteFolder', 'delete');
+
+// 设置selectedKeys
+export const updateSelectedKeys = createAction('updateSelectedKeys');

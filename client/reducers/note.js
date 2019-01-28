@@ -8,3 +8,12 @@ export const updateFolderTreeResult = createSimpleAjaxReduce('updateFolderTree')
 export const addFolderResult = createSimpleAjaxReduce('addFolder');
 
 export const deleteFolderResult = createSimpleAjaxReduce('deleteFolder');
+
+export const updateSelectedKeysResult = handleActions(
+    {
+        updateSelectedKeys: (state, action) => ({
+            keys: action.payload
+        })
+    },
+    {keys: []}
+)

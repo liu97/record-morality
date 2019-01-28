@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import _ from 'lodash';
 import { Menu, Item, Separator, Submenu, animation, contextMenu } from 'react-contexify';
 import { Tree, Icon, Input, Modal, message } from 'antd';
-import { fetchFolderTree, updateFolderTree, addFolder, deleteFolder } from 'actions/note.js';
+import { fetchFolderTree, updateFolderTree, addFolder, deleteFolder, updateSelectedKeys } from 'actions/note.js';
 
 import { CONTEXT_MENU } from 'constants/treeNav';
 
@@ -21,6 +21,7 @@ const { TreeNode } = Tree;
         updateFolderTreeResult: state.updateFolderTreeResult,
         addFolderResult: state.addFolderResult,
         deleteFolderResult: state.deleteFolderResult,
+        updateSelectedKeysResult: state.updateSelectedKeysResult,
     }),
     (dispatch) => ({
         actions: bindActionCreators(routerActions, dispatch),
@@ -53,7 +54,7 @@ class TreeNav extends Component {
             message.success('修改成功');
         }
         if(!_.isEqual(addFolderResult, this.props.addFolderResult) && !addFolderResult.isLoading){
-            this.props.setSelectedKeys && this.props.setSelectedKeys([this.getFolderKey(addFolderResult.data.id)]);
+            this.props.dispatch(updateSelectedKeys([this.getFolderKey(addFolderResult.data.id)]))
             this.hiddenModal();
 
             this.props.history.push(this.getFolderKey(addFolderResult.data.id));
@@ -349,7 +350,7 @@ class TreeNav extends Component {
                 <Tree
                     showIcon
                     draggable
-                    selectedKeys={this.props.treeSelectedKeys}
+                    selectedKeys={props.updateSelectedKeysResult.keys}
                     expandedKeys={this.state.expandedKeys}
                     onDragEnter={this.onDragEnter}
                     onDrop={this.onDrop}

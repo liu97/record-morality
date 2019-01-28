@@ -1,15 +1,28 @@
 import './index.less';
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { routerActions } from 'react-router-redux';
 import { Menu, Icon } from 'antd';
 import classNames from 'classnames';
 import ContextMenu from '../TreeNav';
+import { updateSelectedKeys } from 'actions/note.js';
+
+@connect(
+    (state, props) => ({
+        updateSelectedKeysResult: state.updateSelectedKeysResult,
+    }),
+    (dispatch) => ({
+        actions: bindActionCreators(routerActions, dispatch),
+        dispatch: dispatch
+    })
+)
 class NavMenu extends Component{
     constructor(props){
         super(props);
         this.state = {
             navList: this.props.navList,
-            selectedKeys: [],
         }
 		
     }
@@ -28,9 +41,7 @@ class NavMenu extends Component{
     }
 
     setSelectedKeys = (keys) => {
-        this.setState({
-            selectedKeys: keys
-        })
+        this.props.dispatch(updateSelectedKeys(keys));
     }
 
     getActiveKey = (url = this.props.history.location.pathname) => {
@@ -57,6 +68,8 @@ class NavMenu extends Component{
         this.props.onTreeDrop && this.props.onTreeDrop(info);
     }
     getNavList(){
+        const props = this.props;
+
         let navList = this.state.navList && this.state.navList.map((item, index)=>{
             if(item.type == 'nav'){
                 return (
@@ -72,13 +85,12 @@ class NavMenu extends Component{
                 return (
                     <ContextMenu 
                         key={item.key}
-                        treeSelectedKeys={this.state.selectedKeys}
+                        treeSelectedKeys={props.updateSelectedKeysResult.keys}
                         navTree={item}
                         onTreeDrop={this.onTreeDrop}
                         onTreeSelect={this.onItemClick}
                         onTreeExpand={this.onTreeExpand}
                         onTreeRightClick={this.onTreeRightClick}
-                        setSelectedKeys={this.setSelectedKeys}
                     />
                 )
             }
@@ -105,7 +117,7 @@ class NavMenu extends Component{
                 theme={props.theme ? props.theme : "light"}
                 mode={props.mode ? props.mode : "inline"}
                 className={navMenuClass}
-                selectedKeys={this.state.selectedKeys}
+                selectedKeys={props.updateSelectedKeysResult.keys}
             >
                 {this.getNavList()}
             </Menu>

@@ -1,5 +1,5 @@
 import './index.less';
-import './style/reset.css';
+import './style/reset.less';
 import 'babel-polyfill';
 import 'url-search-params-polyfill';
 import React from 'react';

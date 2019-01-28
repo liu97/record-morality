@@ -2,7 +2,6 @@ import { combineReducers } from 'redux';
 
 import {
 	postLoginResult,
-	getLoginStatus,
 	postRegisterResult,
 } from './lar';
 
@@ -11,17 +10,18 @@ import {
 	updateFolderTreeResult,
 	addFolderResult,
 	deleteFolderResult,
+	updateSelectedKeysResult,
 } from './note';
 
 const rootReducer = combineReducers({
 	postLoginResult,
-	getLoginStatus,
 	postRegisterResult,
 
 	fetchFolderTreeResult,
 	updateFolderTreeResult,
 	addFolderResult,
 	deleteFolderResult,
+	updateSelectedKeysResult,
 });
 
 export default rootReducer;
