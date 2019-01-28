@@ -19,13 +19,17 @@
             background-color: transparent;
         }
     }
-    .ant-layout{
-        background-color: transparent;
-        .ant-layout-content{
+    &-container {
+        flex: auto;
+        display: flex;
+        .note-list {
+            flex-basis: 250px;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        .note-content {
             height: 100%;
-            .note-list {
-                width: 250px;
-            }
+            flex: auto;
+            background-color: rgba(255, 255, 255, 0.6);
         }
     }
 }

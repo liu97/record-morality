@@ -52,11 +52,12 @@ class Note extends Component{
                     />
             
                 </Sider>
-                <Layout>
-                    <Content>
-                        <ContentList  className={`${PREFIX}-list`}/>
-                    </Content>
-                </Layout>
+                <div className={`${PREFIX}-container`}>
+                    <ContentList  className={`${PREFIX}-list`}/>
+                    <div className={`${PREFIX}-content`}>
+                        1
+                    </div>
+                </div>
             </Layout>
 		)
 	}
