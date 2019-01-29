@@ -24,6 +24,7 @@ class Note extends Component{
     constructor(props){
         super(props);
         this.navList = _.cloneDeep(NAVLIST);
+        // this.listRef = React.createRef();
     }
 
     UNSAFE_componentWillReceiveProps(nextProps){
@@ -35,6 +36,8 @@ class Note extends Component{
     }
 
     onItemClick = (info, e) => {
+        this.listRef.clearForm();
+
         console.log(info);
     }
 
@@ -53,7 +56,7 @@ class Note extends Component{
             
                 </Sider>
                 <div className={`${PREFIX}-container`}>
-                    <ContentList  className={`${PREFIX}-list`}/>
+                    <ContentList  className={`${PREFIX}-list`} wrappedComponentRef={(e) => this.listRef = e}/>
                     <div className={`${PREFIX}-content`}>
                         1
                     </div>

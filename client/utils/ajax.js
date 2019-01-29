@@ -84,7 +84,7 @@ export const createSimpleAjaxReduce = (postTitle) => {
 	{
 		// eslint-disable-next-line no-unused-vars
 		[postTitle+'Request']: (state, action) => ({
-			data: {},
+			data: [],
 			...state,
 		  	isLoading: true,
 		  	status: 'posting',
@@ -98,6 +98,6 @@ export const createSimpleAjaxReduce = (postTitle) => {
 	{
 		isLoading: false,
 		status: 'not start',
-		data: {}
+		data: []
 	});
 }

@@ -3,7 +3,6 @@ const _ = require('lodash')
 const Note = require('../models/note');
 const Folder = require('../models/folder');
 const opt = require('./opt');
-const folderService = require('./folder');
 const token = require('../utils/token');
 
 const noteServices ={
@@ -90,7 +89,7 @@ const noteServices ={
 		};
 		let noteInfo = _.cloneDeep(info);
 
-		let notes = await opt.findAll(Note,
+		result = await opt.findAll(Note,
 			{
 				where: {
 					...noteInfo
@@ -99,35 +98,6 @@ const noteServices ={
 			userId
 		)
         
-		if(!notes.isError){
-			result = [];
-			for(let i = 0; i < notes.length; i++){
-				let note = _.cloneDeep(notes[i].dataValues);
-				let folder = await folderService.getFolderInfo({id: note.folderId}, ctx);// 获取note的父文件夹
-
-				if(!folder.isError && folder.length){
-					note.noteFrom = folder[0].name; 
-
-					while(folder[0].parentId){
-						folder = await folderService.getFolderInfo({id:folder[0].parentId}, ctx);
-						note.noteFrom = folder[0].name + ">" + note.noteFrom;
-					}
-					
-					result.push(note);
-				}
-				else{
-					result = {
-						isError: true,
-						msg: '文件夹不存在',
-					};
-					break;
-				}
-			}
-		}
-		else{
-			result = notes;
-		}
-
 		if(!result.isError){
 			result.dataValues = result.map((item, index)=>{
 				return item.dataValues;

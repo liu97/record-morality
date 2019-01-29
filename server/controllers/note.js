@@ -7,7 +7,7 @@
 const _ = require('lodash');
 
 // const birthdayService = require('../services/birthday');
-// const folderService = require('../services/folder');
+const folderService = require('../services/folder');
 const noteService = require('../services/note');
 // const userService = require('../services/user');
 // const config = require('../../config');
@@ -160,9 +160,9 @@ const noteContrallers = {
         let query = _.cloneDeep(ctx.request.query);
 
         delete query.content; // 过滤conten参数
-        if(query.fuzzy_name){
-            query.name = {like: `%${query.fuzzy_name}%`}
-            delete query.fuzzy_name;
+        if(query.fuzzy_title){
+            query.title = {like: `%${query.fuzzy_title}%`}
+            delete query.fuzzy_title;
         }
 
         let noteInfo = await noteService.getNoteInfo(query);
@@ -173,17 +173,42 @@ const noteContrallers = {
         }
         else{
             noteInfo = noteInfo.dataValues;
-            if(ctx.request.query.content){
-                for(let i = 0; i < noteInfo.length; i++){
-                    let item = noteInfo[i];
-                    let readMessage = await file.readFile(item.notePath);
-                    item.content = readMessage.isError ? readMessage.msg : readMessage.content;
+
+            let notes = [];
+            for(let i = 0; i < noteInfo.length; i++){
+                let note = _.cloneDeep(noteInfo[i]);
+                if(ctx.request.query.content){
+                    let readMessage = await file.readFile(note.notePath);
+                    note.content = readMessage.isError ? readMessage.msg : readMessage.content; // 获取文章内容
+                }
+
+                let folder = await folderService.getFolderInfo({id: note.folderId}, ctx);// 获取note的父文件夹
+                folder = folder.dataValues;
+                
+                if(!folder.isError && folder.length){
+                    note.noteFrom = folder[0].name; 
+
+                    while(folder[0].parentId){
+                        folder = await folderService.getFolderInfo({id:folder[0].parentId}, ctx);
+                        note.noteFrom = folder[0].name + ">" + note.noteFrom;
+                    }
+                    note.noteFrom = "我的文件夹>" + note.noteFrom;
+                    notes.push(note);
+                }
+                else if(!folder.isError){
+                    note.noteFrom = "我的文件夹>";
+                    notes.push(note);
+                }
+                else{
+                    ctx.status = 404;
+                    result.msg = folder.msg;
                 }
             }
+
             result = {
                 success: true,
                 msg: 'It is 200 status',
-                data: noteInfo
+                data: notes
             }
         }
 
