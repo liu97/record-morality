@@ -19,13 +19,13 @@ export const NAVLIST = [
         type: 'nav',
         key: '/admin/note/trendMap',
     },
-    {
-        title: '草稿',
-        to: '/admin/note/unsaved',
-        icon: 'file-unknown',
-        type: 'nav',
-        key: '/admin/note/unsaved',
-    },
+    // {
+    //     title: '草稿',
+    //     to: '/admin/note/unsaved',
+    //     icon: 'file-unknown',
+    //     type: 'nav',
+    //     key: '/admin/note/unsaved',
+    // },
     {
         name: '我的文件夹',
         to: '/admin/note/folder',

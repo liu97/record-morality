@@ -6,7 +6,9 @@ import { routerActions } from 'react-router-redux';
 import { Layout, Icon } from 'antd';
 import NavMenu from './Component/NavMenu';
 import ContentList from './Component/ContentList';
+import NoteContent from './Component/NoteContent';
 import { NAVLIST } from 'constants/treeNav';
+import { fetchNoteList } from 'actions/note.js';
 
 const { Content, Sider } = Layout;
 const PREFIX = 'note';
@@ -24,7 +26,6 @@ class Note extends Component{
     constructor(props){
         super(props);
         this.navList = _.cloneDeep(NAVLIST);
-        // this.listRef = React.createRef();
     }
 
     UNSAFE_componentWillReceiveProps(nextProps){
@@ -36,9 +37,9 @@ class Note extends Component{
     }
 
     onItemClick = (info, e) => {
-        this.listRef.clearForm();
-
-        console.log(info);
+        this.listRef && this.listRef.clearForm();
+        let folderId = info.split('/').slice(-1).join();
+        this.props.dispatch(fetchNoteList({folderId}));
     }
 
 	render(){
@@ -57,9 +58,9 @@ class Note extends Component{
                 </Sider>
                 <div className={`${PREFIX}-container`}>
                     <ContentList  className={`${PREFIX}-list`} wrappedComponentRef={(e) => this.listRef = e}/>
-                    <div className={`${PREFIX}-content`}>
-                        1
-                    </div>
+                    <NoteContent className={`${PREFIX}-content`}>
+
+                    </NoteContent>
                 </div>
             </Layout>
 		)

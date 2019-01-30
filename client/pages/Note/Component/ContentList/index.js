@@ -1,12 +1,12 @@
 import './index.less';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Icon, Form, Input, Button, DatePicker, Tooltip, Spin } from 'antd';
+import { Icon, Form, Input, Button, DatePicker, Tooltip, Spin, Empty } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
 import classNames from 'classnames';
-import { fetchNoteList } from 'actions/note.js';
+import { fetchNoteList, fetchNoteContent } from 'actions/note.js';
 import { format } from 'utils/time';
 
 const { RangePicker } = DatePicker;
@@ -33,7 +33,12 @@ class ContentList extends Component{
     UNSAFE_componentWillReceiveProps(nextProps) {
         let { fetchNoteListResult } = nextProps;
         if(fetchNoteListResult && !_.isEqual(fetchNoteListResult, this.props.fetchNoteListResult)){
-            
+            if(fetchNoteListResult.data.length){
+                this.setSelectedNote(fetchNoteListResult.data[0].id);
+            }
+            else{
+                this.setSelectedNote(null);
+            }
         }
     }
 
@@ -68,10 +73,14 @@ class ContentList extends Component{
         this.props.form.resetFields();
     }
 
-    searchListClick = (id) => { // 点击笔记列表
-        this.setState({
-            selectedNote: id
-        })
+    setSelectedNote = (id) => { // 点击笔记列表
+        if(id != this.state.selectedNote){
+            this.setState({
+                selectedNote: id
+            });
+
+            this.props.dispatch(fetchNoteContent({id}));
+        }
     }
 
     getForm = () => {
@@ -81,7 +90,7 @@ class ContentList extends Component{
             <Form onSubmit={this.handleSubmit} className="search-form">
                 <Form.Item>
                     {getFieldDecorator('fuzzy_title')(
-                        <Input placeholder="笔记名" />
+                        <Input placeholder="根据文件名搜索" />
                     )}
                 </Form.Item>
                 <Form.Item>
@@ -91,7 +100,7 @@ class ContentList extends Component{
                 </Form.Item>
                 <Form.Item>
                     <Tooltip placement="right" title="检索范围为全部">
-                        <Button type="primary" htmlType="submit" className="login-form-button">
+                        <Button type="primary" htmlType="submit" className="search-button">
                             查询
                         </Button>
                     </Tooltip>
@@ -105,32 +114,49 @@ class ContentList extends Component{
 
         return(
             <Spin spinning={result.isLoading}>
-                <ul className={'search-list'}>
-                    {
-                        result.data && result.data.map((item, index) => {
-                            let listClassName = classNames({
-                                'search-li-selected': this.state.selectedNote == item.id,
-                                'search-li': true
-                            });
-                            return (
-                                <li 
-                                    key={item.id}
-                                    className={listClassName}
-                                    onClick={this.searchListClick.bind(this, item.id)}
-                                >
+                {
+                    result.data && result.data.length ? 
+                    <ul className={'search-list'}>
+                        {
+                            
+                            result.data.map((item, index) => {
+                                let listClassName = classNames({
+                                    'search-li-selected': this.state.selectedNote == item.id,
+                                    'search-li': true
+                                });
+                                return (
+                                    <li 
+                                        key={item.id}
+                                        className={listClassName}
+                                        onClick={this.setSelectedNote.bind(this, item.id)}
+                                    >
 
-                                    <span className={'search-li-title'}>
-                                        {
-                                            item.noteType == 'md' ? <Icon type="file-markdown" /> : <Icon type="file-text" />
-                                        }
-                                        {`${item.title}.${item.noteType}`}
-                                    </span>
-                                    <span className={'search-li-time'}>{format(item.createdAt)}</span>
-                                </li>
-                            )
-                        })
-                    }
-                </ul>
+                                        <span className={'search-li-title'}>
+                                            {
+                                                item.noteType == 'md' ? <Icon type="file-markdown" /> : <Icon type="file-text" />
+                                            }
+                                            {`${item.title}.${item.noteType}`}
+                                        </span>
+                                        <span className={'search-li-time'}>{format(item.createdAt)}</span>
+                                    </li>
+                                )
+                            })
+
+                        }
+                    </ul> :
+                    <div className={'list-no-data'}>
+                        <Empty
+                            image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
+                            description={
+                                <span>
+                                    未找到文件
+                                </span>
+                            }
+                        >
+                            <Button type="primary">新建笔记</Button>
+                        </Empty>
+                    </div>
+                }
             </Spin>
         )
     }

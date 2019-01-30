@@ -17,5 +17,8 @@ export const deleteFolder = createSimpleAjaxAction('/folder/deleteFolder', 'dele
 // 设置selectedKeys
 export const updateSelectedKeys = createAction('updateSelectedKeys');
 
-// 查询笔记
+// 查询笔记列表
 export const fetchNoteList = createSimpleAjaxAction('/note', 'fetchNoteList', 'get');
+
+// 查询笔记内容
+export const fetchNoteContent = createSimpleAjaxAction('/note?content=true', 'fetchNoteContent', 'get');

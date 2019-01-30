@@ -19,3 +19,5 @@ export const updateSelectedKeysResult = handleActions(
 )
 
 export const fetchNoteListResult = createSimpleAjaxReduce('fetchNoteList');
+
+export const fetchNoteContentResult = createSimpleAjaxReduce('fetchNoteContent');

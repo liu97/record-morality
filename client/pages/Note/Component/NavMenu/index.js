@@ -37,7 +37,9 @@ class NavMenu extends Component{
     }
 
     componentDidMount(){
-        this.setSelectedKeys([this.getActiveKey()]);
+        let key = this.getActiveKey();
+        this.setSelectedKeys([key]);
+        this.onItemClick(key)
     }
 
     setSelectedKeys = (keys) => {

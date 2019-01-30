@@ -31,7 +31,19 @@ const send = (url, options, cb, method = 'post') => {
 	}
 	if (method == 'get') { // 如果是GET请求，拼接url
 		const searchStr = obj2String(options);
-		url += '?' + searchStr;
+
+		if(~url.indexOf('?')){
+			if(url.slice(-1) == '?'){
+				url = `${url}${searchStr}`;
+			}
+			else{
+				url = `${url}&${searchStr}`;
+			}
+		}
+		else{
+			url = `${url}?${searchStr}`;
+		}
+
 		initObj = {
 		  	method: method,
 			credentials: 'include',
