@@ -34,14 +34,22 @@ class ContentList extends Component{
     UNSAFE_componentWillReceiveProps(nextProps) {
         let { fetchNoteContentResult, updateNoteContentResult } = nextProps;
         if(fetchNoteContentResult && !_.isEqual(fetchNoteContentResult, this.props.fetchNoteContentResult)){
-            
+            if(fetchNoteContentResult.data[0] && fetchNoteContentResult.data[0].title != this.state.noteTitle){
+                this.setState({
+                    noteTitle: fetchNoteContentResult.data[0].title
+                })
+            }
         }
         if(updateNoteContentResult && !_.isEqual(updateNoteContentResult, this.props.updateNoteContentResult)){
-            let result = this.props.fetchNoteContentResult;
-            let query = {
-                id: result.data[0].id,
+            
+            if(!updateNoteContentResult.success){
+                this.setState({
+                    noteTitle: this.realTitle
+                })
             }
-            this.props.dispatch(fetchNoteContent(query))
+            else{
+                this.realTitle = this.state.noteTitle
+            }
         }
     }
 
@@ -86,6 +94,12 @@ class ContentList extends Component{
     }
 
     titleChange = (event) => {
+        this.setState({
+            noteTitle: event.target.value 
+        })
+    }
+
+    submitTitle = (event) => {
         let result = this.props.fetchNoteContentResult;
         let query = {
             id: result.data[0].id,
@@ -102,8 +116,9 @@ class ContentList extends Component{
                 <div className={'content-header'}>
                     <div className={'content-title'}>
                         <input
-                            value={result.data[0].title}
-                            onBlur={this.titleChange}
+                            value={this.state.noteTitle}
+                            onChange={this.titleChange}
+                            onBlur={this.submitTitle}
                         ></input>
                     </div>
                 </div>
