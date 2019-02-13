@@ -12,7 +12,8 @@ import {
 	deleteFolderResult,
 	updateSelectedKeysResult,
 	fetchNoteListResult,
-	fetchNoteContentResult
+	fetchNoteContentResult,
+	updateNoteContentResult,
 } from './note';
 
 const rootReducer = combineReducers({
@@ -25,7 +26,8 @@ const rootReducer = combineReducers({
 	deleteFolderResult,
 	updateSelectedKeysResult,
 	fetchNoteListResult,
-	fetchNoteContentResult
+	fetchNoteContentResult,
+	updateNoteContentResult,
 });
 
 export default rootReducer;

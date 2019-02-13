@@ -20,5 +20,8 @@ export const updateSelectedKeys = createAction('updateSelectedKeys');
 // 查询笔记列表
 export const fetchNoteList = createSimpleAjaxAction('/note', 'fetchNoteList', 'get');
 
-// 查询笔记内容
+// 查询笔记信息
 export const fetchNoteContent = createSimpleAjaxAction('/note?content=true', 'fetchNoteContent', 'get');
+
+// 修改笔记信息
+export const updateNoteContent = createSimpleAjaxAction('/note/updateNote', 'updateNoteContent', 'put');

@@ -8,7 +8,7 @@
 const
     request = require('supertest'),
     app = require('../../app'),
-    token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibGl1Y2h1YW5mdSIsImlkIjoxLCJpYXQiOjE1NDg3NTU4MTMsImV4cCI6MTU0ODc3NzQxM30.3aiE9j_CL32HkFlWJS98jJwwtTC17AehOB2WREjnF0A";
+    token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibGl1Y2h1YW5mdSIsImlkIjoxLCJpYXQiOjE1NTAwNTU4NTIsImV4cCI6MTU1MDA3NzQ1Mn0.ql5dOx_07_wfAtOmeb8Oo-_upfYx69YsG3_VP9xeor0";
 
 describe('#test koa app', () => {
 
@@ -31,7 +31,7 @@ describe('#test koa app', () => {
             try{
                 let res = await request(server)
                                 .post('/note/addNote')
-                                .send({title:'记德', noteType:'txt',content:'测试2'})
+                                .send({title:'记德md', noteType:'md',content:'测试md'})
                                 .set('Authorization', 'Bearer ' + token) // header处加入token验证
                                 .expect(200);
             }
