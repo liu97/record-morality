@@ -12,7 +12,7 @@ export const deleteFolderResult = createSimpleAjaxReduce('deleteFolder');
 export const updateSelectedKeysResult = handleActions(
     {
         updateSelectedKeys: (state, action) => ({
-            keys: action.payload
+            keys: action.payload.keys
         })
     },
     {keys: []}
@@ -20,6 +20,17 @@ export const updateSelectedKeysResult = handleActions(
 
 export const fetchNoteListResult = createSimpleAjaxReduce('fetchNoteList');
 
+export const updateNoteStatusResult = handleActions(
+    {
+        updateNoteStatus: (state, action) => ({
+            status: action.payload.status
+        })
+    },
+    {status: 'detail'}
+)
+
 export const fetchNoteContentResult = createSimpleAjaxReduce('fetchNoteContent');
 
 export const updateNoteContentResult = createSimpleAjaxReduce('updateNoteContent');
+
+export const addNoteResult = createSimpleAjaxReduce('addNote');

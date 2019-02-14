@@ -38,12 +38,13 @@ class NavMenu extends Component{
 
     componentDidMount(){
         let key = this.getActiveKey();
-        this.setSelectedKeys([key]);
+        this.setSelectedKeys(key);
         this.onItemClick(key)
     }
 
-    setSelectedKeys = (keys) => {
-        this.props.dispatch(updateSelectedKeys(keys));
+    setSelectedKeys = (key) => {
+        this.props.dispatch(updateSelectedKeys({keys:[key]}));
+        this.props.onClick && this.props.onClick(key);
     }
 
     getActiveKey = (url = this.props.history.location.pathname) => {
@@ -52,13 +53,12 @@ class NavMenu extends Component{
     }
     onItemClick = (item, e) => {
         if(item.type && item.type == 'nav'){
-            this.setSelectedKeys([item.key]);
+            this.setSelectedKeys(item.key);
             item = item.key;
         }
         else if(!item.type){
-            this.setSelectedKeys([item]);
+            this.setSelectedKeys(item);
         }                     
-        this.props.onClick && this.props.onClick(item, e);
     }
     onTreeExpand = (info) => {
         this.props.onTreeExpand && this.props.onTreeExpand(info);
@@ -93,6 +93,7 @@ class NavMenu extends Component{
                         onTreeSelect={this.onItemClick}
                         onTreeExpand={this.onTreeExpand}
                         onTreeRightClick={this.onTreeRightClick}
+                        setSelectedKeys={this.setSelectedKeys}
                     />
                 )
             }

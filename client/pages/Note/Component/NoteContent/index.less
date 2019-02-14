@@ -1,25 +1,66 @@
 .content-container{
-    .content-data{
-        .detail-editor{
-            display: inline-block;
-            width: 100%;
+    .ant-spin-nested-loading{
+        height: 100%;
+        .ant-spin-container{
             height: 100%;
-            .mditor{
-                width: 100%;
-                .head{
-                    .toolbar{
-                        :not(.fa-arrows-alt){
-                            display: none;
-                        }
-                    }            
-                }
-                .body{
-                    div.editor{
-                        display: none;
+            display: flex;
+            flex-direction: column;
+            .content-header{
+                display: flex;
+                height: 60px;
+                line-height: 60px;
+                border-bottom: 1px solid #eee;
+                padding: 0 20px;
+                .content-title{
+                    flex: auto;
+                    height: 59px;
+                    font-size: 18px;
+                    padding: 5px 0;
+                    border-radius: 0;
+                    border: 0px;
+                    &:focus{
+                        outline:none;
                     }
-                    div.viewer{
+                }
+                .content-button{
+                    width: 80px;
+                    margin: 14px 10px;
+                }
+                .content-info{
+                    font-size: 18px;
+                    line-height: 60px;
+                    margin: 0 10px;
+                    cursor: pointer;
+                }
+            }
+            .content-data{
+                flex: auto;
+                display: flex;
+                .editor{
+                    flex: auto;
+                    .mditor{
+                        height: 100% !important;
+                    }
+                }
+                .detail-editor{
+                    display: inline-block;
+                    .mditor{
                         width: 100%;
-                        padding: 50px 0;
+                        .head{
+                            .toolbar{
+                                :not(.fa-arrows-alt){
+                                    display: none;
+                                }
+                            }            
+                        }
+                        .body{
+                            div.editor{
+                                display: none;
+                            }
+                            div.viewer{
+                                width: 100%;
+                            }
+                        }
                     }
                 }
             }

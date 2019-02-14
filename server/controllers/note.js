@@ -35,7 +35,7 @@ const noteContrallers = {
             ctx.status = 404;
             result.msg = "未传入文件类型";
         }
-        else if(!body.content){
+        else if(body.content == undefined){
             ctx.status = 404;
             result.msg = "未传入文件内容";
         }

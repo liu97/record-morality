@@ -24,20 +24,19 @@ const { RangePicker } = DatePicker;
 class ContentList extends Component{
     constructor(props){
         super(props);
-        this.state = {
-            selectedNote: undefined
-        }
 		
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
         let { fetchNoteListResult } = nextProps;
-        if(fetchNoteListResult && !_.isEqual(fetchNoteListResult, this.props.fetchNoteListResult)){
-            if(fetchNoteListResult.data.length){
-                this.setSelectedNote(fetchNoteListResult.data[0].id);
+        if(fetchNoteListResult && !fetchNoteListResult.isLoading && !_.isEqual(fetchNoteListResult, this.props.fetchNoteListResult)){
+            // 如果未选中笔记，且文件夹里有笔记
+            if(!this.props.selectedNote && fetchNoteListResult.info.data && fetchNoteListResult.info.data.length){
+                this.setSelectedNote(fetchNoteListResult.info.data[0].id);
             }
-            else{
-                this.setSelectedNote(null);
+            // 如果文件夹里没笔记
+            else if(fetchNoteListResult.info.data && !fetchNoteListResult.info.data.length){
+                this.setSelectedNote(undefined)
             }
         }
     }
@@ -63,8 +62,8 @@ class ContentList extends Component{
                     }
                 }
                 
-                
-                this.props.dispatch(fetchNoteList(values))
+                this.props.selectedNoteChange(undefined);
+                this.props.getNoteList(values);
             }
         });
     }
@@ -74,10 +73,8 @@ class ContentList extends Component{
     }
 
     setSelectedNote = (id) => { // 点击笔记列表
-        if(id != this.state.selectedNote){
-            this.setState({
-                selectedNote: id
-            });
+        if(id != this.props.selectedNote || !id){
+            this.props.selectedNoteChange(id)
 
             this.props.dispatch(fetchNoteContent({id}));
         }
@@ -113,15 +110,15 @@ class ContentList extends Component{
         const result = this.props.fetchNoteListResult;
 
         return(
-            <Spin spinning={result.isLoading}>
+            <React.Fragment>
                 {
-                    result.data && result.data.length ? 
+                    result.info.data && result.info.data.length ? 
                     <ul className={'search-list'}>
                         {
                             
-                            result.data.map((item, index) => {
+                            result.info.data.map((item, index) => {
                                 let listClassName = classNames({
-                                    'search-li-selected': this.state.selectedNote == item.id,
+                                    'search-li-selected': this.props.selectedNote == item.id,
                                     'search-li': true
                                 });
                                 return (
@@ -133,7 +130,7 @@ class ContentList extends Component{
 
                                         <span className={'search-li-title'}>
                                             {
-                                                item.noteType == 'md' ? <Icon type="file-markdown" /> : <Icon type="file-text" />
+                                                item.noteType == 'md' ? <Icon type="file-markdown" style={{color: '#F78A09'}} /> : <Icon type="file-text" />
                                             }
                                             {`${item.title}.${item.noteType}`}
                                         </span>
@@ -157,7 +154,7 @@ class ContentList extends Component{
                         </Empty>
                     </div>
                 }
-            </Spin>
+            </React.Fragment>
         )
     }
 

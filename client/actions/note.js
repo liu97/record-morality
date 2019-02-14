@@ -20,8 +20,14 @@ export const updateSelectedKeys = createAction('updateSelectedKeys');
 // 查询笔记列表
 export const fetchNoteList = createSimpleAjaxAction('/note', 'fetchNoteList', 'get');
 
+// 设置当前笔记状态（编辑、查看）
+export const updateNoteStatus = createAction('updateNoteStatus');
+
 // 查询笔记信息
 export const fetchNoteContent = createSimpleAjaxAction('/note?content=true', 'fetchNoteContent', 'get');
 
 // 修改笔记信息
 export const updateNoteContent = createSimpleAjaxAction('/note/updateNote', 'updateNoteContent', 'put');
+
+// 添加笔记
+export const addNote = createSimpleAjaxAction('/note/addNote', 'addNote', 'post');

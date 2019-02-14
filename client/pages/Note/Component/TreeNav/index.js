@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import _ from 'lodash';
 import { Menu, Item, Separator, Submenu, animation, contextMenu } from 'react-contexify';
 import { Tree, Icon, Input, Modal, message } from 'antd';
-import { fetchFolderTree, updateFolderTree, addFolder, deleteFolder, updateSelectedKeys } from 'actions/note.js';
+import { fetchFolderTree, updateFolderTree, addFolder, deleteFolder, addNote, updateNoteStatus } from 'actions/note.js';
 
 import { CONTEXT_MENU } from 'constants/treeNav';
 
@@ -22,6 +22,7 @@ const { TreeNode } = Tree;
         addFolderResult: state.addFolderResult,
         deleteFolderResult: state.deleteFolderResult,
         updateSelectedKeysResult: state.updateSelectedKeysResult,
+        addNoteResult: state.addNoteResult,
     }),
     (dispatch) => ({
         actions: bindActionCreators(routerActions, dispatch),
@@ -42,7 +43,7 @@ class TreeNav extends Component {
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
-        let { fetchFolderTreeResult, updateFolderTreeResult, addFolderResult, deleteFolderResult } = nextProps;
+        let { fetchFolderTreeResult, updateFolderTreeResult, addFolderResult, deleteFolderResult, addNoteResult } = nextProps;
         if(!_.isEqual(fetchFolderTreeResult, this.props.fetchFolderTreeResult) && !fetchFolderTreeResult.isLoading){
             this.addAsyncList(fetchFolderTreeResult);
         }
@@ -51,23 +52,31 @@ class TreeNav extends Component {
 
             this.hiddenModal();
 
-            message.success('修改成功');
+            message.success('修改文件夹成功');
         }
         if(!_.isEqual(addFolderResult, this.props.addFolderResult) && !addFolderResult.isLoading){
-            this.props.dispatch(updateSelectedKeys([this.getFolderKey(addFolderResult.data.id)]))
+            this.props.setSelectedKeys(this.getFolderKey(addFolderResult.info.data.id));
             this.hiddenModal();
 
-            this.props.history.push(this.getFolderKey(addFolderResult.data.id));
+            this.props.history.push(this.getFolderKey(addFolderResult.info.data.id));
 
             this.props.dispatch(fetchFolderTree());
 
-            message.success('新建成功');
+            message.success('新建文件夹成功');
         }
         if(!_.isEqual(deleteFolderResult, this.props.deleteFolderResult) && !deleteFolderResult.isLoading){
 
             this.props.dispatch(fetchFolderTree());
 
-            message.success('删除成功');
+            message.success('删除文件夹成功');
+        }
+        if(!_.isEqual(addNoteResult, this.props.addNoteResult) && !addNoteResult.isLoading){
+            let { opt, extra, key } = this.currentRight;
+            this.props.setSelectedKeys(key.props.eventKey);
+
+            this.hiddenModal();
+
+            this.props.dispatch(updateNoteStatus({status: 'edit'}))
         }
     }
 
@@ -111,7 +120,7 @@ class TreeNav extends Component {
 
     addAsyncList = (treeList) => { // 把从数据库获取出来的文件夹信息加入到nav中
         let tree = _.cloneDeep(this.state.tree);
-        tree.children = treeList.data;
+        tree.children = treeList.info.data;
         this.setState({tree})
     }
 
@@ -299,17 +308,21 @@ class TreeNav extends Component {
 
     handleOk = () => { // modal返回确认
         let { opt, extra, key } = this.currentRight;
+        let id = this.getFolderId(key.props.eventKey);
 
         if(opt == 'new'){
             if(extra.type == 'folder'){
-                let parentId = this.getFolderId(key.props.eventKey);
-                this.props.dispatch(addFolder({name: this.state.modalValue, parentId}));
+                this.props.dispatch(addFolder({name: this.state.modalValue, parentId: id}));
+                
+                this.setExpandedKeys(key.props.eventKey);
+            }
+            else{
+                this.props.dispatch(addNote({title: this.state.modalValue, folderId: id, content: '', noteType: extra.type}))
                 
                 this.setExpandedKeys(key.props.eventKey);
             }
         }
         else if(this.currentRight.opt == 'rename'){
-            let id = this.getFolderId(key.props.eventKey);
             this.props.dispatch(updateFolderTree({name: this.state.modalValue, id}))
         }
     }
@@ -365,7 +378,6 @@ class TreeNav extends Component {
                     title={`请输入${typeName}名`}
                     visible={this.state.modalVisible}
                     onOk={this.handleOk}
-                    confirmLoading={props.addFolderResult.isLoading}
                     onCancel={this.hiddenModal}
                 >
                     <Input 

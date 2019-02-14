@@ -35,14 +35,14 @@ class Home extends Component{
 		}
 	}
 	checkIsLogin(result){
-		if(result.success){
+		if(result.info.success){
 			setCookie('isLogin', true);
-			window.localStorage.setItem('access_token', result.data);
+			window.localStorage.setItem('access_token', result.info.data);
 			const bcakURL = this.props.location.state ? this.props.location.state.from.pathname : '/admin/note/';
 			this.props.history.push(bcakURL);
 		}
 		else{
-			message.error(result.msg);
+			message.error(result.info.msg);
 		}
 	}
 	// 提交登录表单
