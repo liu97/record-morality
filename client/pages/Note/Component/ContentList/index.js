@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
 import classNames from 'classnames';
-import { fetchNoteList, fetchNoteContent } from 'actions/note.js';
+import { fetchNoteList, fetchNoteContent, updateSelectedNote } from 'actions/note.js';
 import { format } from 'utils/time';
 
 const { RangePicker } = DatePicker;
@@ -14,6 +14,7 @@ const { RangePicker } = DatePicker;
 @connect(
     (state, props) => ({
         fetchNoteListResult: state.fetchNoteListResult,
+        updateSelectedNoteResult: state.updateSelectedNoteResult,
     }),
     (dispatch) => ({
         actions: bindActionCreators(routerActions, dispatch),
@@ -28,10 +29,10 @@ class ContentList extends Component{
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
-        let { fetchNoteListResult } = nextProps;
+        let { fetchNoteListResult, updateSelectedNoteResult } = nextProps;
         if(fetchNoteListResult && !fetchNoteListResult.isLoading && !_.isEqual(fetchNoteListResult, this.props.fetchNoteListResult)){
             // 如果未选中笔记，且文件夹里有笔记
-            if(!this.props.selectedNote && fetchNoteListResult.info.data && fetchNoteListResult.info.data.length){
+            if(!updateSelectedNoteResult.id && fetchNoteListResult.info.data && fetchNoteListResult.info.data.length){
                 this.setSelectedNote(fetchNoteListResult.info.data[0].id);
             }
             // 如果文件夹里没笔记
@@ -62,7 +63,7 @@ class ContentList extends Component{
                     }
                 }
                 
-                this.props.selectedNoteChange(undefined);
+                this.setSelectedNote(undefined);
                 this.props.getNoteList(values);
             }
         });
@@ -73,8 +74,8 @@ class ContentList extends Component{
     }
 
     setSelectedNote = (id) => { // 点击笔记列表
-        if(id != this.props.selectedNote || !id){
-            this.props.selectedNoteChange(id)
+        if(id != this.props.updateSelectedNoteResult.id || !id){
+            this.props.dispatch(updateSelectedNote({id}))
 
             this.props.dispatch(fetchNoteContent({id}));
         }
@@ -118,7 +119,7 @@ class ContentList extends Component{
                             
                             result.info.data.map((item, index) => {
                                 let listClassName = classNames({
-                                    'search-li-selected': this.props.selectedNote == item.id,
+                                    'search-li-selected': this.props.updateSelectedNoteResult.id == item.id,
                                     'search-li': true
                                 });
                                 return (

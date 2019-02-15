@@ -18,6 +18,15 @@ export const updateSelectedKeysResult = handleActions(
     {keys: []}
 )
 
+export const updateSelectedNoteResult = handleActions(
+    {
+        updateSelectedNote: (state, action) => ({
+            id: action.payload.id
+        })
+    },
+    {id: null}
+)
+
 export const fetchNoteListResult = createSimpleAjaxReduce('fetchNoteList');
 
 export const updateNoteStatusResult = handleActions(

@@ -15,7 +15,7 @@ const PREFIX = 'note';
 
 @connect(
     (state, props) => ({
-        
+        updateSelectedNoteResult: state.updateSelectedNoteResult,
     }),
     (dispatch) => ({
         actions: bindActionCreators(routerActions, dispatch),
@@ -26,9 +26,6 @@ class Note extends Component{
     constructor(props){
         super(props);
         this.navList = _.cloneDeep(NAVLIST);
-        this.state = {
-            selectedNote: undefined
-        }
     }
 
     UNSAFE_componentWillReceiveProps(nextProps){
@@ -43,7 +40,6 @@ class Note extends Component{
         this.listRef && this.listRef.clearForm();
         let folderId = info.split('/').slice(-1).join();
         this.getNoteList({folderId});
-        this.selectedNoteChange(undefined);
     }
 
     getNoteList = (query) => {
@@ -59,12 +55,6 @@ class Note extends Component{
             this.query = sendQuery;
         }
         this.props.dispatch(fetchNoteList(sendQuery));
-    }
-
-    selectedNoteChange = (selectedNote) => {
-        this.setState({
-            selectedNote
-        })
     }
 
 	render(){
@@ -86,8 +76,6 @@ class Note extends Component{
                         className={`${PREFIX}-list`} 
                         wrappedComponentRef={(e) => this.listRef = e}
                         getNoteList={this.getNoteList}
-                        selectedNote={this.state.selectedNote}
-                        selectedNoteChange={this.selectedNoteChange}
                     />
                     <NoteContent 
                         className={`${PREFIX}-content`}

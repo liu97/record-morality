@@ -7,7 +7,7 @@ import { routerActions } from 'react-router-redux';
 import { Menu, Icon } from 'antd';
 import classNames from 'classnames';
 import ContextMenu from '../TreeNav';
-import { updateSelectedKeys } from 'actions/note.js';
+import { updateSelectedKeys, updateSelectedNote } from 'actions/note.js';
 
 @connect(
     (state, props) => ({
@@ -58,7 +58,9 @@ class NavMenu extends Component{
         }
         else if(!item.type){
             this.setSelectedKeys(item);
-        }                     
+        }    
+
+        this.props.dispatch(updateSelectedNote({id:undefined}));
     }
     onTreeExpand = (info) => {
         this.props.onTreeExpand && this.props.onTreeExpand(info);

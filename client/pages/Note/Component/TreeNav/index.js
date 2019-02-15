@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import _ from 'lodash';
 import { Menu, Item, Separator, Submenu, animation, contextMenu } from 'react-contexify';
 import { Tree, Icon, Input, Modal, message } from 'antd';
-import { fetchFolderTree, updateFolderTree, addFolder, deleteFolder, addNote, updateNoteStatus } from 'actions/note.js';
+import { fetchFolderTree, updateFolderTree, addFolder, deleteFolder, addNote, updateNoteStatus, updateSelectedNote } from 'actions/note.js';
 
 import { CONTEXT_MENU } from 'constants/treeNav';
 
@@ -74,6 +74,7 @@ class TreeNav extends Component {
             let { opt, extra, key } = this.currentRight;
             this.props.setSelectedKeys(key.props.eventKey);
 
+            this.props.dispatch(updateSelectedNote({id: addNoteResult.info.data.id}))
             this.hiddenModal();
 
             this.props.dispatch(updateNoteStatus({status: 'edit'}))
