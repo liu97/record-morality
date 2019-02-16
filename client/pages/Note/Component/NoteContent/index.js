@@ -1,14 +1,12 @@
 import './index.less';
 import React, { Component } from 'react';
-import { Icon, Form, Input, Button, DatePicker, Tooltip, Spin, Empty, message, Drawer } from 'antd';
+import { Icon, Form, Input, Button, DatePicker, Tooltip, Spin, Empty, message, Drawer, Row, Col } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
 import classNames from 'classnames';
 import { format } from 'utils/time';
 import { updateNoteContent, fetchNoteContent, updateNoteStatus } from 'actions/note.js';
-
-const { RangePicker } = DatePicker;
 
 @connect(
     (state, props) => ({
@@ -281,7 +279,54 @@ class ContentList extends Component{
                         onClose={this.hiddenDrawer}
                         visible={this.state.drawerVisible}
                     >
-
+                        <Row gutter={8}>
+                            <Col className="gutter-row" span={8}>
+                                {"创建时间:"}
+                            </Col>
+                            <Col className="gutter-row" span={16}>
+                                {
+                                    result.info.data && 
+                                    result.info.data[0] &&
+                                    format(result.info.data[0].createdAt)
+                                }
+                            </Col>
+                        </Row>
+                        <Row gutter={8}>
+                            <Col className="gutter-row" span={8}>
+                                {"更新时间:"}
+                            </Col>
+                            <Col className="gutter-row" span={16}>
+                                {
+                                    result.info.data && 
+                                    result.info.data[0] &&
+                                    format(result.info.data[0].updatedAt)
+                                }
+                            </Col>
+                        </Row>
+                        <Row gutter={8}>
+                            <Col className="gutter-row" span={8}>
+                                {"文件路径:"}
+                            </Col>
+                            <Col className="gutter-row" span={16}>
+                                {
+                                    result.info.data && 
+                                    result.info.data[0] &&
+                                    result.info.data[0].noteFrom
+                                }
+                            </Col>
+                        </Row>
+                        <Row gutter={8}>
+                            <Col className="gutter-row" span={8}>
+                                {"文件夹:"}
+                            </Col>
+                            <Col className="gutter-row" span={16}>
+                                {
+                                    result.info.data && 
+                                    result.info.data[0] &&
+                                    result.info.data[0].noteFrom
+                                }
+                            </Col>
+                        </Row>
                     </Drawer>
                 </Spin>
                 
