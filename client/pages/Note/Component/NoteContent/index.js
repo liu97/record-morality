@@ -15,6 +15,7 @@ const { RangePicker } = DatePicker;
         fetchNoteContentResult: state.fetchNoteContentResult,
         updateNoteContentResult: state.updateNoteContentResult,
         updateNoteStatusResult: state.updateNoteStatusResult,
+        updateSelectedNoteResult: state.updateSelectedNoteResult,
     }),
     (dispatch) => ({
         actions: bindActionCreators(routerActions, dispatch),
@@ -29,21 +30,25 @@ class ContentList extends Component{
             noteTitle: '',
             drawerVisible: false,
         }
-		this.asyncFlag = true;
+        this.asyncFlag = true; // 是否加载md异步文件
+        this.fileContent = ''; // 当前文件在数据库中的内容
+        this.realTitle = ''; // 当前文件在数据库中的标题
+        this.handleSave = false; // 手动保存文件
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
-        let { fetchNoteContentResult, updateNoteContentResult, updateNoteStatusResult } = nextProps;
+        let { fetchNoteContentResult, updateNoteContentResult, updateNoteStatusResult, updateSelectedNoteResult } = nextProps;
         if(fetchNoteContentResult && !fetchNoteContentResult.isLoading && !_.isEqual(fetchNoteContentResult, this.props.fetchNoteContentResult)){
-            if(fetchNoteContentResult.info.data && fetchNoteContentResult.info.data[0] && fetchNoteContentResult.info.data[0].title != this.state.noteTitle){
-                this.setState({
-                    noteTitle: fetchNoteContentResult.info.data[0].title
-                });
-                this.realTitle = fetchNoteContentResult.info.data[0].title;
-
-                updateNoteStatusResult.status != 'datail' && this.props.dispatch(updateNoteStatus({status: 'detail'}))
-
+            if(fetchNoteContentResult.info.data && fetchNoteContentResult.info.data[0]){
+                if(fetchNoteContentResult.info.data[0].title != this.state.noteTitle){
+                    this.setState({
+                        noteTitle: fetchNoteContentResult.info.data[0].title
+                    });
+                    this.realTitle = fetchNoteContentResult.info.data[0].title;
+                }
                 this.mditor && (this.mditor.value = fetchNoteContentResult.info.data[0].content);
+
+                this.fileContent = fetchNoteContentResult.info.data[0].content;
             }
         }
         if(updateNoteContentResult && !updateNoteContentResult.isLoading && !_.isEqual(updateNoteContentResult, this.props.updateNoteContentResult)){
@@ -57,16 +62,33 @@ class ContentList extends Component{
                     this.realTitle = this.state.noteTitle
                     this.props.getNoteList()
                 }
-                else{ // 修改了文档内容
-                    this.props.dispatch(updateNoteStatus({status: 'detail'}));
-                    message.success('保存成功');
+                else {
+                    if(this.handleSave){ // 手动修改了文档内容
+                        this.props.dispatch(updateNoteStatus({status: 'detail'}));
+                        this.handleSave = false;
+                        message.success('保存成功');
+                    }
                 }
+                
             }
+        }
+        if(updateNoteStatusResult && !updateNoteStatusResult.isLoading && !_.isEqual(updateNoteStatusResult, this.props.updateNoteStatusResult)){
+
+        }
+        if(updateSelectedNoteResult && !updateSelectedNoteResult.isLoading && !_.isEqual(updateSelectedNoteResult, this.props.updateSelectedNoteResult)){
+            this.props.dispatch(fetchNoteContent(updateSelectedNoteResult));
         }
     }
 
     componentDidMount(){
         
+    }
+
+    componentWillUnmount(){
+        window.clearInterval(this.timer);
+
+        this.mdTextarea.removeEventListener('focus', this.mdTextareaFocus);
+        this.mdTextarea.removeEventListener('blur', this.mdTextareaBlur);
     }
 
     showDrawer = () => {
@@ -81,17 +103,41 @@ class ContentList extends Component{
         });
     };
 
+    saveContent = () => {
+        if(this.mditor.value != this.fileContent){
+            this.props.dispatch(updateNoteContent({
+                id: this.props.fetchNoteContentResult.info.data[0].id,
+                content: this.mditor.value
+            }))
+            this.fileContent = this.mditor.value;
+        }
+    }
+
+    mdTextareaFocus = () => {
+        this.timer = window.setInterval(()=>{
+            this.saveContent();
+            
+        }, 20000)
+    }
+
+    mdTextareaBlur = () => {
+        this.saveContent();
+        window.clearInterval(this.timer);
+    }
+    
+
     setMdMessage = () => {
 		let result = this.props.fetchNoteContentResult;
 		//设置外部editor
 		const ele_textarea = document.getElementById('md_editor');
 		// eslint-disable-next-line no-undef
         const mditor =  Mditor.fromTextarea(ele_textarea);
-
         mditor.value = result.info.data[0].content; // 由于首次渲染异步资源还未加载，加载完成再设置value
-
         this.mditor = mditor;
 
+        this.mdTextarea = document.querySelector('.editor .textarea');
+        this.mdTextarea.addEventListener('focus', this.mdTextareaFocus)
+        this.mdTextarea.addEventListener('blur', this.mdTextareaBlur);
     }
     
     getAsyncResource = () => {
@@ -115,7 +161,7 @@ class ContentList extends Component{
 
         return (
             <div className={editorClass}>
-                <textarea id="md_editor"></textarea>
+                <textarea id="md_editor" className={'hh'}></textarea>
             </div>
         )
     }
@@ -145,14 +191,17 @@ class ContentList extends Component{
         }
     }
 
-    handleBtnClick = (isEdit, event) => {
-        if(isEdit){
+    handleBtnClick = (isEditBtn, event) => {
+        const note = this.props.fetchNoteContentResult.info.data[0];
+        if(isEditBtn){
             this.props.dispatch(updateNoteStatus({status: 'edit'}))
         }
         else{
-            let note = this.props.fetchNoteContentResult.info.data[0];
-            if(this.mditor.value != note.content){
+            if(this.mditor.value != this.fileContent){
+                this.fileContent = this.mditor.value;
                 this.props.dispatch(updateNoteContent({id: note.id, content: this.mditor.value}))
+
+                this.handleSave = true;
             }
             else{
                 this.props.dispatch(updateNoteStatus({status: 'detail'}));
@@ -163,7 +212,7 @@ class ContentList extends Component{
 
     getContent = () => {
         let result = this.props.fetchNoteContentResult;
-        const isEdit = result.info.data[0].noteType == 'md' && this.props.updateNoteStatusResult.status == 'detail';
+        const isEditBtn = result.info.data[0].noteType == 'md' && this.props.updateNoteStatusResult.status == 'detail';
 
         return (
             <React.Fragment>
@@ -178,10 +227,10 @@ class ContentList extends Component{
                             type="primary" 
                             ghost 
                             className={'content-button'}
-                            onClick={(event)=>this.handleBtnClick(isEdit, event)}
+                            onClick={(event)=>this.handleBtnClick(isEditBtn, event)}
                         >
                             {
-                                isEdit ? '编辑' : '保存'
+                                isEditBtn ? '编辑' : '保存'
                             }
                         </Button>
                         <Tooltip placement="bottom" title={'文件信息'}>

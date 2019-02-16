@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
 import classNames from 'classnames';
-import { fetchNoteList, fetchNoteContent, updateSelectedNote } from 'actions/note.js';
+import { fetchNoteList, fetchNoteContent, updateSelectedNote, updateNoteStatus } from 'actions/note.js';
 import { format } from 'utils/time';
 
 const { RangePicker } = DatePicker;
@@ -15,6 +15,7 @@ const { RangePicker } = DatePicker;
     (state, props) => ({
         fetchNoteListResult: state.fetchNoteListResult,
         updateSelectedNoteResult: state.updateSelectedNoteResult,
+        updateNoteStatusResult: state.updateNoteStatusResult,
     }),
     (dispatch) => ({
         actions: bindActionCreators(routerActions, dispatch),
@@ -75,9 +76,8 @@ class ContentList extends Component{
 
     setSelectedNote = (id) => { // 点击笔记列表
         if(id != this.props.updateSelectedNoteResult.id || !id){
-            this.props.dispatch(updateSelectedNote({id}))
-
-            this.props.dispatch(fetchNoteContent({id}));
+            this.props.dispatch(updateSelectedNote({id}));
+            this.props.updateNoteStatusResult.status != 'datail' && this.props.dispatch(updateNoteStatus({status: 'detail'}))           
         }
     }
 
