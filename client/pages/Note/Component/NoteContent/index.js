@@ -21,7 +21,7 @@ import { updateNoteContent, fetchNoteContent, updateNoteStatus } from 'actions/n
     })
 )
 @Form.create()
-class ContentList extends Component{
+class NoteContent extends Component{
     constructor(props){
         super(props);
         this.state = {
@@ -85,8 +85,10 @@ class ContentList extends Component{
     componentWillUnmount(){
         window.clearInterval(this.timer);
 
-        this.mdTextarea.removeEventListener('focus', this.mdTextareaFocus);
-        this.mdTextarea.removeEventListener('blur', this.mdTextareaBlur);
+        if(this.mdTextarea){
+            this.mdTextarea.removeEventListener('focus', this.mdTextareaFocus);
+            this.mdTextarea.removeEventListener('blur', this.mdTextareaBlur);
+        }
     }
 
     showDrawer = () => {
@@ -335,4 +337,4 @@ class ContentList extends Component{
 	}
 }
 
-export default ContentList;
+export default NoteContent;
