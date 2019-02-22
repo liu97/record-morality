@@ -36,21 +36,11 @@ class NavMenu extends Component{
         }
     }
 
-    componentDidMount(){
-        let key = this.getActiveKey();
-        this.setSelectedKeys(key);
-        this.onItemClick(key)
-    }
-
     setSelectedKeys = (key) => {
         this.props.dispatch(updateSelectedKeys({keys:[key]}));
         this.props.onClick && this.props.onClick(key);
     }
 
-    getActiveKey = (url = this.props.history.location.pathname) => {
-        let result = url.replace(/\/$/, '');
-		return result;
-    }
     onItemClick = (item, e) => {
         if(item.type && item.type == 'nav'){
             this.setSelectedKeys(item.key);

@@ -71,7 +71,11 @@ class NoteContent extends Component{
             }
         }
         if(updateNoteStatusResult && !updateNoteStatusResult.isLoading && !_.isEqual(updateNoteStatusResult, this.props.updateNoteStatusResult)){
-
+            if(updateNoteStatusResult.status == 'edit'){
+                setTimeout(() => {
+                    this.mdTextarea && this.mdTextarea.focus();
+                },500);
+            }
         }
         if(updateSelectedNoteResult && !updateSelectedNoteResult.isLoading && !_.isEqual(updateSelectedNoteResult, this.props.updateSelectedNoteResult)){
             this.props.dispatch(fetchNoteContent(updateSelectedNoteResult));
@@ -134,6 +138,8 @@ class NoteContent extends Component{
         const mditor =  Mditor.fromTextarea(ele_textarea);
         mditor.value = result.info.data[0].content; // 由于首次渲染异步资源还未加载，加载完成再设置value
         this.mditor = mditor;
+
+        window.mditor = mditor;
 
         this.mdTextarea = document.querySelector('.editor .textarea');
         this.mdTextarea.addEventListener('focus', this.mdTextareaFocus)
@@ -282,10 +288,10 @@ class NoteContent extends Component{
                         visible={this.state.drawerVisible}
                     >
                         <Row gutter={8}>
-                            <Col className="gutter-row" span={8}>
+                            <Col className="gutter-row1" span={8}>
                                 {"创建时间:"}
                             </Col>
-                            <Col className="gutter-row" span={16}>
+                            <Col className="gutter-row2" span={16}>
                                 {
                                     result.info.data && 
                                     result.info.data[0] &&
@@ -294,10 +300,10 @@ class NoteContent extends Component{
                             </Col>
                         </Row>
                         <Row gutter={8}>
-                            <Col className="gutter-row" span={8}>
+                            <Col className="gutter-row1" span={8}>
                                 {"更新时间:"}
                             </Col>
-                            <Col className="gutter-row" span={16}>
+                            <Col className="gutter-row2" span={16}>
                                 {
                                     result.info.data && 
                                     result.info.data[0] &&
@@ -306,10 +312,10 @@ class NoteContent extends Component{
                             </Col>
                         </Row>
                         <Row gutter={8}>
-                            <Col className="gutter-row" span={8}>
+                            <Col className="gutter-row1" span={8}>
                                 {"文件路径:"}
                             </Col>
-                            <Col className="gutter-row" span={16}>
+                            <Col className="gutter-row2" span={16}>
                                 {
                                     result.info.data && 
                                     result.info.data[0] &&
@@ -318,10 +324,10 @@ class NoteContent extends Component{
                             </Col>
                         </Row>
                         <Row gutter={8}>
-                            <Col className="gutter-row" span={8}>
+                            <Col className="gutter-row1" span={8}>
                                 {"文件夹:"}
                             </Col>
-                            <Col className="gutter-row" span={16}>
+                            <Col className="gutter-row2" span={16}>
                                 {
                                     result.info.data && 
                                     result.info.data[0] &&

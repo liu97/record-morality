@@ -83,6 +83,11 @@ class TreeNav extends Component {
 
     componentDidMount(){
         this.props.dispatch(fetchFolderTree());
+
+        let key = this.getActiveKey();
+        this.props.setSelectedKeys(key);
+        this.props.onTreeSelect(key);
+        this.setExpandedKeys(key);
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -95,7 +100,19 @@ class TreeNav extends Component {
                 
             },500)
         }
+
+        let key = this.getActiveKey();
+        if(key != this.props.updateSelectedKeysResult.keys[0]){
+            this.props.setSelectedKeys(key);
+            this.props.onTreeSelect(key);
+            this.setExpandedKeys(key);
+        }
         
+    }
+
+    getActiveKey = (url = this.props.history.location.pathname) => {
+        let result = url.replace(/\/$/, '');
+		return result;
     }
 
     setExpandedKeys = (expandKey) => { // 需要展开的某个节点

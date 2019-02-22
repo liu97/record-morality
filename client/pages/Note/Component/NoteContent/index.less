@@ -11,6 +11,7 @@
                 line-height: 60px;
                 border-bottom: 1px solid #eee;
                 padding: 0 20px;
+                background-color: #FFF;
                 .content-title{
                     flex: auto;
                     height: 59px;
@@ -40,6 +41,17 @@
                     flex: auto;
                     .mditor{
                         height: 100% !important;
+                        border: 0;
+                        background-color: #FFFFFF;
+                        .head{
+                            border: 0;
+                            border-radius: 0;
+                            .toolbar{
+                                .fa-columns, .fa-desktop{
+                                    display: none;
+                                }
+                            }            
+                        }
                     }
                 }
                 .detail-editor{
