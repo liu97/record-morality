@@ -97,7 +97,7 @@ class ContentList extends Component{
                     )}
                 </Form.Item>
                 <Form.Item>
-                    <Tooltip placement="right" title="检索范围为全部">
+                    <Tooltip placement="bottom" title="检索范围为全部">
                         <Button type="primary" htmlType="submit" className="search-button">
                             查询
                         </Button>

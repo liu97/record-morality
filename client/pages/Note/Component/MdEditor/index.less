@@ -1,0 +1,39 @@
+.editor{
+    flex: auto;
+    .mditor{
+        height: 100% !important;
+        border-radius: 0;
+        background-color: #FFFFFF;
+        .head{
+            border-radius: 0;
+            background-image: none;
+            background-color: #FFFFFF;
+            .toolbar{
+                .fa-columns, .fa-desktop{
+                    display: none;
+                }
+            }            
+        }
+    }
+}
+.detail-editor{
+    display: inline-block;
+    .mditor{
+        width: 100%;
+        .head{
+            .toolbar{
+                :not(.fa-arrows-alt){
+                    display: none;
+                }
+            }            
+        }
+        .body{
+            .editor{
+                display: none;
+            }
+            .viewer{
+                width: 100%;
+            }
+        }
+    }
+}

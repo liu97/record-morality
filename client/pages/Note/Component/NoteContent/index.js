@@ -7,6 +7,9 @@ import { routerActions } from 'react-router-redux';
 import classNames from 'classnames';
 import { format } from 'utils/time';
 import { updateNoteContent, fetchNoteContent, updateNoteStatus } from 'actions/note.js';
+import WangEditor from '../WangEditor';
+import MdEditor from '../MdEditor';
+
 
 @connect(
     (state, props) => ({
@@ -28,10 +31,11 @@ class NoteContent extends Component{
             noteTitle: '',
             drawerVisible: false,
         }
-        this.asyncFlag = true; // 是否加载md异步文件
-        this.fileContent = ''; // 当前文件在数据库中的内容
         this.realTitle = ''; // 当前文件在数据库中的标题
         this.handleSave = false; // 手动保存文件
+
+        this.mdRef = React.createRef();
+        this.txtRef = React.createRef();
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
@@ -44,9 +48,6 @@ class NoteContent extends Component{
                     });
                     this.realTitle = fetchNoteContentResult.info.data[0].title;
                 }
-                this.mditor && (this.mditor.value = fetchNoteContentResult.info.data[0].content);
-
-                this.fileContent = fetchNoteContentResult.info.data[0].content;
             }
         }
         if(updateNoteContentResult && !updateNoteContentResult.isLoading && !_.isEqual(updateNoteContentResult, this.props.updateNoteContentResult)){
@@ -86,15 +87,6 @@ class NoteContent extends Component{
         
     }
 
-    componentWillUnmount(){
-        window.clearInterval(this.timer);
-
-        if(this.mdTextarea){
-            this.mdTextarea.removeEventListener('focus', this.mdTextareaFocus);
-            this.mdTextarea.removeEventListener('blur', this.mdTextareaBlur);
-        }
-    }
-
     showDrawer = () => {
         this.setState({
             drawerVisible: true,
@@ -106,80 +98,7 @@ class NoteContent extends Component{
             drawerVisible: false,
         });
     };
-
-    saveContent = () => {
-        if(this.mditor.value != this.fileContent){
-            this.props.dispatch(updateNoteContent({
-                id: this.props.fetchNoteContentResult.info.data[0].id,
-                content: this.mditor.value
-            }))
-            this.fileContent = this.mditor.value;
-        }
-    }
-
-    mdTextareaFocus = () => {
-        this.timer = window.setInterval(()=>{
-            this.saveContent();
-            
-        }, 20000)
-    }
-
-    mdTextareaBlur = () => {
-        this.saveContent();
-        window.clearInterval(this.timer);
-    }
     
-
-    setMdMessage = () => {
-		let result = this.props.fetchNoteContentResult;
-		//设置外部editor
-		const ele_textarea = document.getElementById('md_editor');
-		// eslint-disable-next-line no-undef
-        const mditor =  Mditor.fromTextarea(ele_textarea);
-        mditor.value = result.info.data[0].content; // 由于首次渲染异步资源还未加载，加载完成再设置value
-        this.mditor = mditor;
-
-        window.mditor = mditor;
-
-        this.mdTextarea = document.querySelector('.editor .textarea');
-        this.mdTextarea.addEventListener('focus', this.mdTextareaFocus)
-        this.mdTextarea.addEventListener('blur', this.mdTextareaBlur);
-    }
-    
-    getAsyncResource = () => {
-        if(this.asyncFlag){
-            // 按需加载mditor的js和css
-            import(/* webpackChunkName: "mditor" */ 'plugins/mditor/css/mditor.min.css');
-            import(/* webpackChunkName: "mditor" */ 'plugins/mditor/js/mditor.min.js').then(() => {
-                this.setMdMessage();
-            });
-            this.asyncFlag = false;
-        }
-    }
-
-    getMd = () => {
-        this.getAsyncResource();
-        const editorClass = classNames({
-            'editor': true,
-            'detail-editor': this.props.updateNoteStatusResult.status == 'detail',
-            'edit-editor': this.props.updateNoteStatusResult.status == 'edit',
-        })
-
-        return (
-            <div className={editorClass}>
-                <textarea id="md_editor" className={'hh'}></textarea>
-            </div>
-        )
-    }
-
-    getTxt = () => {
-        this.asyncFlag = true;
-
-        return (
-            <div>{'txt'}</div>
-        )
-    }
-
     titleChange = (event) => {
         this.setState({
             noteTitle: event.target.value 
@@ -188,7 +107,12 @@ class NoteContent extends Component{
 
     submitTitle = (event) => {
         let result = this.props.fetchNoteContentResult;
-        if(this.realTitle != event.target.value){
+        if(event.target.value == ''){
+            this.setState({
+                noteTitle: this.realTitle
+            })
+        }
+        else if(this.realTitle != event.target.value){
             let query = {
                 id: result.info.data[0].id,
                 title: event.target.value,
@@ -198,21 +122,24 @@ class NoteContent extends Component{
     }
 
     handleBtnClick = (isEditBtn, event) => {
-        const note = this.props.fetchNoteContentResult.info.data[0];
         if(isEditBtn){
-            this.props.dispatch(updateNoteStatus({status: 'edit'}))
+            this.props.dispatch(updateNoteStatus({status: 'edit'}));
         }
         else{
-            if(this.mditor.value != this.fileContent){
-                this.fileContent = this.mditor.value;
-                this.props.dispatch(updateNoteContent({id: note.id, content: this.mditor.value}))
-
-                this.handleSave = true;
+            let result = this.props.fetchNoteContentResult;
+            let change;
+            if(result.info.data[0].noteType == 'md'){
+                change = this.mdRef.current.wrappedInstance.saveContent();
             }
             else{
+                change = this.txtRef.current.wrappedInstance.saveContent();
+            }
+
+            if(!change){
                 this.props.dispatch(updateNoteStatus({status: 'detail'}));
                 message.success('保存成功');
             }
+            this.handleSave = true;
         }
     }
 
@@ -250,7 +177,7 @@ class NoteContent extends Component{
                 </div>
                 <div className={'content-data'}>
                     {
-                        result.info.data[0].noteType == 'md' ? this.getMd() : this.getTxt()
+                        result.info.data[0].noteType == 'md' ? <MdEditor ref={this.mdRef} /> : <WangEditor ref={this.txtRef} />
                     }
                 </div>
             </React.Fragment>
@@ -258,8 +185,6 @@ class NoteContent extends Component{
     }
 
     getEmpty = () => {
-        this.asyncFlag = true;
-
         return (
             <Empty></Empty>
         )
@@ -280,62 +205,50 @@ class NoteContent extends Component{
                     {
                         result.info.data && result.info.data.length ? this.getContent() : this.getEmpty()
                     }
-                    <Drawer
-                        title="文件信息"
-                        placement="right"
-                        closable={false}
-                        onClose={this.hiddenDrawer}
-                        visible={this.state.drawerVisible}
-                    >
-                        <Row gutter={8}>
-                            <Col className="gutter-row1" span={8}>
-                                {"创建时间:"}
-                            </Col>
-                            <Col className="gutter-row2" span={16}>
-                                {
-                                    result.info.data && 
-                                    result.info.data[0] &&
-                                    format(result.info.data[0].createdAt)
-                                }
-                            </Col>
-                        </Row>
-                        <Row gutter={8}>
-                            <Col className="gutter-row1" span={8}>
-                                {"更新时间:"}
-                            </Col>
-                            <Col className="gutter-row2" span={16}>
-                                {
-                                    result.info.data && 
-                                    result.info.data[0] &&
-                                    format(result.info.data[0].updatedAt)
-                                }
-                            </Col>
-                        </Row>
-                        <Row gutter={8}>
-                            <Col className="gutter-row1" span={8}>
-                                {"文件路径:"}
-                            </Col>
-                            <Col className="gutter-row2" span={16}>
-                                {
-                                    result.info.data && 
-                                    result.info.data[0] &&
-                                    result.info.data[0].noteFrom
-                                }
-                            </Col>
-                        </Row>
-                        <Row gutter={8}>
-                            <Col className="gutter-row1" span={8}>
-                                {"文件夹:"}
-                            </Col>
-                            <Col className="gutter-row2" span={16}>
-                                {
-                                    result.info.data && 
-                                    result.info.data[0] &&
-                                    result.info.data[0].noteFrom
-                                }
-                            </Col>
-                        </Row>
-                    </Drawer>
+                    {
+                        result.info.data && result.info.data.length != 0 &&
+                        <Drawer
+                            title="文件信息"
+                            placement="right"
+                            closable={false}
+                            onClose={this.hiddenDrawer}
+                            visible={this.state.drawerVisible}
+                            className={'content-drawer'}
+                        >
+                            <Row gutter={8}>
+                                <Col className="gutter-row1" span={8}>
+                                    {"创建时间:"}
+                                </Col>
+                                <Col className="gutter-row2" span={16}>
+                                    {
+                                        format(result.info.data[0].createdAt)
+                                    }
+                                </Col>
+                            </Row>
+                            <Row gutter={8}>
+                                <Col className="gutter-row1" span={8}>
+                                    {"更新时间:"}
+                                </Col>
+                                <Col className="gutter-row2" span={16}>
+                                    {
+                                        format(result.info.data[0].updatedAt)
+                                    }
+                                </Col>
+                            </Row>
+                            <Row gutter={8}>
+                                <Col className="gutter-row1" span={8}>
+                                    {"文件路径:"}
+                                </Col>
+                                <Col className="gutter-row2" span={16}>
+                                    <span title={result.info.data[0].noteFrom}>
+                                        {
+                                            result.info.data[0].noteFrom
+                                        }
+                                    </span>
+                                </Col>
+                            </Row>
+                        </Drawer>
+                    }
                 </Spin>
                 
             </div>
