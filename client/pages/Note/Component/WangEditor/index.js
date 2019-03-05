@@ -97,8 +97,10 @@ class WangEditor extends Component{
         const wditor = new E(elem);
         wditor.create();
         wditor.$textElem.html(result.info.data[0].content);
-
+        
         this.wditor = wditor;
+
+        wditor.$textElem[0].blur();
     }
     
 	render(){

@@ -1,18 +1,28 @@
 .editor{
     flex: auto;
+    #md_editor{
+        display: none;
+    }
     .mditor{
         height: 100% !important;
         border-radius: 0;
         background-color: #FFFFFF;
+        border: 0;
         .head{
             border-radius: 0;
             background-image: none;
             background-color: #FFFFFF;
+            border-bottom: 1px solid #eee;
             .toolbar{
                 .fa-columns, .fa-desktop{
                     display: none;
                 }
             }            
+        }
+        .body{
+            .viewer{
+                padding: 0 30px 40px; 
+            }
         }
     }
 }
@@ -21,6 +31,7 @@
     .mditor{
         width: 100%;
         .head{
+            border-bottom: none;
             .toolbar{
                 :not(.fa-arrows-alt){
                     display: none;
@@ -28,6 +39,7 @@
             }            
         }
         .body{
+            box-shadow: none;
             .editor{
                 display: none;
             }

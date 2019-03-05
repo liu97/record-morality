@@ -55,6 +55,9 @@ class TreeNav extends Component {
             message.success('修改文件夹成功');
         }
         if(!_.isEqual(addFolderResult, this.props.addFolderResult) && !addFolderResult.isLoading){
+            let { opt, extra, key } = this.currentRight;
+            this.setExpandedKeys(key.props.eventKey);
+
             this.props.setSelectedKeys(this.getFolderKey(addFolderResult.info.data.id));
             this.hiddenModal();
 
@@ -65,6 +68,20 @@ class TreeNav extends Component {
             message.success('新建文件夹成功');
         }
         if(!_.isEqual(deleteFolderResult, this.props.deleteFolderResult) && !deleteFolderResult.isLoading){
+            let { opt, extra, key } = this.currentRight;
+            let eventId = this.getFolderId(key.props.eventKey);
+            let fatherFolderId = this.getFolderItem(key.props.eventKey).ancestors.slice(-1)[0];
+            let fatherFolderKey = this.getFolderKey(fatherFolderId);
+            if(fatherFolderKey){
+                let brotherFolder = this.getFolderItem(fatherFolderKey).children.indexOf();
+                if(brotherFolder){
+                    let brotherFolderKey = this.getFolderKey(brotherFolder.id);
+                    this.onSelect([brotherFolderKey])
+                }
+                else{
+                    this.onSelect([fatherFolderKey]);
+                }
+            }
 
             this.props.dispatch(fetchFolderTree());
 
@@ -72,7 +89,9 @@ class TreeNav extends Component {
         }
         if(!_.isEqual(addNoteResult, this.props.addNoteResult) && !addNoteResult.isLoading){
             let { opt, extra, key } = this.currentRight;
+            this.setExpandedKeys(key.props.eventKey);
             this.props.setSelectedKeys(key.props.eventKey);
+            this.props.history.push(key.props.eventKey);
 
             this.props.dispatch(updateSelectedNote({id: addNoteResult.info.data.id}))
             this.hiddenModal();
@@ -83,11 +102,6 @@ class TreeNav extends Component {
 
     componentDidMount(){
         this.props.dispatch(fetchFolderTree());
-
-        let key = this.getActiveKey();
-        this.props.setSelectedKeys(key);
-        this.props.onTreeSelect(key);
-        this.setExpandedKeys(key);
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -100,14 +114,12 @@ class TreeNav extends Component {
                 
             },500)
         }
-
-        let key = this.getActiveKey();
-        if(key != this.props.updateSelectedKeysResult.keys[0]){
-            this.props.setSelectedKeys(key);
-            this.props.onTreeSelect(key);
-            this.setExpandedKeys(key);
-        }
         
+        let key = this.getActiveKey();
+        if(key != this.props.updateSelectedKeysResult.keys[0] && this.setExpandedKeys(key)){
+            this.props.setSelectedKeys(key);
+        }
+    
     }
 
     getActiveKey = (url = this.props.history.location.pathname) => {
@@ -117,7 +129,7 @@ class TreeNav extends Component {
 
     setExpandedKeys = (expandKey) => { // 需要展开的某个节点
         let expandItem = this.getFolderItem(expandKey);
-
+        
         if(expandItem){
             let expandedKeys = expandItem.ancestors.map((item, index) => {
                 if(!item){
@@ -133,7 +145,10 @@ class TreeNav extends Component {
             this.setState({
                 expandedKeys
             });
+
+            return true;
         }
+        return false;
     }
 
     addAsyncList = (treeList) => { // 把从数据库获取出来的文件夹信息加入到nav中
@@ -162,7 +177,7 @@ class TreeNav extends Component {
             loop(tree, id, (item, index, arr) => {
                 selectedItem = item;
             });
-
+            
             return selectedItem;
         }
     }
@@ -327,17 +342,13 @@ class TreeNav extends Component {
     handleOk = () => { // modal返回确认
         let { opt, extra, key } = this.currentRight;
         let id = this.getFolderId(key.props.eventKey);
-
+        
         if(opt == 'new'){
             if(extra.type == 'folder'){
                 this.props.dispatch(addFolder({name: this.state.modalValue, parentId: id}));
-                
-                this.setExpandedKeys(key.props.eventKey);
             }
             else{
                 this.props.dispatch(addNote({title: this.state.modalValue, folderId: id, content: '', noteType: extra.type}))
-                
-                this.setExpandedKeys(key.props.eventKey);
             }
         }
         else if(this.currentRight.opt == 'rename'){
