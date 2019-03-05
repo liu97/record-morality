@@ -142,7 +142,7 @@ const folderContrallers = {
 			data: null,
         }
 
-        let folderInfo = await folderService.getFolderInfo({userId, parentId:0}, ctx);
+        let folderInfo = await folderService.getFolderInfo({userId, parentId: null}, ctx);
         if(folderInfo.isError){
             ctx.status = 404;
             ctx.data = null;

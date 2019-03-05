@@ -52,12 +52,13 @@ class ContentList extends Component{
         this.props.form.validateFields((err, fieldsValue) => {
             if (!err) {
 
-                const rangeValue = fieldsValue['createdAt'];
+                const rangeValue = fieldsValue['time_range'];
                 const values = {
                     ...fieldsValue,
-                    'createdAt': rangeValue && rangeValue.length && [rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')]
+                    'start_time': rangeValue && rangeValue.length && rangeValue[0].format('YYYY-MM-DD 00:00:00'),
+                    'end_time': rangeValue && rangeValue.length && rangeValue[1].format('YYYY-MM-DD 23:59:59'),
                 }
-
+                delete values['time_range'];
                 for(let key of Object.keys(values)){
                     if(values[key] == undefined || values[key] == ''){
                         delete values[key]
@@ -92,7 +93,7 @@ class ContentList extends Component{
                     )}
                 </Form.Item>
                 <Form.Item>
-                    {getFieldDecorator('createdAt')(
+                    {getFieldDecorator('time_range')(
                         <RangePicker/>
                     )}
                 </Form.Item>

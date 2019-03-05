@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const _ = require('lodash')
 
 const User = require('../models/user');
+const Folder = require('../models/folder');
 const Opt = require('./opt');
 
 const userServices ={
@@ -40,6 +41,12 @@ const userServices ={
 		registerInfo.password = bcrypt.hashSync(registerInfo.password, salt); // salt is inclued in generated hash
 		
 		result = await Opt.create(User, registerInfo);
+		if(!result.isError){
+			initFolder = await Opt.create(Folder, {name: '我的文件夹', userId: result.id});
+			if(initFolder.isError){
+				result = initFolder;
+			}
+		}
 		
 		return result;
 	},

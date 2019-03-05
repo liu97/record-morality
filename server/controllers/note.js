@@ -164,6 +164,14 @@ const noteContrallers = {
             query.title = {like: `%${query.fuzzy_title}%`}
             delete query.fuzzy_title;
         }
+        if(query.start_time && query.end_time){
+            query.createdAt = {
+                '$gte': query.start_time,
+                '$lte': query.end_time
+            }
+            delete query.start_time;
+            delete query.end_time;
+        }
 
         let noteInfo = await noteService.getNoteInfo(query);
 
