@@ -56,7 +56,6 @@ class TreeNav extends Component {
         if(!_.isEqual(addFolderResult, this.props.addFolderResult) && !addFolderResult.isLoading){
             let { opt, extra, key } = this.currentRight;
             this.setExpandedKeys(key.props.eventKey);
-            debugger
             this.onSelect(String(addFolderResult.info.data.id));
 
             this.props.dispatch(fetchFolderTree());

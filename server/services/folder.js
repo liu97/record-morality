@@ -170,7 +170,10 @@ const folderServices ={
 			{
 				where: {
 					...folderInfo
-				}
+				},
+				order: [
+					['createdAt', 'DESC']
+				]
 			},
 			userId
 		);

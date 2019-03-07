@@ -34,7 +34,6 @@ class ContentList extends Component{
         let { fetchNoteListResult, updateSelectedNoteResult } = nextProps;
         if(fetchNoteListResult && !fetchNoteListResult.isLoading && !_.isEqual(fetchNoteListResult, this.props.fetchNoteListResult)){
             // 如果未选中笔记，且文件夹里有笔记
-            debugger
             if(fetchNoteListResult.info.data && fetchNoteListResult.info.data.length){
                 let ids = fetchNoteListResult.info.data.map((item)=>{
                     return item.id;

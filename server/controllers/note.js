@@ -200,11 +200,10 @@ const noteContrallers = {
                         folder = await folderService.getFolderInfo({id:folder[0].parentId}, ctx);
                         note.noteFrom = folder[0].name + ">" + note.noteFrom;
                     }
-                    note.noteFrom = "我的文件夹>" + note.noteFrom;
                     notes.push(note);
                 }
                 else if(!folder.isError){
-                    note.noteFrom = "我的文件夹>";
+                    note.noteFrom = "";
                     notes.push(note);
                 }
                 else{

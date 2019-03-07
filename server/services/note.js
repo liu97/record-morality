@@ -93,7 +93,10 @@ const noteServices ={
 			{
 				where: {
 					...noteInfo
-				}
+				},
+				order: [
+					['createdAt', 'DESC']
+				]
 			},
 			userId
 		)
