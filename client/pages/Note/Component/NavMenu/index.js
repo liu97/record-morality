@@ -38,7 +38,6 @@ class NavMenu extends Component{
 
     setSelectedKeys = (key) => {
         this.props.dispatch(updateSelectedKeys({keys:[key]}));
-        this.props.onClick && this.props.onClick(key);
     }
 
     onItemClick = (item, e) => {
@@ -49,8 +48,7 @@ class NavMenu extends Component{
         else if(!item.type){
             this.setSelectedKeys(item);
         }    
-
-        this.props.dispatch(updateSelectedNote({id:undefined}));
+        this.props.onClick && this.props.onClick(item);
     }
     onTreeExpand = (info) => {
         this.props.onTreeExpand && this.props.onTreeExpand(info);
@@ -85,7 +83,6 @@ class NavMenu extends Component{
                         onTreeSelect={this.onItemClick}
                         onTreeExpand={this.onTreeExpand}
                         onTreeRightClick={this.onTreeRightClick}
-                        setSelectedKeys={this.setSelectedKeys}
                     />
                 )
             }

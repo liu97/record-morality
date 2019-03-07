@@ -8,6 +8,7 @@ import { routerActions } from 'react-router-redux';
 import classNames from 'classnames';
 import { fetchNoteList, fetchNoteContent, updateSelectedNote, updateNoteStatus } from 'actions/note.js';
 import { format } from 'utils/time';
+import _ from 'lodash';
 
 const { RangePicker } = DatePicker;
 
@@ -33,8 +34,14 @@ class ContentList extends Component{
         let { fetchNoteListResult, updateSelectedNoteResult } = nextProps;
         if(fetchNoteListResult && !fetchNoteListResult.isLoading && !_.isEqual(fetchNoteListResult, this.props.fetchNoteListResult)){
             // 如果未选中笔记，且文件夹里有笔记
-            if(!updateSelectedNoteResult.id && fetchNoteListResult.info.data && fetchNoteListResult.info.data.length){
-                this.setSelectedNote(fetchNoteListResult.info.data[0].id);
+            debugger
+            if(fetchNoteListResult.info.data && fetchNoteListResult.info.data.length){
+                let ids = fetchNoteListResult.info.data.map((item)=>{
+                    return item.id;
+                })
+                if(ids.indexOf(this.props.updateSelectedNoteResult.id) == -1){
+                    this.setSelectedNote(fetchNoteListResult.info.data[0].id);
+                }
             }
             // 如果文件夹里没笔记
             else if(fetchNoteListResult.info.data && !fetchNoteListResult.info.data.length){

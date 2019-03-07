@@ -38,8 +38,7 @@ class Note extends Component{
 
     onItemClick = (info) => {
         this.listRef && this.listRef.clearForm();
-        let folderId = info.split('/').slice(-1).join();
-        this.getNoteList({folderId});
+        this.getNoteList({folderId: info});
     }
 
     getNoteList = (query) => {

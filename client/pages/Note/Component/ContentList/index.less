@@ -1,5 +1,6 @@
 .content-list{
     height: 100%;
+    flex: 0;
     display: flex;
     flex-direction: column;
     .search-form{
@@ -16,15 +17,18 @@
     .search-list{
         overflow: auto;
         .search-li{
-            width: 100%;
             height: 70px;
             padding: 0 6%;
             border-bottom: 1px solid #eee;
             cursor: pointer;
             &-title{
+                width: 223px;
                 display: block;
                 font-size: 14px;
                 line-height: 40px;
+                overflow: hidden;/*超出部分隐藏*/
+                white-space: nowrap;/*不换行*/
+                text-overflow:ellipsis;/*超出部分文字以...显示*/
                 i{
                     font-size: 18px;
                     color: #1890ff;

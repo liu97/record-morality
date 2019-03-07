@@ -150,7 +150,7 @@ const folderContrallers = {
         }
         else{
             folderInfo = folderInfo.dataValues;
-            await folderContrallers.findChildList([0], folderInfo, ctx);
+            await folderContrallers.findChildList([], folderInfo, ctx);
             
             result = {
                 success: true,
