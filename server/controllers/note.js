@@ -31,7 +31,11 @@ const noteContrallers = {
 			body.title = "新建文档";
         }
         
-        if(!body.noteType){
+        if(!body.folderId){
+            ctx.status = 404;
+            result.msg = "未传入文件夹ID";
+        }
+        else if(!body.noteType){
             ctx.status = 404;
             result.msg = "未传入文件类型";
         }

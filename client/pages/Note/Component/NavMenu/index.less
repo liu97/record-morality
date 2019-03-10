@@ -4,7 +4,7 @@
 @menuFontColor: #393939;
 .nav-menu{
     .ant-menu-item {
-        margin: 0;
+        margin: 0 !important;
         color: @menuFontColor;
         font-size: @menuFontSize;
         padding-left: 35px !important;
@@ -32,4 +32,8 @@
             color: #FFFFFF;
         }
     }
+}
+.ant-dropdown{
+    min-width: 180px;
+    box-shadow: 0 10px 20px rgba(0,0,0,.3), 0 0 0 1px #eee;
 }

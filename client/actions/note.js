@@ -34,3 +34,6 @@ export const updateNoteContent = createSimpleAjaxAction('/note/updateNote', 'upd
 
 // 添加笔记
 export const addNote = createSimpleAjaxAction('/note/addNote', 'addNote', 'post');
+
+// 删除笔记
+export const deleteNote = createSimpleAjaxAction('/note/deleteNote', 'deleteNote', 'delete');

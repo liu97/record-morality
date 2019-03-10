@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
 import classNames from 'classnames';
-import { fetchNoteList, fetchNoteContent, updateSelectedNote, updateNoteStatus } from 'actions/note.js';
+import { fetchNoteList, fetchNoteContent, updateSelectedNote, updateNoteStatus, deleteNote } from 'actions/note.js';
 import { format } from 'utils/time';
 import _ from 'lodash';
 
@@ -17,6 +17,7 @@ const { RangePicker } = DatePicker;
         fetchNoteListResult: state.fetchNoteListResult,
         updateSelectedNoteResult: state.updateSelectedNoteResult,
         updateNoteStatusResult: state.updateNoteStatusResult,
+        deleteNoteResult: state.deleteNoteResult,
     }),
     (dispatch) => ({
         actions: bindActionCreators(routerActions, dispatch),
@@ -31,7 +32,7 @@ class ContentList extends Component{
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
-        let { fetchNoteListResult, updateSelectedNoteResult } = nextProps;
+        let { fetchNoteListResult, updateSelectedNoteResult, deleteNoteResult } = nextProps;
         if(fetchNoteListResult && !fetchNoteListResult.isLoading && !_.isEqual(fetchNoteListResult, this.props.fetchNoteListResult)){
             // 如果未选中笔记，且文件夹里有笔记
             if(fetchNoteListResult.info.data && fetchNoteListResult.info.data.length){
@@ -46,6 +47,9 @@ class ContentList extends Component{
             else if(fetchNoteListResult.info.data && !fetchNoteListResult.info.data.length){
                 this.setSelectedNote(undefined)
             }
+        }
+        if(deleteNoteResult && !deleteNoteResult.isLoading && !_.isEqual(deleteNoteResult, this.props.deleteNoteResult)){
+            this.props.getNoteList();
         }
     }
 
@@ -75,6 +79,14 @@ class ContentList extends Component{
                 this.props.getNoteList(values);
             }
         });
+    }
+
+    handleDeleteNote = (id) => {
+        this.props.dispatch(deleteNote({id}));
+    }
+
+    handleAddNote = () => {
+        this.props.handleAddNote('新建笔记');
     }
 
     clearForm = () => { // 清楚表单
@@ -136,13 +148,17 @@ class ContentList extends Component{
                                         onClick={this.setSelectedNote.bind(this, item.id)}
                                     >
 
-                                        <span className={'search-li-title'}>
+                                        <div className={'search-li-title'}>
                                             {
-                                                item.noteType == 'md' ? <Icon type="file-markdown" style={{color: '#F78A09'}} /> : <Icon type="file-text" />
+                                                item.noteType == 'md' ? <Icon type="file-markdown" style={{color: '#F78A09'}} /> : <Icon type="file-text" style={{color: '#1890ff'}} />
                                             }
-                                            {`${item.title}.${item.noteType}`}
-                                        </span>
+                                            <span title={`${item.title}.${item.noteType}`}>{`${item.title}.${item.noteType}`}</span>
+                                            <div className={'search-li-cover'}>
+                                                <Icon type="delete" title="删除" onClick={this.handleDeleteNote.bind(this, item.id)}/>
+                                            </div>
+                                        </div>
                                         <span className={'search-li-time'}>{format(item.createdAt)}</span>
+
                                     </li>
                                 )
                             })
@@ -158,7 +174,7 @@ class ContentList extends Component{
                                 </span>
                             }
                         >
-                            <Button type="primary">新建笔记</Button>
+                            <Button type="primary" onClick={this.handleAddNote}>新建笔记</Button>
                         </Empty>
                     </div>
                 }

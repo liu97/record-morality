@@ -4,7 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
-import { Menu, Icon } from 'antd';
+import { Menu, Icon, Dropdown } from 'antd';
 import classNames from 'classnames';
 import ContextMenu from '../TreeNav';
 import { updateSelectedKeys, updateSelectedNote } from 'actions/note.js';
@@ -36,6 +36,16 @@ class NavMenu extends Component{
         }
     }
 
+    componentDidMount(){
+        let key = this.getActiveKey();
+        this.onItemClick(key);
+    }
+
+    getActiveKey = (url = this.props.history.location.pathname) => {
+        let result = url.replace(/\/$/, '').split('/').slice(-1);
+		return result[0];
+    }
+
     setSelectedKeys = (key) => {
         this.props.dispatch(updateSelectedKeys({keys:[key]}));
     }
@@ -58,6 +68,21 @@ class NavMenu extends Component{
     }
     onTreeDrop = (info) => {
         this.props.onTreeDrop && this.props.onTreeDrop(info);
+    }
+    handleAddNote = (noteType) => {
+        this.props.handleAddNote('新建文件',noteType);
+    }
+    getDropDown(){
+        return (
+            <Menu>
+                <Menu.Item key="0" onClick={this.handleAddNote.bind(this, 'txt')}>
+                    <span>笔记</span>
+                </Menu.Item>
+                <Menu.Item key="1" onClick={this.handleAddNote.bind(this, 'md')}>
+                    <span>markdown</span>
+                </Menu.Item>
+            </Menu>
+        )
     }
     getNavList(){
         const props = this.props;
@@ -88,9 +113,13 @@ class NavMenu extends Component{
             }
             else{
                 return (
-                    <Menu.Item key={item.key} onClick={(e)=>{ this.onItemClick(item, e) }}>
-                        {item.icon && <Icon type={item.icon}></Icon>}
-                        <span>{item.title}</span>
+                    <Menu.Item key={item.key}>
+                        <Dropdown  overlay={this.getDropDown()} trigger={['click']}>
+                            <span>
+                                {item.icon && <Icon type={item.icon}></Icon>}
+                                <span>{item.title}</span>
+                            </span>
+                        </Dropdown>
                     </Menu.Item>
                 )
             }

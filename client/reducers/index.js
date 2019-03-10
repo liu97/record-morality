@@ -17,6 +17,7 @@ import {
 	fetchNoteContentResult,
 	updateNoteContentResult,
 	addNoteResult,
+	deleteNoteResult,
 } from './note';
 
 const rootReducer = combineReducers({
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
 	fetchNoteContentResult,
 	updateNoteContentResult,
 	addNoteResult,
+	deleteNoteResult,
 });
 
 export default rootReducer;

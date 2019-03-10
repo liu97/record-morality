@@ -21,18 +21,35 @@
             padding: 0 6%;
             border-bottom: 1px solid #eee;
             cursor: pointer;
+            position: relative;
             &-title{
                 width: 223px;
-                display: block;
+                display: flex;
                 font-size: 14px;
-                line-height: 40px;
-                overflow: hidden;/*超出部分隐藏*/
-                white-space: nowrap;/*不换行*/
-                text-overflow:ellipsis;/*超出部分文字以...显示*/
                 i{
                     font-size: 18px;
-                    color: #1890ff;
                     margin-right: 5px;
+                    line-height: 40px;
+                }
+                span{
+                    vertical-align: middle;
+                    line-height: 35px;
+                    flex: auto;
+                    overflow: hidden;/*超出部分隐藏*/
+                    white-space: nowrap;/*不换行*/
+                    text-overflow:ellipsis;/*超出部分文字以...显示*/
+                }
+            }
+            &-cover{
+                display: none;
+                width: 20px;
+                i{
+                    color: #aaaaaa;
+                    font-size: 16px;
+                    cursor: pointer;
+                    :hover{
+                        color: #1890ff;
+                    }
                 }
             }
             &-from{
@@ -47,6 +64,9 @@
             }
             &:hover{
                 background-color: #f6f7f9;
+                .search-li-cover{
+                    display: block;
+                }
             }
         }
         .search-li-selected{

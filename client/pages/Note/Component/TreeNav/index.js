@@ -50,7 +50,7 @@ class TreeNav extends Component {
             this.props.dispatch(fetchFolderTree());
 
             this.hiddenModal();
-
+            this.currentRight = {};
             message.success('修改文件夹成功');
         }
         if(!_.isEqual(addFolderResult, this.props.addFolderResult) && !addFolderResult.isLoading){
@@ -61,14 +61,20 @@ class TreeNav extends Component {
             this.props.dispatch(fetchFolderTree());
             
             this.hiddenModal();
+            this.currentRight = {};
             message.success('新建文件夹成功');
         }
         if(!_.isEqual(deleteFolderResult, this.props.deleteFolderResult) && !deleteFolderResult.isLoading){
             let { opt, extra, key } = this.currentRight;
-            let fatherFolderId = this.getFolderItem(key.props.eventKey).ancestors.slice(-1)[0];
+            let folderItem = this.getFolderItem(key.props.eventKey)
+            let fatherFolderId = folderItem.ancestors.slice(-1)[0];
             let fatherFolderKey = String(fatherFolderId);
             if(fatherFolderKey){
-                let brotherFolder = this.getFolderItem(fatherFolderKey).children.indexOf();
+                let fatherFolderItem = this.getFolderItem(fatherFolderKey);
+                let brotherFolder = fatherFolderItem.children[0];
+                if(brotherFolder.id == Number(key.props.eventKey)){
+                    brotherFolder = fatherFolderItem.children[1];
+                }
                 if(brotherFolder){
                     let brotherFolderKey = String(brotherFolder.id);
                     this.onSelect(brotherFolderKey);
@@ -80,27 +86,30 @@ class TreeNav extends Component {
 
             this.props.dispatch(fetchFolderTree());
 
+            this.currentRight = {};
             message.success('删除文件夹成功');
         }
         if(!_.isEqual(addNoteResult, this.props.addNoteResult) && !addNoteResult.isLoading){
-            let { opt, extra, key } = this.currentRight;
-            this.onSelect(key.props.eventKey);
+            let eventKey;
+            if(!this.currentRight.key){
+                eventKey = this.getActiveKey()
+            }
+            else{
+                let { opt, extra, key } = this.currentRight;
+                eventKey = key.props.eventKey
 
-            this.props.dispatch(updateSelectedNote({id: addNoteResult.info.data.id}))
-            this.props.dispatch(updateNoteStatus({status: 'edit'}))
+                this.hiddenModal();
+                this.currentRight = {};
+            }
+            this.onSelect(eventKey);
 
-            this.hiddenModal();
+            this.props.dispatch(updateSelectedNote({id: addNoteResult.info.data.id}));
+            this.props.dispatch(updateNoteStatus({status: 'edit'}));
         }
     }
 
     componentDidMount(){
         this.props.dispatch(fetchFolderTree());
-
-        // let key = this.getActiveKey();
-        // debugger
-        // if(key != this.props.updateSelectedKeysResult.keys[0] && this.setExpandedKeys(key)){
-        //     this.props.setSelectedKeys(key);
-        // }
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -400,6 +409,7 @@ class TreeNav extends Component {
                         ref={this.inputRef} 
                         value={this.state.modalValue} 
                         onChange={this.modalChange} 
+                        onPressEnter={this.handleOk}
                         placeholder={typeName} />
                 </Modal>
             </div>
