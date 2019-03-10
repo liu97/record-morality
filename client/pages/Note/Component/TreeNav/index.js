@@ -202,7 +202,7 @@ class TreeNav extends Component {
             key = selectedKeys[0];
         }
         if(key){
-            this.props.history.push(key);
+            this.props.history.push(`/admin/note/folder/${key}`);
             this.props.onTreeSelect && this.props.onTreeSelect(key, e);
         }
     }

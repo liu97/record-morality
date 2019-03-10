@@ -3,9 +3,8 @@ import ErrorPage from 'pages/Error/ErrorPage';
 import {
   AsyncLaR,
   AsyncApp,
-  AsyncErrorPage,
-  AsyncError,
   AsyncNote,
+  AsyncNoteContent,
 } from './async'
 
 const routes = [
@@ -31,19 +30,15 @@ const routes = [
         routes: [
           {
             path: '/admin/note/recent',
-            component: AsyncNote,
-          },
-          {
-            path: '/admin/note/folder/:id',
-            component: AsyncNote,
+            component: AsyncNoteContent,
           },
           {
             path: '/admin/note/trendMap',
             component: AsyncNote,
           },
           {
-            path: '/admin/note/unsaved',
-            component: AsyncNote,
+            path: '/admin/note/folder/:id',
+            component: AsyncNoteContent,
           },
           {
             component: Error,

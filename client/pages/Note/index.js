@@ -5,10 +5,13 @@ import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
 import { Layout, Icon } from 'antd';
 import NavMenu from './Component/NavMenu';
-import ContentList from './Component/ContentList';
-import NoteContent from './Component/NoteContent';
+
 import { NAVLIST } from 'constants/treeNav';
 import { fetchNoteList, addNote, updateSelectedKeys } from 'actions/note.js';
+
+import renderRoutes from 'utils/renderRoutes';
+import { authPath } from 'utils/config';
+import { getCookie } from 'utils/cookie';
 
 const { Content, Sider } = Layout;
 const PREFIX = 'note';
@@ -48,7 +51,7 @@ class Note extends Component{
         let folderKey = this.props.updateSelectedKeysResult.keys[0];
         if(!Number(folderKey)){
             folderKey = String(this.rootFolderId);
-            this.props.history.push(folderKey)
+            this.props.history.push(`/admin/note/folder/${folderKey}`)
             this.props.dispatch(updateSelectedKeys({keys:[folderKey]}));
         }
         this.props.dispatch(addNote({folderId:folderKey, title, noteType, content}))
@@ -67,32 +70,24 @@ class Note extends Component{
     }
 
 	render(){
+        const authed = getCookie('isLogin') == 'true';
 		return (
             <Layout className={PREFIX}>
                 <Sider className={`${PREFIX}-sider`}>
                     <NavMenu 
                         className={`${PREFIX}-menu`}
                         navList={this.navList}
-                        onTreeDrop={this.onTreeDrop}
                         onClick={this.onItemClick}
-                        onTreeExpand={this.onTreeExpand}
-                        onTreeRightClick={this.onTreeRightClick}
                         handleAddNote={this.handleAddNote}
                     />
             
                 </Sider>
                 <div className={`${PREFIX}-container`}>
-                    <ContentList  
-                        className={`${PREFIX}-list`} 
-                        wrappedComponentRef={(e) => this.listRef = e}
-                        getNoteList={this.getNoteList}
-                        handleAddNote={this.handleAddNote}
-                    />
-                    <NoteContent 
-                        className={`${PREFIX}-content`}
-                        getNoteList={this.getNoteList}
-                    >
-                    </NoteContent>
+                    {renderRoutes(this.props.route.routes, authed, authPath, 
+                                    {wrappedComponentRef:(e) => this.listRef = e,
+                                    getNoteList:this.getNoteList,
+                                    handleAddNote:this.handleAddNote}
+                    )}
                 </div>
             </Layout>
 		)
