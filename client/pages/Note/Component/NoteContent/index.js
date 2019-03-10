@@ -41,14 +41,7 @@ class NoteContent extends Component{
     UNSAFE_componentWillReceiveProps(nextProps) {
         let { fetchNoteContentResult, updateNoteContentResult, updateNoteStatusResult, updateSelectedNoteResult } = nextProps;
         if(fetchNoteContentResult && !fetchNoteContentResult.isLoading && !_.isEqual(fetchNoteContentResult, this.props.fetchNoteContentResult)){
-            if(fetchNoteContentResult.info.data && fetchNoteContentResult.info.data[0]){
-                if(fetchNoteContentResult.info.data[0].title != this.state.noteTitle){
-                    this.setState({
-                        noteTitle: fetchNoteContentResult.info.data[0].title
-                    });
-                    this.realTitle = fetchNoteContentResult.info.data[0].title;
-                }
-            }
+            this.initNoteContent(fetchNoteContentResult);
         }
         if(updateNoteContentResult && !updateNoteContentResult.isLoading && !_.isEqual(updateNoteContentResult, this.props.updateNoteContentResult)){
             if(!updateNoteContentResult.info.success){
@@ -84,7 +77,18 @@ class NoteContent extends Component{
     }
 
     componentDidMount(){
-        
+        this.initNoteContent(this.props.fetchNoteContentResult);
+    }
+
+    initNoteContent = (fetchNoteContentResult) => {
+        if(fetchNoteContentResult && !fetchNoteContentResult.isLoading && fetchNoteContentResult.info.data && fetchNoteContentResult.info.data[0]){
+            if(fetchNoteContentResult.info.data[0].title != this.state.noteTitle){
+                this.setState({
+                    noteTitle: fetchNoteContentResult.info.data[0].title
+                });
+                this.realTitle = fetchNoteContentResult.info.data[0].title;
+            }
+        }
     }
 
     showDrawer = () => {

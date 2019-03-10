@@ -7,7 +7,7 @@ import { Layout, Icon } from 'antd';
 import NavMenu from './Component/NavMenu';
 
 import { NAVLIST } from 'constants/treeNav';
-import { fetchNoteList, addNote, updateSelectedKeys } from 'actions/note.js';
+import { fetchNoteList, addNote, updateSelectedKeys, updateSelectedNote } from 'actions/note.js';
 
 import renderRoutes from 'utils/renderRoutes';
 import { authPath } from 'utils/config';
@@ -44,7 +44,18 @@ class Note extends Component{
 
     onItemClick = (info) => { // 提到这里是为了处理查询form
         this.listRef && this.listRef.clearForm();
-        this.getNoteList({folderId: info});
+        let query = {};
+        switch (info){
+            case 'recent':
+                break;
+            case 'trendMap':
+                return;
+            default:
+                query = {folderId: info};
+                break;
+        }
+
+        this.getNoteList(query);
     }
 
     handleAddNote = (title, noteType = 'txt', content = '') => { // 提到这里是为了让NavMenu和ContentList共用

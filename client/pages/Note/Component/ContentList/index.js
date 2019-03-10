@@ -28,25 +28,12 @@ const { RangePicker } = DatePicker;
 class ContentList extends Component{
     constructor(props){
         super(props);
-		
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
-        let { fetchNoteListResult, updateSelectedNoteResult, deleteNoteResult } = nextProps;
+        let { fetchNoteListResult, deleteNoteResult } = nextProps;
         if(fetchNoteListResult && !fetchNoteListResult.isLoading && !_.isEqual(fetchNoteListResult, this.props.fetchNoteListResult)){
-            // 如果未选中笔记，且文件夹里有笔记
-            if(fetchNoteListResult.info.data && fetchNoteListResult.info.data.length){
-                let ids = fetchNoteListResult.info.data.map((item)=>{
-                    return item.id;
-                })
-                if(ids.indexOf(this.props.updateSelectedNoteResult.id) == -1){
-                    this.setSelectedNote(fetchNoteListResult.info.data[0].id);
-                }
-            }
-            // 如果文件夹里没笔记
-            else if(fetchNoteListResult.info.data && !fetchNoteListResult.info.data.length){
-                this.setSelectedNote(undefined)
-            }
+            this.initSelectedNote(fetchNoteListResult);
         }
         if(deleteNoteResult && !deleteNoteResult.isLoading && !_.isEqual(deleteNoteResult, this.props.deleteNoteResult)){
             this.props.getNoteList();
@@ -54,7 +41,24 @@ class ContentList extends Component{
     }
 
     componentDidMount(){
-        
+        let fetchNoteListResult = this.props.fetchNoteListResult;
+        if(fetchNoteListResult && !fetchNoteListResult.isLoading){
+            this.initSelectedNote(fetchNoteListResult);
+        }
+    }
+
+    initSelectedNote = (fetchNoteListResult) => {
+        // 如果未选中笔记，且文件夹里有笔记
+        if(fetchNoteListResult.info.data && fetchNoteListResult.info.data.length){
+            let ids = fetchNoteListResult.info.data.map((item)=>{
+                return item.id;
+            })
+            this.setSelectedNote(fetchNoteListResult.info.data[0].id);
+        }
+        // 如果文件夹里没笔记
+        else if(fetchNoteListResult.info.data && !fetchNoteListResult.info.data.length){
+            this.setSelectedNote(undefined)
+        }
     }
 
     handleSubmit = (e) => { // 提交表单

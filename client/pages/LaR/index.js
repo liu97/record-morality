@@ -21,7 +21,7 @@ class Home extends Component{
 	UNSAFE_componentWillMount(){
 		const authed = getCookie('isLogin') == 'true';
 		if(authed){
-			this.props.history.push('/admin/note/');
+			this.props.history.push('/admin/note/recent');
 		}
 	}
 	UNSAFE_componentWillReceiveProps(newProps){
@@ -38,7 +38,7 @@ class Home extends Component{
 		if(result.info.success){
 			setCookie('isLogin', true);
 			window.localStorage.setItem('access_token', result.info.data);
-			const bcakURL = this.props.location.state ? this.props.location.state.from.pathname : '/admin/note/';
+			const bcakURL = this.props.location.state ? this.props.location.state.from.pathname : '/admin/note/recent';
 			this.props.history.push(bcakURL);
 		}
 		else{
