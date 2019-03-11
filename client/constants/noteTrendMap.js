@@ -11,12 +11,11 @@ export const NOTE_ECHARTS_OPTION = {
     }
   },
   legend: {
-    data:['成交量']
+    data:['笔记数']
   },
   toolbox: {
     show : true,
     feature : {
-      dataView : {show: true, readOnly: false},
       magicType : {show: true, type: ['line', 'bar']},
     }
   },
@@ -24,7 +23,7 @@ export const NOTE_ECHARTS_OPTION = {
   xAxis : [
     {
       type : 'category',
-      data : ['天海湾','鼎龙湾','珍珠湾','翠逸家园','紫林湾', '田螺湾', '香海彼岸', "花城都汇", "天蕴皖",'珍珠湾','翠逸家园','紫林湾', '田螺湾', '香海彼岸']
+      data : []
     }
   ],
   yAxis : [
@@ -34,9 +33,9 @@ export const NOTE_ECHARTS_OPTION = {
   ],
   series : [
       {
-          name:'成交量',
+          name:'笔记数',
           type:'bar',
-          data:[2100, 909, 7200, 1232, 4256, 5409, 1700, 6232, 3256, 7900, 1232, 4256, 5409, 1700],
+          data:[],
           markPoint : {
               data : [
                   {type : 'max', name: '最大值'},

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Spin, Card, Radio } from 'antd'
 import NoteEcharts from '../Component/NoteEcharts';
+import { fetchNoteTrend } from 'actions/note';
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -20,9 +21,10 @@ class TrendMap extends Component {
 
   handleTimeRadioChange = (e) => {
     let type = e.target.value;
-    this.props.dispatch(fetchNoteTrendMap({type}))
+    this.props.dispatch(fetchNoteTrend({type}))
   }
-  getTimeExtraRender =() => {
+
+  getTimeExtraRender = () => {
     let graphRadio = [
       {title: '日视图', value: 'day'}, 
       {title: '月视图', value: 'month'},
@@ -33,7 +35,7 @@ class TrendMap extends Component {
       <div>
         <RadioGroup 
           onChange={(e) => this.handleTimeRadioChange(e)} 
-          defaultValue="province"
+          defaultValue="day"
         >
           {
             graphRadio.map(item => <RadioButton value={item.value} key={item.value}>{item.title}</RadioButton>)
@@ -52,7 +54,6 @@ class TrendMap extends Component {
             title=" "
             extra={this.getTimeExtraRender()}
             bordered={false}
-            style={{ width: 572 }}
           >
             <NoteEcharts />
           </Card>

@@ -37,3 +37,6 @@ export const addNote = createSimpleAjaxAction('/note/addNote', 'addNote', 'post'
 
 // 删除笔记
 export const deleteNote = createSimpleAjaxAction('/note/deleteNote', 'deleteNote', 'delete');
+
+
+export const fetchNoteTrend = createSimpleAjaxAction('/note/getNoteTrend', 'fetchNoteTrend', 'get');

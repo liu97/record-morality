@@ -45,3 +45,5 @@ export const updateNoteContentResult = createSimpleAjaxReduce('updateNoteContent
 export const addNoteResult = createSimpleAjaxReduce('addNote');
 
 export const deleteNoteResult = createSimpleAjaxReduce('deleteNote');
+
+export const fetchNoteTrendResult = createSimpleAjaxReduce('fetchNoteTrend');
