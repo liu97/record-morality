@@ -9,8 +9,14 @@ export const isObject = (obj) => {
 
 // 对象转字符串
 export const obj2String = (obj, arr = [], idx = 0) => {
+	let str = "";
 	for (let item in obj) {
-	arr[idx++] = [item, obj[item]];
+		if(str == ''){
+			str = `${item}=${obj[item]}`;
+		}
+		else{
+			str = `${str}&${item}=${obj[item]}`
+		}
 	}
-	return new URLSearchParams(arr).toString();
+	return str;
 }

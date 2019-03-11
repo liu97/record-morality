@@ -5,6 +5,7 @@ import {
   AsyncApp,
   AsyncNote,
   AsyncNoteContent,
+  AsyncTrendMap,
 } from './async'
 
 const routes = [
@@ -34,7 +35,7 @@ const routes = [
           },
           {
             path: '/admin/note/trendMap',
-            component: AsyncNote,
+            component: AsyncTrendMap,
           },
           {
             path: '/admin/note/folder/:id',

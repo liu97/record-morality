@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
 import { message } from 'antd';
 import classNames from 'classnames';
-import { updateNoteContent, fetchNoteContent, updateNoteStatus } from 'actions/note.js';
+import { updateNoteContent } from 'actions/note.js';
 
 @connect(
     (state, props) => ({

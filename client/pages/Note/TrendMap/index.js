@@ -11,7 +11,7 @@ const PREFIX = 'note-content';
 	(state, props) => ({
 	})
 )
-class Content extends Component {
+class TrendMap extends Component {
   constructor(props){
     super(props);
   }
@@ -33,4 +33,4 @@ class Content extends Component {
   }
 }
 
-export default Content
+export default TrendMap

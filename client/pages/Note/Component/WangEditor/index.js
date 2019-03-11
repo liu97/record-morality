@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
 import classNames from 'classnames';
 import { format } from 'utils/time';
-import { updateNoteContent, fetchNoteContent, updateNoteStatus } from 'actions/note.js';
+import { updateNoteContent } from 'actions/note.js';
 import E from 'wangeditor';
 
 

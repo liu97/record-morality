@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
 import classNames from 'classnames';
-import { fetchNoteList, fetchNoteContent, updateSelectedNote, updateNoteStatus, deleteNote } from 'actions/note.js';
+import { updateSelectedNote, updateNoteStatus, deleteNote } from 'actions/note.js';
 import { format } from 'utils/time';
 import _ from 'lodash';
 
