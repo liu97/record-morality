@@ -5,7 +5,7 @@
 * @Email: chuanfuliu@sohu-inc.com
 */
 const _ = require('lodash');
-
+const moment = require('moment');
 // const birthdayService = require('../services/birthday');
 const folderService = require('../services/folder');
 const noteService = require('../services/note');
@@ -14,7 +14,6 @@ const noteService = require('../services/note');
 const file = require('../utils/file');
 const token = require('../utils/token');
 const datatime = require('../utils/datetime');
-
 
 const noteContrallers = {
 
@@ -226,6 +225,52 @@ const noteContrallers = {
         console.log(result)
         ctx.body = result;
     },
-    
+    async getNoteTrend(ctx){ // 根据时间范围类型统计笔记数量
+        let result = {
+			success: false,
+			msg: '',
+			data: null,
+        }
+
+        let query = _.cloneDeep(ctx.request.query);
+        if(!query.type){
+            ctx.status = 404;
+            result.msg = "未传入时间范围类型";
+        }
+        else{
+            let data = [], type = query.type;
+            let config = {
+                day: {num: 6, format: 'YYYY-MM-DD'},
+                month: {num: 11, format: 'YYYY-MM'},
+                year: {num: 11, format: 'YYYY'},
+            }
+            for(let i = config[type].num; i >= 0; i--){
+                let time = moment()[type](moment()[type]() - i);
+                let startTime = time.startOf(type).format('YYYY-MM-DD 00:00:00');
+                let endtTime = time.endOf(type).format('YYYY-MM-DD 23:59:59');
+                query.createdAt = {
+                    '$gte': startTime,
+                    '$lte': endtTime
+                }
+                delete query.type;
+                let count = await noteService.getNoteInfo(query);
+                if(count.isError){
+                    ctx.status = 404;
+                    result.msg = count.msg;
+                    break;
+                }
+                data.push({[time.format(config[type].format)]: count.length});
+            }
+
+            result = {
+                success: true,
+                msg: 'It is 200 status',
+                data: data
+            }
+        }
+
+        console.log(result)
+        ctx.body = result;
+    },
 }
 module.exports = noteContrallers;

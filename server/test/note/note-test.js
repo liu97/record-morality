@@ -8,7 +8,7 @@
 const
     request = require('supertest'),
     app = require('../../app'),
-    token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibGl1Y2h1YW5mdSIsImlkIjoxLCJpYXQiOjE1NTAwNTU4NTIsImV4cCI6MTU1MDA3NzQ1Mn0.ql5dOx_07_wfAtOmeb8Oo-_upfYx69YsG3_VP9xeor0";
+    token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibGl1Y2h1YW5mdSIsImlkIjoxLCJpYXQiOjE1NTIyOTAyNTcsImV4cCI6MTU1MjMxMTg1N30.B_6nD1o5CB7KFoZZVyoZER4nl3BHgB__uNkDSePiVaA";
 
 describe('#test koa app', () => {
 
@@ -27,11 +27,10 @@ describe('#test koa app', () => {
         //     }
         // });
 
-        it('#test POST /note/addNote', async () => {
+        it('#test GET /note/getNoteTrend', async () => {
             try{
                 let res = await request(server)
-                                .post('/note/addNote')
-                                .send({title:'记德md', noteType:'md',content:'测试md'})
+                                .get('/note/getNoteTrend?type=year')
                                 .set('Authorization', 'Bearer ' + token) // header处加入token验证
                                 .expect(200);
             }
@@ -39,6 +38,19 @@ describe('#test koa app', () => {
                 throw err;
             }
         });
+
+        // it('#test POST /note/addNote', async () => {
+        //     try{
+        //         let res = await request(server)
+        //                         .post('/note/addNote')
+        //                         .send({title:'记德md', noteType:'md',content:'测试md'})
+        //                         .set('Authorization', 'Bearer ' + token) // header处加入token验证
+        //                         .expect(200);
+        //     }
+        //     catch(err){
+        //         throw err;
+        //     }
+        // });
 
         // it('#test DELETE /note/deleteNote', async () => {
         //     try{

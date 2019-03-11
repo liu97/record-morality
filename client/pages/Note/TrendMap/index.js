@@ -1,10 +1,12 @@
 import './index.less';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ContentList from '../Component/ContentList';
-import NoteContent from '../Component/NoteContent';
+import { Spin, Card, Radio } from 'antd'
+import NoteEcharts from '../Component/NoteEcharts';
 
-const PREFIX = 'note-content';
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group;
+const PREFIX = 'trend-map';
 
 @connect(
 	// eslint-disable-next-line no-unused-vars
@@ -16,19 +18,47 @@ class TrendMap extends Component {
     super(props);
   }
 
+  handleTimeRadioChange = (e) => {
+    let type = e.target.value;
+    this.props.dispatch(fetchNoteTrendMap({type}))
+  }
+  getTimeExtraRender =() => {
+    let graphRadio = [
+      {title: '日视图', value: 'day'}, 
+      {title: '月视图', value: 'month'},
+      {title: '年视图', value: 'year'}
+    ]
+
+    return (
+      <div>
+        <RadioGroup 
+          onChange={(e) => this.handleTimeRadioChange(e)} 
+          defaultValue="province"
+        >
+          {
+            graphRadio.map(item => <RadioButton value={item.value} key={item.value}>{item.title}</RadioButton>)
+          }
+        </RadioGroup>
+      </div>
+    )
+  }
+
   render() {
     return (
-        <React.Fragment>
-            <ContentList  
-                className={`${PREFIX}-list`} 
-                {...this.props}
-            />
-            <NoteContent 
-                className={`${PREFIX}-content`}
-                getNoteList={this.props.getNoteList}
-            >
-            </NoteContent>
-        </React.Fragment>
+      <div className={`${PREFIX}-container`} >
+        <h2>笔记趋势图</h2>
+        <div className={`${PREFIX}-content`}>
+          <Card 
+            title=" "
+            extra={this.getTimeExtraRender()}
+            bordered={false}
+            style={{ width: 572 }}
+          >
+            <NoteEcharts />
+          </Card>
+        </div>
+
+      </div>
     )
   }
 }
