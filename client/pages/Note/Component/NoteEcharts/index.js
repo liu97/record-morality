@@ -17,7 +17,8 @@ const PREFIX = 'note-echarts';
 class NoteEcharts extends Component {
   constructor(props){
     super(props);
-    this.echartsOption = NOTE_ECHARTS_OPTION;
+    this.echartsOption = _.cloneDeep(NOTE_ECHARTS_OPTION);
+    this.echatsRef = React.createRef();
   }
 
   UNSAFE_componentWillReceiveProps(nextProps){
@@ -28,22 +29,23 @@ class NoteEcharts extends Component {
   }
 
   initTrendMap = (data) => {
+    this.echartsOption.xAxis.data = [];
+    this.echartsOption.series.data = [];
     data.forEach(item => {
-      this.echartsOption.xAxis[0].data.push(...Object.keys(item));
-      this.echartsOption.series[0].data.push(...Object.values(item));
+      this.echartsOption.xAxis.data.push(...Object.keys(item));
+      this.echartsOption.series.data.push(...Object.values(item));
     });
+    this.echatsRef.current.getEchartsInstance().setOption(this.echartsOption);
   }
 
   render() {
-    debugger
     return (
-      <div style={{height:"300px",width:"600px"}}>
-        <ReactEcharts
-          option={this.echartsOption}
-          theme="clear"
-          lazyUpdate={false}
-        />
-      </div>
+      <ReactEcharts
+        ref={this.echatsRef}
+        option={this.echartsOption}
+        theme="clear"
+        notMerge={true}
+      />
     )
   }
 }

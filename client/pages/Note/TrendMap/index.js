@@ -19,6 +19,10 @@ class TrendMap extends Component {
     super(props);
   }
 
+  componentDidMount(){
+    this.props.dispatch(fetchNoteTrend({type: 'day'}));
+  }
+
   handleTimeRadioChange = (e) => {
     let type = e.target.value;
     this.props.dispatch(fetchNoteTrend({type}))
@@ -48,12 +52,11 @@ class TrendMap extends Component {
   render() {
     return (
       <div className={`${PREFIX}-container`} >
-        <h2>笔记趋势图</h2>
+        <h2 className={`${PREFIX}-header`}>笔记趋势图</h2>
         <div className={`${PREFIX}-content`}>
           <Card 
             title=" "
             extra={this.getTimeExtraRender()}
-            bordered={false}
           >
             <NoteEcharts />
           </Card>
