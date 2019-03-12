@@ -77,7 +77,10 @@ class NoteContent extends Component{
     }
 
     componentDidMount(){
-        this.initNoteContent(this.props.fetchNoteContentResult);
+        let updateSelectedNoteResult = this.props.updateSelectedNoteResult;
+        if(updateSelectedNoteResult && !updateSelectedNoteResult.isLoading){
+            this.props.dispatch(fetchNoteContent(updateSelectedNoteResult));
+        }
     }
 
     initNoteContent = (fetchNoteContentResult) => {

@@ -7,7 +7,7 @@ import { Layout, Icon } from 'antd';
 import NavMenu from './Component/NavMenu';
 
 import { NAVLIST } from 'constants/treeNav';
-import { fetchNoteList, addNote, updateSelectedKeys, updateSelectedNote } from 'actions/note.js';
+import { fetchNoteList, addNote, updateSelectedKeys } from 'actions/note.js';
 
 import renderRoutes from 'utils/renderRoutes';
 import { authPath } from 'utils/config';

@@ -7,7 +7,7 @@ import { routerActions } from 'react-router-redux';
 import { Menu, Icon, Dropdown } from 'antd';
 import classNames from 'classnames';
 import ContextMenu from '../TreeNav';
-import { updateSelectedKeys, updateSelectedNote } from 'actions/note.js';
+import { updateSelectedKeys } from 'actions/note.js';
 
 @connect(
     (state, props) => ({

@@ -50,9 +50,6 @@ class ContentList extends Component{
     initSelectedNote = (fetchNoteListResult) => {
         // 如果未选中笔记，且文件夹里有笔记
         if(fetchNoteListResult.info.data && fetchNoteListResult.info.data.length){
-            let ids = fetchNoteListResult.info.data.map((item)=>{
-                return item.id;
-            })
             this.setSelectedNote(fetchNoteListResult.info.data[0].id);
         }
         // 如果文件夹里没笔记
