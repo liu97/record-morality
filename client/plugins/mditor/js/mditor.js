@@ -6662,12 +6662,7 @@
 	};
 	
 	Renderer.prototype.image = function(href, title, text) {
-	  var out = '<img src="' + href + '" alt="' + text + '"';
-	  if (title) {
-	    out += ' title="' + title + '"';
-	  }
-	  out += this.options.xhtml ? '/>' : '>';
-	  return out;
+
 	};
 	
 	Renderer.prototype.text = function(text) {

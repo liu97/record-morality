@@ -116,7 +116,7 @@ class MdEditor extends Component{
     getMdAsyncResource = () => {
         // 按需加载mditor的js和css
         import(/* webpackChunkName: "mditor" */ 'plugins/mditor/css/mditor.min.css');
-        import(/* webpackChunkName: "mditor" */ 'plugins/mditor/js/mditor.min.js').then(() => {
+        import(/* webpackChunkName: "mditor" */ 'plugins/mditor/js/mditor.js').then(() => {
             this.setMdMessage();
         });
     }
