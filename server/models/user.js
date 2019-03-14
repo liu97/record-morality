@@ -9,9 +9,8 @@ const User = db.sequelize.define('user',{
         unique: true,
         autoIncrement: true
     },
-    name: Sequelize.STRING(255),  // 用户名
+    nickName: Sequelize.STRING(255), // 昵称
     password: Sequelize.STRING(255),  // 密码
-    nickname: Sequelize.STRING(255), // 昵称
     telephone: Sequelize.STRING(11), // 手机号
     email: Sequelize.STRING(20), // 用户email
 },{

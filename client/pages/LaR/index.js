@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 import { PostLoginMessage, PostRegisterMessage } from 'actions/lar';
-import { message, Tabs, Icon } from 'antd';
+import { message, Tabs } from 'antd';
 import { getCookie, setCookie } from 'utils/cookie';
 
 const TabPane = Tabs.TabPane;

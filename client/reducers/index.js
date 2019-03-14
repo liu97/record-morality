@@ -3,6 +3,8 @@ import { combineReducers } from 'redux';
 import {
 	postLoginResult,
 	postRegisterResult,
+	checkNickNameResult,
+	checkEmailResult,
 } from './lar';
 
 import {
@@ -24,6 +26,8 @@ import {
 const rootReducer = combineReducers({
 	postLoginResult,
 	postRegisterResult,
+	checkNickNameResult,
+	checkEmailResult,
 
 	fetchFolderTreeResult,
 	updateFolderTreeResult,

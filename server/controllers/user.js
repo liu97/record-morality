@@ -56,14 +56,19 @@ const userContrallers = {
         }
 
         let body = _.cloneDeep(ctx.request.body);
-        if(!body.password || !body.name || !body.email){
+        if(!body.password || !body.nickName || !body.email){
             ctx.status = 404;
             result.msg = "填写信息不完全";
         }
         else{
-            let checkExist = await userService.getUserInfo({name: body.name});
+            let checkExist = await userService.getUserInfo({
+                '$or': [
+                    {nickName: body.nickName},
+                    {email: body.email}
+                ]
+            });
             if(checkExist.length){
-                result.msg = '用戶名已存在';
+                result.msg = '昵称或者邮箱已存在';
             }
             else{
                 let registerResult = await userService.registerUser(body);
@@ -76,7 +81,7 @@ const userContrallers = {
                     try{
                         registerResult = registerResult.dataValues;
                         const userToken = { // 用户token
-                            name: registerResult.name,
+                            nickName: registerResult.nickName,
                             id: registerResult.id
                         };
                         const token = jwt.sign(userToken, config.secret, {expiresIn: '6h'});  // 签发token
@@ -107,12 +112,12 @@ const userContrallers = {
         }
 
         let body = _.cloneDeep(ctx.request.body);
-        if(!body.password || !body.name){
+        if(!body.password || !body.email){
             ctx.status = 404;
             result.msg = "填写信息不完全";
         }
         else{
-            let userInfo = await userService.getUserInfo({name: body.name});
+            let userInfo = await userService.getUserInfo({email: body.email});
             if(userInfo.isError){
                 ctx.status = 404;
                 result.msg = userInfo.msg;
@@ -123,7 +128,7 @@ const userContrallers = {
                     try{
                         if (bcrypt.compareSync(body.password, userInfo[0].password)) { // 判断数据库密码和用户输入密码是否相同
                             const userToken = { // 用户token
-                                name: userInfo[0].name,
+                                email: userInfo[0].email,
                                 id: userInfo[0].id
                             };
                             const token = jwt.sign(userToken, config.secret, {expiresIn: '6h'});  // 签发token
@@ -135,7 +140,7 @@ const userContrallers = {
                             }
                         }
                         else{
-                            result.msg = "用戶名或密码错误";
+                            result.msg = "邮箱或密码错误";
                         }
                     }
                     catch(err){
@@ -144,13 +149,73 @@ const userContrallers = {
                     }
                 }
                 else{
-                    result.msg = "用戶名不存在";
+                    result.msg = "邮箱不存在";
                 }
             }
         }
         console.log(result);
         ctx.body = result;
-    }
+    },
+    
+    async checkNickName(ctx){ // 检查昵称是否被占用
+        let result = {
+			success: false,
+			msg: '',
+			data: null,
+        }
+
+        let body = _.cloneDeep(ctx.request.body);
+
+        if(!body.nickName){
+            result.msg = "未填写昵称";
+        }
+        else{
+            let checkExist = await userService.getUserInfo({nickName: body.nickName});
+            if(checkExist.length){
+                result.msg = '昵称已经被占用了呢';
+            }
+            else{
+                result = {
+                    success: true,
+                    msg: 'It is 200 status',
+                    data: null,
+                }
+            }
+        }
+
+        console.log(result);
+        ctx.body = result;
+    },
+
+    async checkEmail(ctx){
+        let result = {
+			success: false,
+			msg: '',
+			data: null,
+        }
+
+        let body = _.cloneDeep(ctx.request.body);
+
+        if(!body.email){
+            result.msg = "未填写邮箱";
+        }
+        else{
+            let checkExist = await userService.getUserInfo({email: body.email});
+            if(checkExist.length){
+                result.msg = '邮箱已经被注册过了呢';
+            }
+            else{
+                result = {
+                    success: true,
+                    msg: 'It is 200 status',
+                    data: null,
+                }
+            }
+        }
+
+        console.log(result);
+        ctx.body = result;
+    },
     
 }
 module.exports = userContrallers;

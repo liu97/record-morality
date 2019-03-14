@@ -18,16 +18,16 @@ class LoginForm extends Component{
 		return (
             <div className={'main-form'}>
                 <Form onSubmit={this.handleSubmit} className="lag-form">
-                    <FormItem>
-                        {getFieldDecorator('name', {
-                            rules: [{ required: true, message: 'Please input your name!' }],
+                <FormItem>
+                        {getFieldDecorator('email', {
+                            rules: [{ type: 'email', message: '请输入正确格式的email!' },{ required: true, message: '请输入email!' }],
                         })(
-                            <Input prefix={<Icon type="user" style={{ color: 'rgba(250,82,82,1)' }} />} placeholder="name" />
+                            <Input prefix={<Icon type="aliwangwang" style={{ color: 'rgba(250,82,82,1)' }} />} placeholder="email" />
                         )}
                     </FormItem>
                     <FormItem>
                         {getFieldDecorator('password', {
-                            rules: [{ required: true, message: 'Please input your password!' }],
+                            rules: [{ required: true, message: '请输入密码!' }],
                         })(
                             <Input prefix={<Icon type="lock" style={{ color: 'rgba(250,82,82,1)' }} />} type="password" placeholder="password" />
                         )}
