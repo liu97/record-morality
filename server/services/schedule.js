@@ -1,0 +1,50 @@
+const schedule = require('node-schedule');
+const moment = require('moment');
+const birthdayService = require('../services/birthday');
+const {sendMail} = require('./mailer');
+
+const isBirthday =function(date, advanceDay, type){ // 判断是否为生日
+
+	let changeDay = moment().add(advanceDay, 'days'); // 今天+advanceDay
+	if(type == 0){ // 0为阴历，1为阳历
+		changeDay = chineseLunar.solarToLunar(new Date(changeDay.format('YYYY-MM-DD 00:00:00'))); // 阴历格式的 今天+advanceDay
+		birthday = moment(date).format('MM-DD').split('-'); // 数据库生日的 月日
+		return (Number(birthday[0]) == changeDay.month && Number(birthday[1]) == changeDay.day);
+	}
+	else{
+		changeDay = changeDay.format('MM-DD');
+		birthday = moment(date).format('MM-DD');
+		return changeDay == birthday;
+	}
+}
+
+const scheduleSendMail = async function(){
+    schedule.scheduleJob('0 * * * * *', async function(){
+        let birthdayInfo = await birthdayService.getBirthdayInfo({});
+
+        if(birthdayInfo.isError){
+            ctx.status = 404;
+            result.msg = birthdayInfo.msg;
+        }
+        else{
+            birthdayInfo = birthdayInfo.dataValues;
+            for(let i = 0; i< birthdayInfo.length; i++){
+                let item = birthdayInfo[i];
+                if(isBirthday(item.date, item.advanceDay, item.dateType)){
+                    let leftText = '';
+                    if(item.advanceDay == 0){
+                        leftText = '今天';
+                    }
+                    else{
+                        leftText = `还有${item.advanceDay}就要`;
+                    }
+                    let message = `${item.name}${leftText}过生日啦！赶快准备好礼物祝福ta吧！`;
+                    sendMail(item.email, message);
+                }
+            }
+        }
+    }); 
+}
+
+scheduleSendMail();
+module.exports = { scheduleSendMail };

@@ -19,8 +19,8 @@ const birthdayServices ={
         if(!birthdayInfo.advanceDay){ // 提前提醒日期默认为0天
             birthdayInfo.advanceDay = 0;
         }
-        if(!birthdayInfo.dataType){ // 生日类型默认为0(阳历)
-            birthdayInfo.dataType = 0;
+        if(!birthdayInfo.dataType){ // 生日类型默认为1(阳历)
+            birthdayInfo.dataType = 1;
         }
         if(!birthdayInfo.email){ // 提醒邮箱默认为用户邮箱
             let user = await opt.findAll(User, {
