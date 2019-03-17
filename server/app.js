@@ -15,6 +15,7 @@ const verify = util.promisify(jwt.verify); // 解密
 
 const config = require('./../config');
 const routers = require('./routers/index');
+const scheduleServices = require('./services/schedule'); // 定时任务
 
 const app = new Koa();
 
@@ -54,6 +55,6 @@ app.use(jwtKoa({secret:config.secret}).unless({
 // 初始化路由中间件
 app.use(routers.routes()).use(routers.allowedMethods());
 
-
+scheduleServices.scheduleSendMail();
 
 module.exports = app;

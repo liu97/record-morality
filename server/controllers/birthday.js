@@ -14,6 +14,7 @@ const birthdayService = require('../services/birthday');
 const file = require('../utils/file');
 const token = require('../utils/token');
 const datatime = require('../utils/datetime');
+const scheduleServices = require('../services/schedule'); // 定时任务
 
 
 const birthdayContrallers = {
@@ -54,10 +55,11 @@ const birthdayContrallers = {
                 result.msg = birthdayInfo.msg;
             }
             else{
+                scheduleServices.sendMailByMessage(birthdayInfo); // 检查新建的生日提醒是否就是今天
                 result = {
                     success: true,
                     msg: 'It is 200 status',
-                    data: birthdayInfo.birthdayInfo
+                    data: birthdayInfo
                 }
             }
         }
@@ -169,6 +171,11 @@ const birthdayContrallers = {
         }
         else{
             birthdayInfo = birthdayInfo.dataValues;
+            for(let i = 0; i < birthdayInfo.length; i++){
+                let birthday = birthdayInfo[i];
+                let readMessage = await file.readFile(birthday.pointPath);
+                birthday.content = readMessage.isError ? readMessage.msg : readMessage.content; // 获取文章内容
+            }
             result = {
                 success: true,
                 msg: 'It is 200 status',

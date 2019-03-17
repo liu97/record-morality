@@ -8,7 +8,7 @@
 const
     request = require('supertest'),
     app = require('../../app'),
-    token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibGl1Y2h1YW5mdSIsImlkIjozNCwiaWF0IjoxNTQ3NDU4MDYxLCJleHAiOjE1ODM0Nzk2NjF9.6IiVlRiIeMiuF5zk6kTrq85UwIjLtT6uj2Wh85UHfZo";;
+    token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjExMzk0NzIwMjlAcXEuY29tIiwiaWQiOjEsImlhdCI6MTU1Mjc5MzA0NiwiZXhwIjoxNTUyODE0NjQ2fQ.ZGG0e5bMtdM_inNLv3jfvdNBl4FaXjgih7IDQaI29xg";;
 
 describe('#test koa app', () => {
 
@@ -16,17 +16,17 @@ describe('#test koa app', () => {
 
     describe('#test server', () => {
 
-        // it('#test GET /birthday', async () => {
-        //     try{
-        //         let res = await request(server)
-        //                         .get('/birthday')
-        //                         .set('Authorization', 'Bearer ' + token) // header处加入token验证
-        //                         .expect(200);
-        //     }
-        //     catch(err){
-        //         throw err;
-        //     }
-        // });
+        it('#test GET /birthday', async () => {
+            try{
+                let res = await request(server)
+                                .get('/birthday')
+                                .set('Authorization', 'Bearer ' + token) // header处加入token验证
+                                .expect(200);
+            }
+            catch(err){
+                throw err;
+            }
+        });
 
         // it('#test POST /birthday/addBirthday', async () => {
         //     try{

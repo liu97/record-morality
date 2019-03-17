@@ -37,11 +37,6 @@ const birthdayServices ={
         }
 
         result = await opt.create(Birthday, birthdayInfo);
-        if(!result.isError){
-			result.dataValues = result.map((item, index)=>{
-				return item.dataValues;
-			})
-		}
         return result;
     },
     
