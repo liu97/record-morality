@@ -6,6 +6,8 @@ import {
   AsyncNote,
   AsyncNoteContent,
   AsyncTrendMap,
+
+  AsyncBirthday,
 } from './async'
 
 const routes = [
@@ -48,24 +50,12 @@ const routes = [
         ]
       },
       {
-        path: '/birthday',
-        component: AsyncApp,
+        path: '/admin/birthday',
+        component: AsyncBirthday,
         requiresAuth: true,
         routes: [
           {
-            path: '/birthday/new',
-            component: AsyncNote,
-          },
-          {
-            path: '/birthday/folder/:id',
-            component: AsyncNote,
-          },
-          {
-            path: '/birthday/trendMap',
-            component: AsyncNote,
-          },
-          {
-            path: '/birthday/unsaved',
+            path: '/admin/birthday/list',
             component: AsyncNote,
           },
           {

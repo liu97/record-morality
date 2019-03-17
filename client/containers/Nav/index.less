@@ -1,0 +1,35 @@
+@themeColor: #1890ff;
+@menuFontSize: 14px;
+@menuLineHeight: 40px;
+@menuFontColor: #393939;
+.nav-menu{
+    .ant-menu-item {
+        margin: 0 !important;
+        color: @menuFontColor;
+        font-size: @menuFontSize;
+        padding-left: 35px !important;
+        &:first-child {
+            padding: 0 !important;
+            height: 50px;
+            border-bottom: 1px solid #eee;
+            line-height: 50px;
+            text-align: center;
+            border-top-left-radius: 3px;
+        }
+        a {
+            display: inline-block;
+            color: @menuFontColor;
+            font-size: @menuFontSize;
+        }
+    }
+    .ant-menu-item-active {
+        background-color: #e4edff !important;
+    }
+    .ant-menu-item-selected {
+        background-color: @themeColor !important;
+        color: #FFFFFF;
+        a {
+            color: #FFFFFF;
+        }
+    }
+}

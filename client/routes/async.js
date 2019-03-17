@@ -6,10 +6,14 @@ const AsyncNote = asyncComponent(() => import(/* webpackChunkName: "note" */ 'pa
 const AsyncNoteContent = asyncComponent(() => import(/* webpackChunkName: "noteContent" */ 'pages/Note/Content'));
 const AsyncTrendMap = asyncComponent(() => import(/* webpackChunkName: "noteTrendMap" */ 'pages/Note/TrendMap'));
 
+const AsyncBirthday = asyncComponent(() => import(/* webpackChunkName: "birthday" */ 'pages/Birthday'));
+
 export {
     AsyncLaR,
     AsyncApp,
     AsyncNote,
     AsyncNoteContent,
     AsyncTrendMap,
+
+    AsyncBirthday,
 }

@@ -11,7 +11,7 @@ class Head extends Component{
 			{
 				title: '笔记',
 				className: 'note',
-				to: '/admin/note/',
+				to: '/admin/note/recent',
 				addition: 'note'
 			},
 			{

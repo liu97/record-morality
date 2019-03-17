@@ -5,7 +5,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
 import { Menu, Icon, Dropdown } from 'antd';
-import classNames from 'classnames';
+import Nav from 'containers/Nav';
+
 import ContextMenu from '../TreeNav';
 import { updateSelectedKeys } from 'actions/note.js';
 
@@ -18,60 +19,29 @@ import { updateSelectedKeys } from 'actions/note.js';
         dispatch: dispatch
     })
 )
-class NavMenu extends Component{
+class NavMenu extends Nav{
     constructor(props){
         super(props);
-        this.state = {
-            navList: this.props.navList,
-        }
-		
+
+        this.updateSelectedKeys = updateSelectedKeys;
     }
 
-    UNSAFE_componentWillReceiveProps(nextProps) {
-        let { navList } = nextProps;
-        if(navList && !_.isEqual(navList, this.props.navList)){
-            this.setState({
-                navList
-            })
-        }
-    }
-
-    componentDidMount(){
-        let key = this.getActiveKey();
-        this.onItemClick(key);
-    }
-
-    getActiveKey = (url = this.props.history.location.pathname) => {
-        let result = url.replace(/\/$/, '').split('/').slice(-1);
-		return result[0];
-    }
-
-    setSelectedKeys = (key) => {
-        this.props.dispatch(updateSelectedKeys({keys:[key]}));
-    }
-
-    onItemClick = (item, e) => {
-        if(item.type && item.type == 'nav'){
-            this.setSelectedKeys(item.key);
-            item = item.key;
-        }
-        else if(!item.type){
-            this.setSelectedKeys(item);
-        }    
-        this.props.onClick && this.props.onClick(item);
-    }
     onTreeExpand = (info) => {
         this.props.onTreeExpand && this.props.onTreeExpand(info);
     }
+
     onTreeRightClick = (info) => {
         this.props.onTreeRightClick && this.props.onTreeRightClick(info);
     }
+
     onTreeDrop = (info) => {
         this.props.onTreeDrop && this.props.onTreeDrop(info);
     }
+
     handleAddNote = (noteType) => {
         this.props.handleAddNote('新建文件',noteType);
     }
+
     getDropDown(){
         return (
             <Menu>
@@ -84,6 +54,7 @@ class NavMenu extends Component{
             </Menu>
         )
     }
+
     getNavList(){
         const props = this.props;
 
@@ -127,23 +98,6 @@ class NavMenu extends Component{
 
         return navList;
     }
-	render(){
-        const props = this.props;
-        const navMenuClass = classNames({
-            [props.className]: props.className != undefined,
-            'nav-menu': true
-        })
-		return (
-            <Menu
-                theme={props.theme ? props.theme : "light"}
-                mode={props.mode ? props.mode : "inline"}
-                className={navMenuClass}
-                selectedKeys={props.updateSelectedKeysResult.keys}
-            >
-                {this.getNavList()}
-            </Menu>
-		)
-	}
 }
 
 export default withRouter(NavMenu)
