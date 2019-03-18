@@ -8,6 +8,7 @@ import {
   AsyncTrendMap,
 
   AsyncBirthday,
+  AsyncBirthdayList,
 } from './async'
 
 const routes = [
@@ -56,7 +57,7 @@ const routes = [
         routes: [
           {
             path: '/admin/birthday/list',
-            component: AsyncNote,
+            component: AsyncBirthdayList,
           },
           {
             component: Error,

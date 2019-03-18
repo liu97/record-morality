@@ -85,14 +85,7 @@ const birthdayServices ={
         };
         let birthdayInfo = _.cloneDeep(info);
 
-        result = await opt.findAll(Birthday,
-			{
-				where: {
-					...birthdayInfo
-				}
-			},
-			userId
-        )
+        result = await opt.findAll(Birthday, birthdayInfo, userId);
         
         if(!result.isError){
 			result.dataValues = result.map((item, index)=>{

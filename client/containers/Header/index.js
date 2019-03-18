@@ -17,7 +17,7 @@ class Head extends Component{
 			{
 				title: '生日提醒',
 				className: 'birthday',
-				to: '/admin/birthday/',
+				to: '/admin/birthday/list',
 				addition: 'birthday'
 			}
 		]

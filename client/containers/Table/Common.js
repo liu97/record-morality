@@ -52,7 +52,7 @@ export default class TableAdd extends Component {
 
         this.props.dispatch(this.fetchList({
             ...this.query,
-            start: (currentPage-1)*pageSize,
+            page: currentPage,
             pageSize: pageSize
         }))
     }
@@ -90,7 +90,7 @@ export default class TableAdd extends Component {
     }
 
     render() {
-        const {listResult} = this.props;
+        const listResult = this.listResult;
         return (
             <div className={this.conPrefix}>
                 <Spin spinning={listResult.isLoading}>
@@ -101,7 +101,7 @@ export default class TableAdd extends Component {
                         cacheSearch={this.cacheSearch}
                         columns={this.columnsConfig}
                         searchList={this.queryConfig}
-                        tableData={listResult.info.list}
+                        tableData={listResult.info.data}
                         currentPage={this.currentPage}
                         totalCount={listResult.info.count}
                         clear={this._clear}

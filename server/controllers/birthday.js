@@ -116,7 +116,11 @@ const birthdayContrallers = {
         }
         else{
             if(body.content){
-                let oldBirthday = await birthdayService.getBirthdayInfo({id: body.id}, ctx);
+                let oldBirthday = await birthdayService.getBirthdayInfo({
+                    where: {
+                        id: body.id
+                    }
+                }, ctx);
 
                 if(oldBirthday.isError && oldBirthday.length){
                     oldBirthday = oldBirthday.dataValues;
@@ -161,9 +165,19 @@ const birthdayContrallers = {
         }
 
         let query = _.cloneDeep(ctx.request.query);
+        let info = {};
 
         query.userId = userId;
-        let birthdayInfo = await birthdayService.getBirthdayInfo(query, ctx);
+        if(query.page || query.pageSize){
+            info.limit = +query.pageSize || 50;
+            info.offset = (query.page-1) * query.pageSize || 0;
+
+            delete query.page;
+            delete query.pageSize;
+
+            info.where = query
+        }
+        let birthdayInfo = await birthdayService.getBirthdayInfo(info, ctx);
 
         if(birthdayInfo.isError){
             ctx.status = 404;

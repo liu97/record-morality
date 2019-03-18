@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
 import { Layout, Icon } from 'antd';
+import _ from 'lodash';
 import NavMenu from './Component/NavMenu';
 
 import { NAVLIST } from 'constants/treeNav';
