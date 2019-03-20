@@ -62,7 +62,7 @@ class Nav extends Component{
             }
             else{
                 return (
-                    <Menu.Item key={item.key}>
+                    <Menu.Item key={item.key}  onClick={(e)=>{ this.onItemClick(item, e) }}>
                         <span>
                             {item.icon && <Icon type={item.icon}></Icon>}
                             <span>{item.title}</span>

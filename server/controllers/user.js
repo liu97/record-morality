@@ -119,18 +119,19 @@ const userContrallers = {
         }
         else{
             let userInfo = await userService.getUserInfo({email: body.email});
+            let userdata = userInfo.dataValues;
             if(userInfo.isError){
                 ctx.status = 404;
                 result.msg = userInfo.msg;
             }
             else{
-                if(userInfo.length){
+                if(userdata.length){
                     
                     try{
-                        if (bcrypt.compareSync(body.password, userInfo[0].password)) { // 判断数据库密码和用户输入密码是否相同
+                        if (bcrypt.compareSync(body.password, userdata[0].password)) { // 判断数据库密码和用户输入密码是否相同
                             const userToken = { // 用户token
-                                email: userInfo[0].email,
-                                id: userInfo[0].id
+                                email: userdata[0].email,
+                                id: userdata[0].id
                             };
                             const token = jwt.sign(userToken, config.secret, {expiresIn: '6h'});  // 签发token
     

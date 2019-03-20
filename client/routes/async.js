@@ -8,6 +8,7 @@ const AsyncTrendMap = asyncComponent(() => import(/* webpackChunkName: "noteTren
 
 const AsyncBirthday = asyncComponent(() => import(/* webpackChunkName: "birthday" */ 'pages/Birthday'));
 const AsyncBirthdayList = asyncComponent(() => import(/* webpackChunkName: "birthdayList" */ 'pages/Birthday/List'));
+const AsyncBirthdayAdd = asyncComponent(() => import(/* webpackChunkName: "birthdayAdd" */ 'pages/Birthday/Add'));
 
 export {
     AsyncLaR,
@@ -18,4 +19,5 @@ export {
 
     AsyncBirthday,
     AsyncBirthdayList,
+    AsyncBirthdayAdd,
 }

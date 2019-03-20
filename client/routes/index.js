@@ -9,6 +9,7 @@ import {
 
   AsyncBirthday,
   AsyncBirthdayList,
+  AsyncBirthdayAdd,
 } from './async'
 
 const routes = [
@@ -58,6 +59,10 @@ const routes = [
           {
             path: '/admin/birthday/list',
             component: AsyncBirthdayList,
+          },
+          {
+            path: '/admin/birthday/add',
+            component: AsyncBirthdayAdd,
           },
           {
             component: Error,

@@ -91,7 +91,6 @@ export default class TableAdd extends Component {
 
     render() {
         const listResult = this.listResult;
-        debugger
         return (
             <div className={this.conPrefix}>
                 <Spin spinning={listResult.isLoading}>

@@ -7,15 +7,17 @@ import { fetchBirthdayList } from 'actions/birthday';
 import Table from 'containers/Table/Common';
 import {COLUMNS, QUERY} from 'constants/birthday';
 import { Button, Icon, Tooltip  } from 'antd';
+import { deleteBirthday } from 'actions/birthday';
 
 
 @connect(
   // eslint-disable-next-line no-unused-vars
   (state, props) => ({
     fetchBirthdayListResult: state.fetchBirthdayListResult,
+    deleteBirthdayResult: state.deleteBirthdayResult,
   })
 )
-class Article extends Table{
+class Birthday extends Table{
 	constructor(props){
 		super(props);
 		this.columnsConfig = COLUMNS;
@@ -27,15 +29,16 @@ class Article extends Table{
 		this.listResult = this.props.fetchBirthdayListResult;
 	}
 	componentWillReceiveProps(newProps){
-		let { fetchBirthdayListResult } = newProps;
+		let { fetchBirthdayListResult, deleteBirthdayResult } = newProps;
 		if(fetchBirthdayListResult !== this.props.fetchBirthdayListResult &&fetchBirthdayListResult && fetchBirthdayListResult.isLoading === false) {
-			if(fetchBirthdayListResult.info.count != 0){
-				this.listResult = fetchBirthdayListResult
-			}
+			this.listResult = fetchBirthdayListResult
+		}
+		if(deleteBirthdayResult !== this.props.deleteBirthdayResult &&deleteBirthdayResult && deleteBirthdayResult.isLoading === false) {
+				this.triggerSubmit();
 	  }
 	}
-	deleteArticle = (article_id) =>{
-		// this.props.dispatch(deleteArticleMessage({article_id}));
+	handleDeleteBirthday = (id) =>{
+		this.props.dispatch(deleteBirthday({id}));
 	}
 	addCustomCloumns() {
 		COLUMNS.forEach((col) => {
@@ -61,9 +64,9 @@ class Article extends Table{
 			    	col.render = (text, record, index) => {
 			      	return (
 			        	<div className="table-opt">
-				            <Link to={`/admin/article/detail?article_id=${record.article_id}`} >查看 </Link>
-				            <Link to={`/admin/article/edit?article_id=${record.article_id}`} >编辑 </Link>
-				            <a href="javascript:void(0);" onClick={this.deleteArticle.bind(this,record.article_id)}>删除</a>
+				            <Link to={`/admin/birthday/detail?id=${record.id}`} >查看 </Link>
+				            <Link to={`/admin/birthday/edit?id=${record.id}`} >编辑 </Link>
+				            <a href="javascript:void(0);" onClick={this.handleDeleteBirthday.bind(this,record.id)}>删除</a>
 			        	</div>
 			      	)}
 			    	break;
@@ -73,4 +76,4 @@ class Article extends Table{
 	}
 }
 
-export default Article
+export default Birthday

@@ -3,7 +3,7 @@ export const NAVLIST = [
         title: '添加提醒',
         to: '/admin/birthday/add',
         icon: 'plus',
-        type: 'nav',
+        type: 'btn',
         key: 'new',
     },
     {
