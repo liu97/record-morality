@@ -2,9 +2,9 @@ import './index.less';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { message } from 'antd';
+import { message, Card  } from 'antd';
 
-const PREFIX = 'birthday-list';
+const PREFIX = 'birthday-add';
 
 @connect(
 	// eslint-disable-next-line no-unused-vars
@@ -28,7 +28,14 @@ class BirthdayAdd extends Component{
 
 	render(){
 		return (
-			<div></div>
+			<Card
+				title="基本信息"
+				className={PREFIX}
+				>
+				<p>Card content</p>
+				<p>Card content</p>
+				<p>Card content</p>
+			</Card>
 		)
 	}
 }

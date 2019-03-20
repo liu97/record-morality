@@ -254,13 +254,13 @@ const noteContrallers = {
                     '$lte': endtTime
                 }
                 delete query.type;
-                let count = await noteService.getNoteInfo(query);
-                if(count.isError){
+                let noteInfo = await noteService.getNoteInfo(query);
+                if(noteInfo.isError){
                     ctx.status = 404;
-                    result.msg = count.msg;
+                    result.msg = noteInfo.msg;
                     break;
                 }
-                data.push({[time.format(config[type].format)]: count.length});
+                data.push({[time.format(config[type].format)]: noteInfo.count});
             }
 
             result = {

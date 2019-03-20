@@ -4,13 +4,13 @@ export const NAVLIST = [
         to: '/admin/birthday/add',
         icon: 'plus',
         type: 'btn',
-        key: 'new',
+        key: 'add',
     },
     {
         title: '提醒管理',
         to: '/admin/birthday/list',
         icon: 'profile',
         type: 'nav',
-        key: 'list',
+        key: 'birthday',
     },
 ];

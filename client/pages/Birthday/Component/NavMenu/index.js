@@ -23,6 +23,11 @@ class NavMenu extends Nav{
 
         this.updateSelectedKeys = updateSelectedKeys;
     }
+
+    getActiveKey = (url = this.props.history.location.pathname) => {
+        let result = url.replace(/\/$/, '').split('/').slice(-2, -1);
+		return result[0];
+    }
 }
 
 export default withRouter(NavMenu)

@@ -5,9 +5,9 @@ const WebpackParallelUglifyPlugin = require('webpack-parallel-uglify-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
-const HappyPack = require('happypack');
+// const HappyPack = require('happypack');
 const os = require('os');
-const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
+// const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
 const rootPath = path.join(__dirname, '..');
 const appPath = path.join(rootPath, 'client');
@@ -35,26 +35,20 @@ module.exports = {
               test: /\.js$/,
               exclude: /node_modules/,
               include: appPath,
-              loader: 'happypack/loader?id=happyBabel',
+              loader: 'babel-loader',
+              query: {
+                  plugins: [                                             
+                      ["import", {libraryName: "antd", style: "css"}]   //需要配置的地方
+                  ]                                                    
+              }
           },
           {
               test: /\.css$/,
-              use:[
-                  "style-loader",
-                  MiniCssExtractPlugin.loader,
-                  "happyPack/loader?id=happyCss",
-                  "postcss-loader"
-              ], // 注意顺序
+              use:["style-loader","css-loader","postcss-loader"],
           },
           {
               test: /\.less$/,
-              use:[
-                  "style-loader",
-                  MiniCssExtractPlugin.loader,
-                  "happyPack/loader?id=happyCss",
-                  "postcss-loader",
-                  "happyPack/loader?id=happyLess"
-              ],
+              use:["style-loader","css-loader","postcss-loader","less-loader"],
           },
           {
               test: /.(gif|jpg|png$)/,
@@ -138,39 +132,39 @@ module.exports = {
             algorithm:  'gzip',
             test:  /\.js$|\.css$|\.html$/
         }),
-        new HappyPack({
-            id: 'happyBabel', // 用id来标识 happypack处理那里类文件
-            loaders: [{ // 如何处理  用法和loader 的配置一样
-              loader: 'babel-loader',
-              query: {
-                  cacheDirectory:  true,
-                  plugins: [                                             
-                      ["import", {libraryName: "antd", style: "css"}]   //需要配置的地方
-                  ]                                                    
-              }
-            }],
-            cache: true, // 缓存加载器
-            threadPool: happyThreadPool, // 共享进程池
-            verbose: true, // 允许 HappyPack 输出日志
-        }),
-        new HappyPack({
-            id: 'happyCss', // 用id来标识 happypack处理那里类文件
-            loaders: [{ // 如何处理  用法和loader 的配置一样
-              loader: 'css-loader',
-            }],
-            cache: true, // 缓存加载器
-            threadPool: happyThreadPool, // 共享进程池
-            verbose: true, // 允许 HappyPack 输出日志
-        }),
-        new HappyPack({
-            id: 'happyLess', // 用id来标识 happypack处理那里类文件
-            loaders: [{ // 如何处理  用法和loader 的配置一样
-              loader: 'less-loader',
-            }],
-            cache: true, // 缓存加载器
-            threadPool: happyThreadPool, // 共享进程池
-            verbose: true, // 允许 HappyPack 输出日志
-        }),
+        // new HappyPack({
+        //     id: 'happyBabel', // 用id来标识 happypack处理那里类文件
+        //     loaders: [{ // 如何处理  用法和loader 的配置一样
+        //       loader: 'babel-loader',
+        //       query: {
+        //           cacheDirectory:  true,
+        //           plugins: [                                             
+        //               ["import", {libraryName: "antd", style: "css"}]   //需要配置的地方
+        //           ]                                                    
+        //       }
+        //     }],
+        //     cache: true, // 缓存加载器
+        //     threadPool: happyThreadPool, // 共享进程池
+        //     verbose: true, // 允许 HappyPack 输出日志
+        // }),
+        // new HappyPack({
+        //     id: 'happyCss', // 用id来标识 happypack处理那里类文件
+        //     loaders: [{ // 如何处理  用法和loader 的配置一样
+        //       loader: 'css-loader',
+        //     }],
+        //     cache: true, // 缓存加载器
+        //     threadPool: happyThreadPool, // 共享进程池
+        //     verbose: true, // 允许 HappyPack 输出日志
+        // }),
+        // new HappyPack({
+        //     id: 'happyLess', // 用id来标识 happypack处理那里类文件
+        //     loaders: [{ // 如何处理  用法和loader 的配置一样
+        //       loader: 'less-loader',
+        //     }],
+        //     cache: true, // 缓存加载器
+        //     threadPool: happyThreadPool, // 共享进程池
+        //     verbose: true, // 允许 HappyPack 输出日志
+        // }),
         new webpack.DllReferencePlugin({
             manifest: require(path.join(rootPath, 'dist', 'manifest.json')),
         }),

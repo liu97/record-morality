@@ -44,20 +44,27 @@ class Birthday extends Component{
 
     }
 
-    getActiveKey = (url = this.props.history.location.pathname) => {
+    getActivePage = (url = this.props.history.location.pathname) => {
         let result = url.replace(/\/$/, '').split('/').slice(-1);
 		return result[0];
     }
 
+    navClick = (item) => {
+        if(item.key == 'add'){
+            this.props.history.push('/admin/birthday/add');
+        }
+    }
+
 	render(){
         const authed = getCookie('isLogin') == 'true';
-        const activeKey = this.getActiveKey()
+        const activePage = this.getActivePage()
 		return (
             <Layout className={PREFIX}>
                 <Sider className={`${PREFIX}-sider`}>
                     <NavMenu 
                         className={`${PREFIX}-menu`}
                         navList={this.navList}
+                        onClick={this.navClick}
                     />
             
                 </Sider>
@@ -65,9 +72,9 @@ class Birthday extends Component{
                     <div className={`${PREFIX}-container-breadcrumb`}>
                         <Breadcrumb>
                             <Breadcrumb.Item>Home</Breadcrumb.Item>
-                            <Breadcrumb.Item>{activeKey}</Breadcrumb.Item>
+                            <Breadcrumb.Item>{activePage}</Breadcrumb.Item>
                         </Breadcrumb>
-                        <h2>{this.breadOption[activeKey]}</h2>
+                        <h2>{this.breadOption[activePage]}</h2>
                     </div>
                     {renderRoutes(this.props.route.routes, authed, authPath, {wrappedComponentRef:(e) => this.listRef = e}
                     )}
