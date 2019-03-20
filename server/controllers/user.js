@@ -37,11 +37,12 @@ const userContrallers = {
                 result.msg = userInfo.msg;
             }
             else{
-                userInfo = userInfo.dataValues;
+                let userData = userInfo.dataValues;
                 result = {
                     success: true,
                     msg: 'It is 200 status',
-                    data: userInfo
+                    data: userData,
+                    count: userInfo.count,
                 }
             }
         }

@@ -168,6 +168,10 @@ const birthdayContrallers = {
         let info = {};
 
         query.userId = userId;
+        if(query.fuzzy_name){
+            query.name = {like: `%${query.fuzzy_name}%`}
+            delete query.fuzzy_name;
+        }
         if(query.page || query.pageSize){
             info.limit = +query.pageSize || 50;
             info.offset = (query.page-1) * query.pageSize || 0;
@@ -184,7 +188,7 @@ const birthdayContrallers = {
             result.msg = birthdayInfo.msg;
         }
         else{
-            birthdayInfo = birthdayInfo.dataValues;
+            let birthdayData = birthdayInfo.dataValues;
             for(let i = 0; i < birthdayInfo.length; i++){
                 let birthday = birthdayInfo[i];
                 let readMessage = await file.readFile(birthday.pointPath);
@@ -193,7 +197,8 @@ const birthdayContrallers = {
             result = {
                 success: true,
                 msg: 'It is 200 status',
-                data: birthdayInfo
+                data: birthdayData,
+                count: birthdayInfo.count,
             }
         }
 

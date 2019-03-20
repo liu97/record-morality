@@ -88,7 +88,7 @@ const birthdayServices ={
         result = await opt.findAll(Birthday, birthdayInfo, userId);
         
         if(!result.isError){
-			result.dataValues = result.map((item, index)=>{
+			result.dataValues = result.rows.map((item, index)=>{
 				return item.dataValues;
 			})
 		}

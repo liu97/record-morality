@@ -183,11 +183,11 @@ const noteContrallers = {
             result.msg = noteInfo.msg;
         }
         else{
-            noteInfo = noteInfo.dataValues;
+            let noteData = noteInfo.dataValues;
 
             let notes = [];
-            for(let i = 0; i < noteInfo.length; i++){
-                let note = _.cloneDeep(noteInfo[i]);
+            for(let i = 0; i < noteData.length; i++){
+                let note = _.cloneDeep(noteData[i]);
                 if(ctx.request.query.content){
                     let readMessage = await file.readFile(note.notePath);
                     note.content = readMessage.isError ? readMessage.msg : readMessage.content; // 获取文章内容
@@ -218,7 +218,8 @@ const noteContrallers = {
             result = {
                 success: true,
                 msg: 'It is 200 status',
-                data: notes
+                data: notes,
+                count: noteInfo.count
             }
         }
 

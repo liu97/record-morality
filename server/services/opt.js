@@ -151,7 +151,7 @@ const findAll = async function(model, message, authId){
 	let result;
 	if(Types.isJSON(message)){
 		try{
-			result = await model.findAll(
+			result = await model.findAndCountAll(
 				message
 			);
 			if(authId){

@@ -102,7 +102,7 @@ const noteServices ={
 		)
         
 		if(!result.isError){
-			result.dataValues = result.map((item, index)=>{
+			result.dataValues = result.rows.map((item, index)=>{
 				return item.dataValues;
 			})
 		}

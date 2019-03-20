@@ -31,7 +31,7 @@ const { RangePicker } = DatePicker;
         fields[item.key] = props.search[item.key]
       }
     })
-    return fields;
+    return Form.createFormField(fields);
   },
 })
 
@@ -197,7 +197,6 @@ class SearchForm extends Component {
     )
   }
   getDefaultMultiSelect(item) {
-    // debugger
     let children = []
     const itemArr = item.text.split(',')
     item.options.map((option, index) => {
