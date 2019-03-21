@@ -26,6 +26,7 @@ import {
 import {
 	fetchBirthdayListResult,
 	deleteBirthdayResult,
+	addBirthdayResult,
 } from './birthday';
 
 const rootReducer = combineReducers({
@@ -50,6 +51,7 @@ const rootReducer = combineReducers({
 
 	fetchBirthdayListResult,
 	deleteBirthdayResult,
+	addBirthdayResult,
 });
 
 export default rootReducer;

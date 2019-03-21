@@ -7,3 +7,6 @@ export const fetchBirthdayList = createSimpleAjaxAction('/birthday', 'fetchBirth
 
 // 删除生日提醒
 export const deleteBirthday = createSimpleAjaxAction('/birthday/deleteBirthday', 'deleteBirthday', 'delete');
+
+// 添加生日提醒
+export const addBirthday = createSimpleAjaxAction('/birthday/addBirthday', 'addBirthday', 'post');

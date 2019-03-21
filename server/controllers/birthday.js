@@ -27,6 +27,9 @@ const birthdayContrallers = {
         }
 
         let body = _.cloneDeep(ctx.request.body);
+        if(!body.content){
+            body.content = '';
+        }
         if(!body.name){
 			ctx.status = 404;
             result.msg = "未传入生日者的名称";
@@ -34,9 +37,6 @@ const birthdayContrallers = {
         else if(!body.date){
             ctx.status = 404;
             result.msg = "未传入生日时间";
-        }
-        else if(!body.content){
-            body.content = '';
         }
         else{
             let writeMessage = await file.writeFile(`resource/users/${userId}/birthdayPoint/${body.name}${datatime.parseStampToFormat('YYYY-MM-DD')}.text`, body.content)
@@ -49,12 +49,13 @@ const birthdayContrallers = {
             }
 
             let birthdayInfo = await birthdayService.addBirthday(body, ctx);
-
+            
             if(birthdayInfo.isError){
                 ctx.status = 404;
                 result.msg = birthdayInfo.msg;
             }
             else{
+                birthdayInfo.content = body.content;
                 scheduleServices.sendMailByMessage(birthdayInfo); // 检查新建的生日提醒是否就是今天
                 result = {
                     success: true,

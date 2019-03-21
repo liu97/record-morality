@@ -28,8 +28,8 @@ class Birthday extends Table{
 		this.fetchList = fetchBirthdayList;
 		this.listResult = this.props.fetchBirthdayListResult;
 	}
-	componentWillReceiveProps(newProps){
-		let { fetchBirthdayListResult, deleteBirthdayResult } = newProps;
+	componentWillReceiveProps(nextProps){
+		let { fetchBirthdayListResult, deleteBirthdayResult } = nextProps;
 		if(fetchBirthdayListResult !== this.props.fetchBirthdayListResult &&fetchBirthdayListResult && fetchBirthdayListResult.isLoading === false) {
 			this.listResult = fetchBirthdayListResult
 		}

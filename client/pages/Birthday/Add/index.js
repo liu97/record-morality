@@ -3,14 +3,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { message, Card, Form, Button, Input, DatePicker  } from 'antd';
-import moment from 'moment';
 
+import { addBirthday } from 'actions/birthday';
+const { TextArea } = Input;
 const PREFIX = 'birthday-add';
 
 @connect(
 	// eslint-disable-next-line no-unused-vars
 	(state, props) => ({
-		postArticleResult: state.postArticleResult
+		addBirthdayResult: state.addBirthdayResult
 	})
 )
 @Form.create()
@@ -23,8 +24,13 @@ class BirthdayAdd extends Component{
 	componentDidMount(){
 
 	}
-	UNSAFE_componentWillReceiveProps(newProps){
-		
+	UNSAFE_componentWillReceiveProps(nextProps){
+		let { addBirthdayResult } = nextProps;
+		if(addBirthdayResult !== this.props.addBirthdayResult &&addBirthdayResult && addBirthdayResult.isLoading === false) {
+			if(addBirthdayResult.info.success){
+				this.props.history.push('/admin/birthday/list');
+			}
+		}
 	}
 	
 	handleSubmit = (e) => {
@@ -32,9 +38,18 @@ class BirthdayAdd extends Component{
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			if (!err) {
 				if(values.date){
-					values.date = values.date.foemat('YYYY-MM-DD');
+					values.date = values.date.format('YYYY-MM-DD');
 				}
+
+				for(let key of Object.keys(values)){
+					if(values[key] == undefined){
+						delete values[key];
+					}
+				}
+
+				this.props.dispatch(addBirthday(values));
 				console.log('Received values of form: ', values);
+
 			}
 		});
 	}
@@ -91,8 +106,17 @@ class BirthdayAdd extends Component{
 							)}
 						</Form.Item>
 						<Form.Item label="提醒邮箱">
-							{getFieldDecorator('email')(
+							{getFieldDecorator('email', {
+								rules: [{
+									type: 'email', message: 'The input is not valid E-mail!',
+								}],
+							})(
 								<Input placeholder="默认为你的邮箱" />
+							)}
+						</Form.Item>
+						<Form.Item label="备忘录">
+							{getFieldDecorator('content')(
+								<TextArea placeholder="你还想记点什么..." />
 							)}
 						</Form.Item>
 						<Form.Item

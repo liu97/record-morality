@@ -28,14 +28,13 @@ const birthdayServices ={
                     id: userId
                 }
             }, userId);
-            if(user.isError || !user.length){
+            if(user.isError || !user.rows.length){
                 return user;
             }
             else{
-                birthdayInfo.email = user[0].email;
+                birthdayInfo.email = user.rows[0].email;
             }
         }
-
         result = await opt.create(Birthday, birthdayInfo);
         return result;
     },
