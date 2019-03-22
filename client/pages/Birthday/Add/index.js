@@ -4,26 +4,31 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { message, Card, Form, Button, Input, DatePicker, InputNumber   } from 'antd';
 
-import { addBirthday } from 'actions/birthday';
+import { getGivenSearch } from 'utils/location';
+import { addBirthday, fetchBirthdayList } from 'actions/birthday';
 const { TextArea } = Input;
 const PREFIX = 'birthday-add';
 
 @connect(
 	// eslint-disable-next-line no-unused-vars
 	(state, props) => ({
-		addBirthdayResult: state.addBirthdayResult
+		addBirthdayResult: state.addBirthdayResult,
+		fetchBirthdayListResult: state.fetchBirthdayListResult,
 	})
 )
 @Form.create()
 class BirthdayAdd extends Component{
 	constructor(props){
 		super(props);
-
-
 	}
+
 	componentDidMount(){
-
+		if(this.pageType != 'add'){
+			let search = getGivenSearch(this.props, ['id']);
+			this.props.dispatch(fetchBirthdayList(search));
+		}
 	}
+
 	UNSAFE_componentWillReceiveProps(nextProps){
 		let { addBirthdayResult } = nextProps;
 		if(addBirthdayResult !== this.props.addBirthdayResult &&addBirthdayResult && addBirthdayResult.isLoading === false) {
@@ -31,6 +36,11 @@ class BirthdayAdd extends Component{
 				this.props.history.push('/admin/birthday/list');
 			}
 		}
+	}
+
+	getActivePage = (url = this.props.history.location.pathname) => {
+        let result = url.replace(/\/$/, '').split('/').slice(-1);
+		return result[0];
 	}
 	
 	handleSubmit = (e) => {
@@ -55,6 +65,7 @@ class BirthdayAdd extends Component{
 	}
 
 	render(){
+		this.pageType = this.getActivePage();
 		const { getFieldDecorator } = this.props.form;
 
 		const formItemLayout = {
@@ -83,7 +94,7 @@ class BirthdayAdd extends Component{
 									required: true, message: '请输入寿星的名字',
 								}],
 							})(
-								<Input placeholder="名字" />
+								<Input />
 							)}
 						</Form.Item>
 						<Form.Item label="生日日期">
@@ -92,7 +103,7 @@ class BirthdayAdd extends Component{
 									required: true, message: '请输入生日日期',
 								}],
 							})(
-								<DatePicker style={{width:'100%'}}/>
+								<DatePicker style={{width:'100%'}} placeholder=""/>
 							)}
 						</Form.Item>
 						<Form.Item label="提前提醒天数">
@@ -102,13 +113,13 @@ class BirthdayAdd extends Component{
 									required: true, message: '请输入提前提醒天数',
 								}],
 							})(
-								<InputNumber style={{width:'100%'}} placeholder="提前提醒天数" />
+								<InputNumber style={{width:'100%'}}/>
 							)}
 						</Form.Item>
 						<Form.Item label="提醒邮箱">
 							{getFieldDecorator('email', {
 								rules: [{
-									type: 'email', message: 'The input is not valid E-mail!',
+									type: 'email', message: '请输入正确的邮箱格式',
 								}],
 							})(
 								<Input placeholder="默认为你的邮箱" />

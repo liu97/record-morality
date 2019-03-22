@@ -28,6 +28,7 @@ class Birthday extends Table{
 		this.fetchList = fetchBirthdayList;
 		this.listResult = this.props.fetchBirthdayListResult;
 	}
+
 	componentWillReceiveProps(nextProps){
 		let { fetchBirthdayListResult, deleteBirthdayResult } = nextProps;
 		if(fetchBirthdayListResult !== this.props.fetchBirthdayListResult &&fetchBirthdayListResult && fetchBirthdayListResult.isLoading === false) {
@@ -37,9 +38,11 @@ class Birthday extends Table{
 				this.triggerSubmit();
 	  }
 	}
+
 	handleDeleteBirthday = (id) =>{
 		this.props.dispatch(deleteBirthday({id}));
 	}
+
 	addCustomCloumns() {
 		COLUMNS.forEach((col) => {
 			switch (col.key) {
@@ -74,6 +77,7 @@ class Birthday extends Table{
 			}
 		})
 	}
+	
 	addButtonTool = () => {
 		return (
 			<div className={'add-birthday'}>

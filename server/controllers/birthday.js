@@ -197,8 +197,8 @@ const birthdayContrallers = {
         }
         else{
             let birthdayData = birthdayInfo.dataValues;
-            for(let i = 0; i < birthdayInfo.length; i++){
-                let birthday = birthdayInfo[i];
+            for(let i = 0; i < birthdayData.length; i++){
+                let birthday = birthdayData[i];
                 let readMessage = await file.readFile(birthday.pointPath);
                 birthday.content = readMessage.isError ? readMessage.msg : readMessage.content; // 获取文章内容
             }
