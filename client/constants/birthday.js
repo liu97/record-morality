@@ -4,7 +4,7 @@ export const COLUMNS = [
       dataIndex: 'name',
       key: 'name',
       align: 'left',
-      width: 60
+      width: 100
     },
     {
       title: '生日日期',
@@ -18,20 +18,21 @@ export const COLUMNS = [
       dataIndex: 'dateType',
       key: 'dateType',
       align: 'center',
-      width: 60,
+      width: 80,
     },
     {
       title: '提前天数',
       key: 'advanceDay',
       dataIndex:'advanceDay',
       align: 'center',
-      width: 80,
+      width: 100,
     },
     {
       title: '提醒邮箱',
       key: 'email',
       dataIndex:'email',
-      width: 160,
+      align: 'center',
+      width: 200,
     },
     {
       title: '创建时间',
@@ -52,7 +53,7 @@ export const COLUMNS = [
       key: 'opt',
       dataIndex:'opt',
       align: 'center',
-      width: 100,
+      width: 140,
     }
   ]
   

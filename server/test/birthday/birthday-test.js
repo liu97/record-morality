@@ -8,7 +8,7 @@
 const
     request = require('supertest'),
     app = require('../../app'),
-    token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjExMzk0NzIwMjlAcXEuY29tIiwiaWQiOjEsImlhdCI6MTU1Mjc5MzA0NiwiZXhwIjoxNTUyODE0NjQ2fQ.ZGG0e5bMtdM_inNLv3jfvdNBl4FaXjgih7IDQaI29xg";;
+    token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjExMzk0NzIwMjlAcXEuY29tIiwiaWQiOjEsImlhdCI6MTU1MzIxNTczMCwiZXhwIjoxNTUzMjM3MzMwfQ.lu11n8dr-itBGCaQRD52LPV42wtDn83tjEQUUjm2L8w";
 
 describe('#test koa app', () => {
 

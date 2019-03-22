@@ -28,7 +28,7 @@ const scheduleServices = {
                 leftText = '今天';
             }
             else{
-                leftText = `还有${item.advanceDay}就要`;
+                leftText = `还有${item.advanceDay}天就要`;
             }
             let message = `<p><strong>${item.name}</strong>${leftText}过生日啦！赶快准备好礼物祝福ta吧！</p>`;
             if(item.content){

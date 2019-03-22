@@ -6,7 +6,7 @@ import moment from 'moment';
 import { fetchBirthdayList } from 'actions/birthday';
 import Table from 'containers/Table/Common';
 import {COLUMNS, QUERY} from 'constants/birthday';
-import { Button, Icon, Tooltip  } from 'antd';
+import { Button, Icon  } from 'antd';
 import { deleteBirthday } from 'actions/birthday';
 
 
@@ -73,6 +73,15 @@ class Birthday extends Table{
 			  	}
 			}
 		})
+	}
+	addButtonTool = () => {
+		return (
+			<div className={'add-birthday'}>
+				<Button type="primary" className={'add-btn'}>
+					<Link to={'/admin/birthday/add'}><Icon type="file-add" theme="outlined" /> 添加提醒</Link>
+				</Button>
+			</div>
+		)
 	}
 }
 

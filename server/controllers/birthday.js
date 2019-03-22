@@ -179,9 +179,16 @@ const birthdayContrallers = {
 
             delete query.page;
             delete query.pageSize;
-
-            info.where = query
         }
+        if(query.sort){
+            let order = JSON.parse(query.sort);
+            info.order = _.entries(order);
+            delete query.sort;
+        }
+        else{
+            info.order = [['updatedAt', 'desc']];
+        }
+        info.where = query;
         let birthdayInfo = await birthdayService.getBirthdayInfo(info, ctx);
 
         if(birthdayInfo.isError){

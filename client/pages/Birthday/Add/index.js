@@ -2,7 +2,7 @@ import './index.less';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { message, Card, Form, Button, Input, DatePicker  } from 'antd';
+import { message, Card, Form, Button, Input, DatePicker, InputNumber   } from 'antd';
 
 import { addBirthday } from 'actions/birthday';
 const { TextArea } = Input;
@@ -92,7 +92,7 @@ class BirthdayAdd extends Component{
 									required: true, message: '请输入生日日期',
 								}],
 							})(
-								<DatePicker/>
+								<DatePicker style={{width:'100%'}}/>
 							)}
 						</Form.Item>
 						<Form.Item label="提前提醒天数">
@@ -102,7 +102,7 @@ class BirthdayAdd extends Component{
 									required: true, message: '请输入提前提醒天数',
 								}],
 							})(
-								<Input placeholder="提前提醒天数" />
+								<InputNumber style={{width:'100%'}} placeholder="提前提醒天数" />
 							)}
 						</Form.Item>
 						<Form.Item label="提醒邮箱">
@@ -116,7 +116,7 @@ class BirthdayAdd extends Component{
 						</Form.Item>
 						<Form.Item label="备忘录">
 							{getFieldDecorator('content')(
-								<TextArea placeholder="你还想记点什么..." />
+								<TextArea style={{minHeight: '80px'}} placeholder="你还想记点什么..." />
 							)}
 						</Form.Item>
 						<Form.Item
