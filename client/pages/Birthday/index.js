@@ -66,7 +66,6 @@ class Birthday extends Component{
                         navList={this.navList}
                         onClick={this.navClick}
                     />
-            
                 </Sider>
                 <div className={`${PREFIX}-container`}>
                     <div className={`${PREFIX}-container-breadcrumb`}>
@@ -76,8 +75,9 @@ class Birthday extends Component{
                         </Breadcrumb>
                         <h2>{this.breadOption[activePage]}</h2>
                     </div>
-                    {renderRoutes(this.props.route.routes, authed, authPath, {wrappedComponentRef:(e) => this.listRef = e}
-                    )}
+                    <div className={`${PREFIX}-container-content`}>
+                        {renderRoutes(this.props.route.routes, authed, authPath, {wrappedComponentRef:(e) => this.listRef = e})}
+                    </div>
                 </div>
             </Layout>
 		)
