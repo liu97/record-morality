@@ -10,6 +10,7 @@ const AsyncBirthday = asyncComponent(() => import(/* webpackChunkName: "birthday
 const AsyncBirthdayList = asyncComponent(() => import(/* webpackChunkName: "birthdayList" */ 'pages/Birthday/List'));
 const AsyncBirthdayAdd = asyncComponent(() => import(/* webpackChunkName: "birthdayAdd" */ 'pages/Birthday/Add'));
 const AsyncBirthdayDetail = asyncComponent(() => import(/* webpackChunkName: "birthdayDetail" */ 'pages/Birthday/Detail'));
+const AsyncBirthdayEdit = asyncComponent(() => import(/* webpackChunkName: "birthdayEdit" */ 'pages/Birthday/Edit'));
 
 export {
     AsyncLaR,
@@ -22,4 +23,5 @@ export {
     AsyncBirthdayList,
     AsyncBirthdayAdd,
     AsyncBirthdayDetail,
+    AsyncBirthdayEdit,
 }

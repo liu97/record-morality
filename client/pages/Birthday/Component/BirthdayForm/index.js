@@ -16,7 +16,7 @@ const PREFIX = 'birthday-form';
 	})
 )
 @Form.create()
-class BirthdayAdd extends Component{
+class BirthdayForm extends Component{
 	constructor(props){
 		super(props);
 	}
@@ -137,4 +137,4 @@ class BirthdayAdd extends Component{
 	}
 }
 
-export default withRouter(BirthdayAdd)
+export default withRouter(BirthdayForm)

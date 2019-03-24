@@ -82,7 +82,7 @@ class BirthdayAdd extends Component{
                     <Row gutter={16} className={`${PREFIX}-button-group`}>
                         <Col {...labelCol} className={`${PREFIX}-label`}>
                             <Button  type="primary">
-                                <Link to={`/admin/birthday/edit?id=${this.search}`} >编辑 </Link>
+                                <Link to={`/admin/birthday/edit?id=${this.search.id}`} >编辑 </Link>
                             </Button>
                         </Col>
                         <Col {...wrapperCol}>

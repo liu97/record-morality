@@ -39,7 +39,7 @@ const birthdayContrallers = {
             result.msg = "未传入生日时间";
         }
         else{
-            let writeMessage = await file.writeFile(`resource/users/${userId}/birthdayPoint/${body.name}${datatime.parseStampToFormat('YYYY-MM-DD')}.text`, body.content)
+            let writeMessage = await file.writeFile(`resource/users/${userId}/birthdayPoint/${body.name}${datatime.parseStampToFormat('YYYY-MM-DD')}.txt`, body.content)
             if(writeMessage.isError){
                 ctx.status = 404;
                 result.msg = writeMessage.msg;
@@ -123,10 +123,10 @@ const birthdayContrallers = {
                     }
                 }, ctx);
 
-                if(oldBirthday.isError && oldBirthday.length){
+                if(!oldBirthday.isError && oldBirthday.count){
                     oldBirthday = oldBirthday.dataValues;
 
-                    let writeMessage = await file.writeFile(oldBirthday.pointPath, body.content);
+                    let writeMessage = await file.writeFile(oldBirthday[0].pointPath, body.content);
                     if(writeMessage.isError){
                         ctx.status = 404;
                         result.msg = writeMessage.msg;
