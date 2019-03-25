@@ -191,6 +191,8 @@ class TreeNav extends Component {
         const dropId = Number(info.node.props.eventKey);
         const dragId = Number(info.dragNode.props.eventKey);
 
+        this.setExpandedKeys(String(dropId))
+
         this.props.dispatch(updateFolderTree({id: dragId, parentId: dropId}))
         
         this.props.onTreeDrop && this.props.onTreeDrop(info);

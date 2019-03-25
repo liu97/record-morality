@@ -121,7 +121,7 @@ const noteContrallers = {
         else{
             if(body.content){ // 如果传了笔记内容，更新笔记内容
                 let oldNote = await noteService.getNoteInfo({id: body.id});
-                if(!oldNote.isError && oldNote.length){
+                if(!oldNote.isError && oldNote.count){
                     oldNote = oldNote.dataValues;
 
                     let writeMessage = await file.writeFile(oldNote[0].notePath, body.content);
@@ -201,6 +201,7 @@ const noteContrallers = {
 
                     while(folder[0].parentId){
                         folder = await folderService.getFolderInfo({id:folder[0].parentId}, ctx);
+                        folder = folder.dataValues;
                         note.noteFrom = folder[0].name + ">" + note.noteFrom;
                     }
                     notes.push(note);

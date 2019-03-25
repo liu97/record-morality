@@ -28,7 +28,7 @@ const birthdayServices ={
                     id: userId
                 }
             }, userId);
-            if(user.isError || !user.rows.length){
+            if(user.isError || !user.count){
                 return user;
             }
             else{

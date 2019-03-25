@@ -68,7 +68,7 @@ const userContrallers = {
                     {email: body.email}
                 ]
             });
-            if(checkExist.length){
+            if(checkExist.count){
                 result.msg = '昵称或者邮箱已存在';
             }
             else{
@@ -173,7 +173,7 @@ const userContrallers = {
         }
         else{
             let checkExist = await userService.getUserInfo({nickName: body.nickName});
-            if(checkExist.length){
+            if(checkExist.count){
                 result.msg = '昵称已经被占用了呢';
             }
             else{

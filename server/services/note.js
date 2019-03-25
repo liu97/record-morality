@@ -26,7 +26,7 @@ const noteServices ={
 				},
 				userId
 			)
-			if(!folder.isError && folder.length){
+			if(!folder.isError && folder.count){
 				result = await opt.create(Note, noteInfo);
 			}
 			else{

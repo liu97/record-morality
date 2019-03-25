@@ -30,7 +30,7 @@ const folderServices ={
 				},
 				userId
 			)
-			if(!parentFolder.isError && parentFolder.length){
+			if(!parentFolder.isError && parentFolder.count){
 				result = await opt.create(Folder, folderInfo);
 			}
 			else{
@@ -69,6 +69,7 @@ const folderServices ={
 			result = dFolderCond;
 		}
 		else{
+			dFolderCond = dFolderCond.rows;
 			needDeleteList.push(...dFolderCond);
 
 			while(dFolderCond.length){
@@ -91,6 +92,7 @@ const folderServices ={
 						break;
 					}
 					else{
+						childrenFolder = childrenFolder.rows;
 						childrenList.push(...childrenFolder);
 				
 						let childrenNote = await opt.findAll(Note, // 找到所有需要删除的folder的子note
@@ -107,7 +109,7 @@ const folderServices ={
 							break;
 						}
 						else{
-							needDeleteList.push(...childrenFolder, ...childrenNote);
+							needDeleteList.push(...childrenFolder, ...childrenNote.rows);
 						}
 					}
 				}

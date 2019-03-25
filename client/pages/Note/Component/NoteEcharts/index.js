@@ -2,6 +2,7 @@ import './index.less';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactEcharts from 'echarts-for-react';
+import { Spin } from 'antd';
 
 import { NOTE_ECHARTS_OPTION } from 'constants/noteTrendMap';
 
@@ -40,12 +41,14 @@ class NoteEcharts extends Component {
 
   render() {
     return (
-      <ReactEcharts
-        ref={this.echatsRef}
-        option={this.echartsOption}
-        theme="clear"
-        notMerge={true}
-      />
+      <Spin spinning={this.props.fetchNoteTrendResult.isLoading}>
+        <ReactEcharts
+          ref={this.echatsRef}
+          option={this.echartsOption}
+          theme="clear"
+          notMerge={true}
+        />
+      </Spin>
     )
   }
 }
