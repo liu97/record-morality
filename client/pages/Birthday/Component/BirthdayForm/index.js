@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import moment from 'moment';
-import { message, Card, Form, Button, Input, DatePicker, InputNumber   } from 'antd';
+import { message, Form, Button, Input, DatePicker, InputNumber, Calendar   } from 'antd';
 
 const { TextArea } = Input;
 const PREFIX = 'birthday-form';
@@ -50,7 +50,12 @@ class BirthdayForm extends Component{
 				console.log('Received values of form: ', values);
 			}
 		});
-	}
+    }
+    
+    dateCellRender = (date) => {
+        console.log(date.format('YYYY-MM-DD'))
+        return <span>{date.format('DD')}</span>;
+    }
 
 	render(){
         const { birthday, mode } = this.props;
@@ -90,6 +95,10 @@ class BirthdayForm extends Component{
                     })(
                         <DatePicker style={{width:'100%'}} placeholder="" disabled={mode == 'detail'}/>
                     )}
+                </Form.Item>
+                <Form.Item label="生日日期">
+                   
+                        <Calendar fullscreen={false} dateCellRender={this.dateCellRender}/>
                 </Form.Item>
                 <Form.Item label="提前提醒天数">
                     {getFieldDecorator('advanceDay', {

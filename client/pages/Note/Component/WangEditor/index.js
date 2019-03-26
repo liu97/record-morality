@@ -55,10 +55,10 @@ class WangEditor extends Component{
     componentWillUnmount(){
         window.clearInterval(this.timer);
 
-        if(this.mdTextarea){
-            this.mdTextarea.removeEventListener('focus', this.mdTextareaFocus);
-            this.mdTextarea.removeEventListener('blur', this.mdTextareaBlur);
-        }
+        // if(this.mdTextarea){
+        //     this.mdTextarea.removeEventListener('focus', this.mdTextareaFocus);
+        //     this.mdTextarea.removeEventListener('blur', this.mdTextareaBlur);
+        // }
     }
 
     initFileContent = () => {

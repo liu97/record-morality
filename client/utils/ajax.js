@@ -7,7 +7,6 @@ import { setCookie } from 'utils/cookie';
 const checkStatus = (response) => {
 	if(response.status===401){
 		setCookie('isLogin', false);
-		alert('身份过期，请重新登录！');
 		location.reload();
 	}
 	if (response.status >= 200 && response.status < 300) {
