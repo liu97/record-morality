@@ -5,6 +5,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { message, Card, Row, Col, Button } from 'antd';
 import { getGivenSearch } from 'utils/location';
 import moment from 'moment';
+import LunarCal from "components/LunarCal";
 
 import { fetchBirthdayList } from 'actions/birthday';
 const PREFIX = 'birthday-detail';
@@ -91,6 +92,7 @@ class BirthdayAdd extends Component{
                             </Button>
                         </Col>
                     </Row>
+                    <LunarCal></LunarCal>
 				</div>
 			</Card>
 		)

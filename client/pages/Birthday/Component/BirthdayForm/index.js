@@ -96,10 +96,6 @@ class BirthdayForm extends Component{
                         <DatePicker style={{width:'100%'}} placeholder="" disabled={mode == 'detail'}/>
                     )}
                 </Form.Item>
-                <Form.Item label="生日日期">
-                   
-                        <Calendar fullscreen={false} dateCellRender={this.dateCellRender}/>
-                </Form.Item>
                 <Form.Item label="提前提醒天数">
                     {getFieldDecorator('advanceDay', {
                         rules: [{
