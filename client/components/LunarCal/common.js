@@ -8,9 +8,9 @@ import chineseLunar from 'chinese-lunar';
 import { message, Form, Button, Input, DatePicker, InputNumber, Calendar   } from 'antd';
 
 const { TextArea } = Input;
-const PREFIX = 'lunar-cal';
+const PREFIX = 'common-lunar';
 
-class LunarCal extends Component{
+class CommonLunar extends Component{
 	constructor(props){
 		super(props);
 	}
@@ -55,4 +55,4 @@ class LunarCal extends Component{
 	}
 }
 
-export default withRouter(LunarCal)
+export default CommonLunar

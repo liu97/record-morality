@@ -5,7 +5,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { message, Card, Row, Col, Button } from 'antd';
 import { getGivenSearch } from 'utils/location';
 import moment from 'moment';
-import LunarCal from "components/LunarCal";
+import LunarCal from "components/LunarCal/formLunar";
 
 import { fetchBirthdayList } from 'actions/birthday';
 const PREFIX = 'birthday-detail';
@@ -35,7 +35,11 @@ class BirthdayAdd extends Component{
 	
 	handleSubmit = (values) => {
 		this.props.dispatch(addBirthday(values))
-	}
+    }
+    
+    onSelect = (date) => {
+        console.log(date)
+    }
 
 	render(){
         this.search = getGivenSearch(this.props, ['id']);
@@ -92,7 +96,7 @@ class BirthdayAdd extends Component{
                             </Button>
                         </Col>
                     </Row>
-                    <LunarCal></LunarCal>
+                    <LunarCal fullscreen={false} onSelect={this.onSelect}></LunarCal>
 				</div>
 			</Card>
 		)
