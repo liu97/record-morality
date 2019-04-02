@@ -25,13 +25,13 @@ const { RangePicker } = DatePicker;
     props.searchList.map((item) => {
       if (typeof (item.key) !== 'string') {
         for (let i = 0; i < item.key.length; i++) {
-          fields[item.key[i]] = props.search[item.key[i]];
+          fields[item.key[i]] = Form.createFormField(props.search[item.key[i]]);
         }
       } else {
-        fields[item.key] = props.search[item.key]
+        fields[item.key] = Form.createFormField(props.search[item.key]);
       }
     })
-    return Form.createFormField(fields);
+    return fields;
   },
 })
 

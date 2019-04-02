@@ -1,16 +1,17 @@
 import './index.less';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import moment from 'moment';
+import { CSSTransition } from 'react-transition-group';
 import classNames from 'classnames';
-import { message, Form, Button, Input, DatePicker, InputNumber, Calendar, Dropdown } from 'antd';
+import { Input } from 'antd';
 import CommonLunar from './common';
 const PREFIX = 'form-lunar';
 
 class FormLunar extends Component{
 	constructor(props){
 		super(props);
+		this.state = {
+			showCalendar: false,
+		}
 	}
 
 	componentDidMount(){
@@ -20,17 +21,23 @@ class FormLunar extends Component{
 	UNSAFE_componentWillReceiveProps(nextProps){
 
     }
-
-    getCommonLunar = () => {
-        const props = this.props;
-        return (
-            <CommonLunar {...props}  onSelect={this.onSelect} />
-        )
-    }
 	
 	onSelect = (date) => {
 		console.log(date);
-    }
+	}
+	
+	handleInputClick = (event) => {
+		this.setState((preState) => ({
+			showCalendar: !preState.showCalendar,
+		}))
+	}
+
+	handleInputBlur = (event) => {
+		debugger
+		this.setState({
+			showCalendar: false,
+		})
+	}
 
 	render(){
 		const props = this.props;
@@ -40,9 +47,15 @@ class FormLunar extends Component{
 		});
 		return (
             <div className={calClass}>
-                <Dropdown overlay={this.getCommonLunar} trigger={['click']}>
-                    <Input></Input>
-                </Dropdown>
+				<Input onClick={this.handleInputClick} onBlur={this.handleInputBlur}></Input>
+				<CSSTransition
+					in={this.state.showCalendar}
+					timeout={500}
+					unmountOnExit
+					classNames = "alert"
+				>
+					<CommonLunar {...props} className='active-lunar'  onSelect={this.onSelect} />
+				</CSSTransition>
             </div>
 		)
 	}
