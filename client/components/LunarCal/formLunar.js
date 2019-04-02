@@ -15,12 +15,43 @@ class FormLunar extends Component{
 	}
 
 	componentDidMount(){
-
+		document.onclick = this.hideCal;
 	}
 
 	UNSAFE_componentWillReceiveProps(nextProps){
 
-    }
+	}
+
+	matchesSelector = (element, selector) =>{
+		if(element.matches){
+			return element.matches(selector);
+		} 
+		else if(element.matchesSelector){
+			return element.matchesSelector(selector);
+		} 
+		else if(element.webkitMatchesSelector){
+			return element.webkitMatchesSelector(selector);
+		} 
+		else if(element.msMatchesSelector){
+			return element.msMatchesSelector(selector);
+		} 
+		else if(element.mozMatchesSelector){
+			return element.mozMatchesSelector(selector);
+		} 
+		else if(element.oMatchesSelector){
+			return element.oMatchesSelector(selector);
+		}
+	}
+	
+	hideCal = (e) => {
+		//匹配当前组件内的所有元素
+		if(!this.matchesSelector(e.target,'.form-lunar *')){   
+			// e.nativeEvent.stopImmediatePropagation();
+			this.setState({
+				showCalendar: false,
+			})
+		}
+	}
 	
 	onSelect = (date) => {
 		console.log(date);
@@ -32,13 +63,6 @@ class FormLunar extends Component{
 		}))
 	}
 
-	handleInputBlur = (event) => {
-		debugger
-		this.setState({
-			showCalendar: false,
-		})
-	}
-
 	render(){
 		const props = this.props;
 		const calClass = classNames({
@@ -47,14 +71,16 @@ class FormLunar extends Component{
 		});
 		return (
             <div className={calClass}>
-				<Input onClick={this.handleInputClick} onBlur={this.handleInputBlur}></Input>
+				<Input onClick={this.handleInputClick} onBlur={this.handleInputBlur} className='active-input'></Input>
 				<CSSTransition
 					in={this.state.showCalendar}
 					timeout={500}
 					unmountOnExit
 					classNames = "alert"
 				>
-					<CommonLunar {...props} className='active-lunar'  onSelect={this.onSelect} />
+					<div className='active-lunar'>
+						<CommonLunar {...props}  onSelect={this.onSelect} />
+					</div>
 				</CSSTransition>
             </div>
 		)
