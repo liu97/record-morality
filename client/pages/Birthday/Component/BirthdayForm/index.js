@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import moment from 'moment';
+import LunarCal from "components/LunarCal/FormLunar";
 import { message, Form, Button, Input, DatePicker, InputNumber, Calendar   } from 'antd';
 
 const { TextArea } = Input;
@@ -45,7 +46,8 @@ class BirthdayForm extends Component{
 					if(values[key] == undefined){
 						delete values[key];
 					}
-				}
+                }
+                debugger
                 this.props.handleSubmit && this.props.handleSubmit(values);
 				console.log('Received values of form: ', values);
 			}
@@ -96,6 +98,16 @@ class BirthdayForm extends Component{
                         <DatePicker style={{width:'100%'}} placeholder="" disabled={mode == 'detail'}/>
                     )}
                 </Form.Item>
+                <Form.Item label="生日日期">
+                    {getFieldDecorator('date2', {
+                        rules: [{
+                            required: true, message: '请输入生日日期',
+                        }],
+                        initialValue: (birthday && birthday.date) ? moment(birthday.date) : null,
+                    })(
+                        <LunarCal fullscreen={false} dateType={'lunar'}></LunarCal>
+                    )}
+                </Form.Item>
                 <Form.Item label="提前提醒天数">
                     {getFieldDecorator('advanceDay', {
                         rules: [{
@@ -103,7 +115,7 @@ class BirthdayForm extends Component{
                         }],
                         initialValue: (birthday && birthday.advanceDay) || 0,
                     })(
-                        <InputNumber style={{width:'100%'}} disabled={mode == 'detail'}/>
+                        <InputNumber style={{width:'100%'}} disabled={mode == 'detail'} min={0}/>
                     )}
                 </Form.Item>
                 <Form.Item label="提醒邮箱">

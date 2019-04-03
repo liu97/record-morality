@@ -35,7 +35,8 @@ class CommonLunar extends Component{
 	// 在select value里添加阴历
 	onSelect = (date) => {
 		let lunarTime = chineseLunar.solarToLunar(new Date(date.format('YYYY-MM-DD 00:00:00')));
-		lunarTime.dateValue = `${lunarTime.year}-${lunarTime.month}-${lunarTime.day}`;
+		let tradition = chineseLunar.format(lunarTime, 'T(A)Md');
+		lunarTime.dateValue = `${lunarTime.year}-${lunarTime.month}-${lunarTime.day} ${tradition}`;
 
 		this.props.onSelect && this.props.onSelect({lunarTime, solarTime: date});
     }
@@ -49,7 +50,7 @@ class CommonLunar extends Component{
 		});
 		return (
             <div className={calClass}>
-                <Calendar {...props} dateCellRender={this.dateCellRender} onSelect={this.onSelect} />
+                <Calendar {...props} className='' dateCellRender={this.dateCellRender} onSelect={this.onSelect} />
             </div>
 		)
 	}
