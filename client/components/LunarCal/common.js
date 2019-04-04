@@ -1,13 +1,11 @@
 import './index.less';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+
 import moment from 'moment';
 import classNames from 'classnames';
 import chineseLunar from 'chinese-lunar';
-import { message, Form, Button, Input, DatePicker, InputNumber, Calendar   } from 'antd';
+import { Calendar   } from 'antd';
 
-const { TextArea } = Input;
 const PREFIX = 'common-lunar';
 
 class CommonLunar extends Component{

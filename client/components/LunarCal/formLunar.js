@@ -106,8 +106,14 @@ class FormLunar extends Component{
 	}
 	
 	handleInputClick = (event) => {
+		let dClientY = document.documentElement.clientHeight;
+		let conPosition = null;
+		if(dClientY - event.clientY < 340 && event.clientY > 340){
+			conPosition = "top"
+		}
 		this.setState((preState) => ({
 			showCalendar: !preState.showCalendar,
+			conPosition,
 		}))
 	}
 
@@ -126,6 +132,11 @@ class FormLunar extends Component{
             [props.className]: props.className != undefined,
 			[PREFIX]: true,
 			'lunar-have-value': state.inputValue,
+		});
+
+		const conClass = classNames({
+			'active-container-top': state.conPosition == 'top',
+			'active-container': true,
 		});
 
 		delete props.className;
@@ -151,7 +162,7 @@ class FormLunar extends Component{
 					unmountOnExit
 					classNames = "alert"
 				>
-					<div className='active-container'>
+					<div className={conClass}>
 						<CommonLunar {...props} defaultValue={defaultValue}  onSelect={this.onSelect} />
 					</div>
 				</CSSTransition>
