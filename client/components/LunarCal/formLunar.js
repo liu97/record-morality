@@ -125,6 +125,7 @@ class FormLunar extends Component{
 		const calClass = classNames({
             [props.className]: props.className != undefined,
 			[PREFIX]: true,
+			'lunar-have-value': state.inputValue,
 		});
 
 		delete props.className;
@@ -138,7 +139,10 @@ class FormLunar extends Component{
 					onClick={this.handleInputClick} 
 					onBlur={this.handleInputBlur} 
 					className='active-input'
-					suffix={<React.Fragment><Icon type="calendar" /><Icon type="close-circle" onClick={this.handleClear} /></React.Fragment>}
+					suffix={<React.Fragment>
+						<Icon type="calendar" />
+						{state.inputValue && <Icon type="close-circle" theme="filled" onClick={this.handleClear} />}
+						</React.Fragment>}
 				>
 				</Input>
 				<CSSTransition
