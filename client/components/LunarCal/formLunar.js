@@ -1,10 +1,11 @@
 import './index.less';
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 import classNames from 'classnames';
 import { Input, Icon } from 'antd';
 import chineseLunar from 'chinese-lunar';
-import CommonLunar from './Common';
+import BaseLunar from './BaseLunar';
 import moment from 'moment';
 const PREFIX = 'form-lunar';
 
@@ -16,10 +17,14 @@ class FormLunar extends Component{
 			inputValue: this.formatDate(props.defaultValue || props.value),
 			dateValue: props.defaultValue || props.value,
 		}
+
+		this.dRenderSub = _.debounce(this.renderSub);
 	}
 
 	componentDidMount(){
 		document.addEventListener("click", this.hideCal);
+
+		window.addEventListener("resize", this.showCal);
 	}
 
 	UNSAFE_componentWillReceiveProps(nextProps){
@@ -31,8 +36,14 @@ class FormLunar extends Component{
 		}
 	}
 
+	componentDidUpdate(){
+		this.dRenderSub();
+	}
+
 	componentWillUnmount(){
 		document.removeEventListener('click', this.hideCal);
+
+		document.removeEventListener('resize', this.showCal);
 	}
 
 	matchesSelector = (element, selector) =>{
@@ -55,12 +66,26 @@ class FormLunar extends Component{
 			return element.oMatchesSelector(selector);
 		}
 	}
+
+	renderSub = () => { // 渲染子组件lunar
+		ReactDOM.unstable_renderSubtreeIntoContainer(
+			this,
+			this.getLunar(),
+			this.getLunarContainer(),
+		)
+	}
 	
 	hideCal = (e) => {
 		if(!this.matchesSelector(e.target,'.form-lunar *')){ //匹配当前组件内的所有元素
 			this.setState({
 				showCalendar: false,
 			})
+		}
+	}
+
+	showCal = (e) => {
+		if(this.state.showCalendar){
+			this.dRenderSub();
 		}
 	}
 
@@ -95,8 +120,8 @@ class FormLunar extends Component{
 
 		this.selectedDate = date;
 		this.setState({
-			inputValue,
 			showCalendar: false,
+			inputValue,
 			dateValue: date,
 		});
 
@@ -104,16 +129,72 @@ class FormLunar extends Component{
 
 		this.props.onSelect && this.props.onSelect(date);
 	}
+
+	getLunar = () => { // 返回
+		const props = _.cloneDeep(this.props);
+		const state = this.state;
+		const defaultValue = state.dateValue && state.dateValue.solarTime;
+		const lunarClass = classNames({
+			'active-lunar': true,
+		});
+
+		const dClinetHeight = document.documentElement.clientHeight; // 视窗口高度
+		const dClinetWidth = document.documentElement.clientWidth; // 视窗口宽度
+		const iRect = this.iEvent.currentTarget.getBoundingClientRect();
+		iRect.toBottom = dClinetHeight - iRect.bottom; // 输入框距浏览器窗口底部距离
+		iRect.toRight = dClinetWidth - iRect.left; // 输入框左端距浏览器窗口右部距离
+		let lunarHeight = 321;
+		let lunarWidth = 300;
+		let lunarStyle = {};
+		if(iRect.toBottom < lunarHeight){
+			if(iRect.top < lunarHeight){
+				lunarStyle.top = 0;
+			}
+			else{
+				lunarStyle.top = iRect.top-lunarHeight;
+			}
+		}
+		else{
+			lunarStyle.top = iRect.bottom;
+		}
+		if(iRect.toRight < lunarWidth){
+			lunarStyle.right = 0;
+		}
+		else{
+			lunarStyle.left = iRect.left;
+		}
+
+		delete props.className;
+		delete props.onSelect;
+		delete props.onChange;
+		delete props.value;
+		delete props.id;
+		return (
+			<CSSTransition
+				in={state.showCalendar}
+				timeout={500}
+				unmountOnExit
+				classNames = "alert"
+			>
+				<BaseLunar {...props} style={lunarStyle} className={lunarClass} fullscreen={false} defaultValue={defaultValue}  onSelect={this.onSelect} />
+			</CSSTransition>
+		)
+	}
+
+	getLunarContainer = () => {
+		if(!this.conDiv){
+			this.conDiv = document.createElement('div');
+			this.conDiv.setAttribute('class', 'mask-lunar-container')
+			document.body.appendChild(this.conDiv);
+		}
+		return this.conDiv;
+	}
 	
 	handleInputClick = (event) => {
-		let dClientY = document.documentElement.clientHeight;
-		let conPosition = null;
-		if(dClientY - event.clientY < 340 && event.clientY > 340){
-			conPosition = "top"
-		}
+		this.iEvent = _.cloneDeep(event);
+		
 		this.setState((preState) => ({
 			showCalendar: !preState.showCalendar,
-			conPosition,
 		}))
 	}
 
@@ -125,24 +206,14 @@ class FormLunar extends Component{
 	}
 
 	render(){
-		const props = _.cloneDeep(this.props);
+		const props = this.props;
 		const state = this.state;
-		const defaultValue = (state.dateValue && state.dateValue.solarTime) || moment();
 		const calClass = classNames({
             [props.className]: props.className != undefined,
 			[PREFIX]: true,
 			'lunar-have-value': state.inputValue,
 		});
-
-		const conClass = classNames({
-			'active-container-top': state.conPosition == 'top',
-			'active-container': true,
-		});
-
-		delete props.className;
-		delete props.onSelect;
-		delete props.onChange;
-		delete props.value;
+		
 		return (
             <div className={calClass}>
 				<Input 
@@ -156,16 +227,6 @@ class FormLunar extends Component{
 						</React.Fragment>}
 				>
 				</Input>
-				<CSSTransition
-					in={state.showCalendar}
-					timeout={500}
-					unmountOnExit
-					classNames = "alert"
-				>
-					<div className={conClass}>
-						<CommonLunar {...props} defaultValue={defaultValue}  onSelect={this.onSelect} />
-					</div>
-				</CSSTransition>
             </div>
 		)
 	}

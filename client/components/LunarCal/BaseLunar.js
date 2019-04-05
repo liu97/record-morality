@@ -41,14 +41,15 @@ class BaseLunar extends Component{
 
 	render(){
 		const props = this.props;
+		const style = props.style;
 		const calClass = classNames({
             [props.className]: props.className != undefined,
 			[PREFIX]: true,
 			'ant-fullcalendar-nofull': !props.fullscreen,
 		});
 		return (
-            <div className={calClass}>
-                <Calendar {...props} className='' dateCellRender={this.dateCellRender} onSelect={this.onSelect} />
+            <div className={calClass} style={style}>
+                <Calendar {...props} className='' style={{}} dateCellRender={this.dateCellRender} onSelect={this.onSelect} />
             </div>
 		)
 	}

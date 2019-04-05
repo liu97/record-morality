@@ -1,8 +1,8 @@
+// Base
 .ant-fullcalendar-nofull{
     width: 300px;
     border: 1px solid #d9d9d9;
     border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     .ant-fullcalendar-header{
         .ant-select{
             width: auto;
@@ -43,16 +43,9 @@
         }
     }
 }
+
+//form lunar
 .form-lunar{
-    position: relative;
-    .active-container{
-        position: absolute;
-        z-index: 1050;
-        background: #fff;
-    }
-    .active-container-top{
-        transform: translateY(-100%)
-    }
     .ant-input-suffix{
         color: rgba(0, 0, 0, 0.25);
     }
@@ -61,20 +54,6 @@
         right: 0;
         opacity: 0;
         transition: all 300ms;
-    }
-    .alert-enter {
-        opacity: 0.5;
-    }
-    .alert-enter-active {
-        opacity: 1;
-        transition: all 500ms;
-    }
-    .alert-exit {
-        opacity: 1;
-    }
-    .alert-exit-active {
-        opacity: 0;
-        transition: all 500ms;
     }
 }
 .lunar-have-value{
@@ -91,5 +70,31 @@
                 }
             }
         }
+    }
+}
+.mask-lunar-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    .active-lunar{
+        position: absolute;
+        z-index: 1050;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+    .alert-enter {
+        opacity: 0.5;
+    }
+    .alert-enter-active {
+        opacity: 1;
+        transition: all 500ms;
+    }
+    .alert-exit {
+        opacity: 1;
+    }
+    .alert-exit-active {
+        opacity: 0;
+        transition: all 500ms;
     }
 }
