@@ -14,7 +14,7 @@ const Birthday = db.sequelize.define('birthday',{
     pointPath: Sequelize.STRING(255),  // 提醒信息存储位置
     date: Sequelize.DATE, // 生日日期
     advanceDay: Sequelize.STRING(11), // 生日提前提醒天数
-    dateType: Sequelize.BOOLEAN, //生日日期类型（阳历|阴历）
+    dateType: Sequelize.STRING(2), //生日日期类型（阳历|阴历）
     email: Sequelize.STRING(20), // 提醒生日邮箱
 },{
     paranoid: true,

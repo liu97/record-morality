@@ -8,7 +8,7 @@ import Table from 'containers/Table/Common';
 import {COLUMNS, QUERY} from 'constants/birthday';
 import { Button, Icon  } from 'antd';
 import { deleteBirthday } from 'actions/birthday';
-
+import chineseLunar from 'chinese-lunar';
 
 @connect(
   // eslint-disable-next-line no-unused-vars
@@ -47,19 +47,32 @@ class Birthday extends Table{
 		COLUMNS.forEach((col) => {
 			switch (col.key) {
 				case 'date':
+					// eslint-disable-next-line no-unused-vars
+					col.render = (text, record, index) => {
+						if(record.dateType == '2'){
+							let lunarTime = chineseLunar.solarToLunar(new Date(moment(text).format('YYYY-MM-DD 00:00:00')));
+							text = chineseLunar.format(lunarTime, 'T(A)Md');
+						}
+						else{
+							text = moment(text).format('YYYY-MM-DD');
+						}
+						return (
+							<span>{text}</span>
+						)}
+					break;
 				case 'createdAt':
 				case 'updatedAt':
 					// eslint-disable-next-line no-unused-vars
 			    	col.render = (text, record, index) => {
 						return (
-						  <span>{moment(text).format('YYYY-MM-DD')}</span>
+							<span>{moment(text).format('YYYY-MM-DD')}</span>
 						)}
 					break;
 				case 'dateType':
 					// eslint-disable-next-line no-unused-vars
 			    	col.render = (text, record, index) => {
 						return (
-						  <span>{text ? '阳历' : '阴历'}</span>
+							<span>{text == '1' ? '阳历' : '阴历'}</span>
 						)}
 					break;
 			  	case 'opt': {

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { message, Card } from 'antd';
+import _ from 'lodash';
 import BirthdayForm from '../Component/BirthdayForm';
 
 import { addBirthday } from 'actions/birthday';
@@ -25,7 +26,7 @@ class BirthdayAdd extends Component{
 
 	UNSAFE_componentWillReceiveProps(nextProps){
 		let { addBirthdayResult } = nextProps;
-		if(addBirthdayResult !== this.props.addBirthdayResult &&addBirthdayResult && addBirthdayResult.isLoading === false) {
+		if(!_.isEqual(addBirthdayResult,this.props.addBirthdayResult) &&addBirthdayResult && addBirthdayResult.isLoading === false) {
 			if(addBirthdayResult.info.success){
 				this.props.history.push('/admin/birthday/list');
 			}

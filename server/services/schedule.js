@@ -9,7 +9,7 @@ const scheduleServices = {
     isBirthday(date, advanceDay, type){ // 判断是否为生日
 
         let changeDay = moment().add(advanceDay, 'days'); // 今天+advanceDay
-        if(type == 0){ // 0为阴历，1为阳历
+        if(type == 2){ // 0为阴历，1为阳历
             changeDay = chineseLunar.solarToLunar(new Date(changeDay.format('YYYY-MM-DD 00:00:00'))); // 阴历格式的 今天+advanceDay
             birthday = moment(date).format('MM-DD').split('-'); // 数据库生日的 月日
             return (Number(birthday[0]) == changeDay.month && Number(birthday[1]) == changeDay.day);

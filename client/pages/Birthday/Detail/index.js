@@ -5,6 +5,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { message, Card, Row, Col, Button } from 'antd';
 import { getGivenSearch } from 'utils/location';
 import moment from 'moment';
+import chineseLunar from 'chinese-lunar';
 
 import { fetchBirthdayList } from 'actions/birthday';
 const PREFIX = 'birthday-detail';
@@ -46,7 +47,11 @@ class BirthdayAdd extends Component{
                         && this.props.fetchBirthdayListResult.info 
                         && this.props.fetchBirthdayListResult.info.data
                         && this.props.fetchBirthdayListResult.info.data[0];
-
+        let date = moment(birthday && birthday.date).format('YYYY-MM-DD');
+        if(birthday && birthday.dateType == '2'){
+            let lunarTime = chineseLunar.solarToLunar(new Date(moment(date).format('YYYY-MM-DD 00:00:00')));
+            date = date + ' ' +chineseLunar.format(lunarTime, 'T(A)Md');
+        }
         const labelCol= {
             xs: { span: 24 },
             sm: { span: 10 },
@@ -69,7 +74,11 @@ class BirthdayAdd extends Component{
                     </Row>
                     <Row>
                         <Col {...labelCol} className={`${PREFIX}-label`}>生日日期：</Col>
-                        <Col {...wrapperCol}>{birthday && moment(birthday.date).format('YYYY-MM-DD')}</Col>
+                        <Col {...wrapperCol}>{date}</Col>
+                    </Row>
+                    <Row>
+                        <Col {...labelCol} className={`${PREFIX}-label`}>生日类型：</Col>
+                        <Col {...wrapperCol}>{birthday && birthday.dateType && birthday.dateType == '1' ? '阳历' : '阴历'}</Col>
                     </Row>
                     <Row>
                         <Col {...labelCol} className={`${PREFIX}-label`}>提前提醒天数：</Col>

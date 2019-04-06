@@ -14,33 +14,40 @@ class FormLunar extends Component{
 		super(props);
 		this.state = {
 			showCalendar: false,
-			inputValue: this.formatDate(props.defaultValue || props.value),
-			dateValue: props.defaultValue || props.value,
+			inputValue: this.formatInputValue(props.defaultValue || props.value),
+			dateValue: this.formatDateValue(props.defaultValue || props.value),
 		}
 
 		this.dRenderSub = _.debounce(this.renderSub);
 	}
 
 	componentDidMount(){
+		this.state.dateValue && this.props.onChange && this.props.onChange(this.state.dateValue);
+
 		document.addEventListener("click", this.hideCal);
 
 		window.addEventListener("resize", this.showCal);
 	}
 
 	UNSAFE_componentWillReceiveProps(nextProps){
-		let { value } = nextProps;
-		if(value !== this.props.value && value) {
+		let { value, dateType } = nextProps;
+		if((value !== this.props.value) || (dateType !== this.props.dateType)) { // 如果改变了日期或者日历类型
+			value = this.formatDateValue(value);
 			this.setState({
 				dateValue: value,
+				inputValue: this.formatInputValue(value, dateType),
 			})
 		}
 	}
 
-	componentDidUpdate(){
-		this.dRenderSub();
+	componentDidUpdate(prevProps, prevState){
+		if(!_.isEqual(prevState.dateValue, this.state.dateValue) || this.state.showCalendar) {
+			this.dRenderSub();
+		}
 	}
 
 	componentWillUnmount(){
+		this.conDiv && this.conDiv.parentNode.removeChild(this.conDiv);
 		document.removeEventListener('click', this.hideCal);
 
 		document.removeEventListener('resize', this.showCal);
@@ -76,7 +83,9 @@ class FormLunar extends Component{
 	}
 	
 	hideCal = (e) => {
-		if(!this.matchesSelector(e.target,'.form-lunar *')){ //匹配当前组件内的所有元素
+		if(!this.matchesSelector(e.target,'.mask-lunar-container *')
+			&& !this.matchesSelector(e.target,'.form-lunar *')
+			&& this.state.showCalendar){ //匹配当前组件内的所有元素
 			this.setState({
 				showCalendar: false,
 			})
@@ -89,40 +98,56 @@ class FormLunar extends Component{
 		}
 	}
 
-	formatDate = (date) => { // 根据类型格式化日期
+	formatDateValue = (date) => {
+		if(!date){
+			return null;
+		}
+		else if(date.lunarTime){
+			return date;
+		}
+		else if(date._isAMomentObject){
+			let solarTime = date;
+			let lunarTime = chineseLunar.solarToLunar(new Date(solarTime.format('YYYY-MM-DD 00:00:00')));
+			let tradition = chineseLunar.format(lunarTime, 'T(A)Md');
+			lunarTime.dateValue = `${solarTime.format('YYYY-MM-DD')} ${tradition}`;
+			return {lunarTime, solarTime};
+		}
+		else{
+			let lunarTime = date;
+			let commonDate = chineseLunar.lunarToSolar(lunarTime);
+			let solarTime = moment(commonDate);
+			let tradition = chineseLunar.format(lunarTime, 'T(A)Md');
+			lunarTime.dateValue = `${solarTime.format('YYYY-MM-DD')} ${tradition}`;
+
+			return {lunarTime, solarTime};
+		}
+	}
+
+	formatInputValue = (date, dateType) => { // 根据类型格式化日期
 		const props = this.props;
+		!dateType && (dateType = props.dateType);
 		let inputValue = null;
+		let dateValue = this.formatDateValue(date);
 		if(date){
-			if(props.dateType == 'solar'){ // 如果是阳历类型
-				if(date.solarTime){
-					inputValue = date.solarTime.format('YYYY-MM-DD');
-				}
-				else{
-					inputValue = date.format('YYYY-MM-DD');
-				}
+			if(dateType == 'solar'){ // 如果是阳历类型
+				inputValue = dateValue.solarTime.format('YYYY-MM-DD');
 			}
 			else{
-				if(date.lunarTime){
-					inputValue = date.lunarTime.dateValue;
-				}
-				else{
-					let lunarTime = chineseLunar.solarToLunar(new Date(date.format('YYYY-MM-DD 00:00:00')));
-					let tradition = chineseLunar.format(lunarTime, 'T(A)Md');
-					inputValue = `${lunarTime.year}-${lunarTime.month}-${lunarTime.day} ${tradition}`;
-				}
+				inputValue = dateValue.lunarTime.dateValue
 			}
 		}
 		return inputValue;
 	}
 	
 	onSelect = (date) => { // 点击选择日期回调
-		let inputValue = this.formatDate(date);
+		let inputValue = this.formatInputValue(date);
+		let dateValue = this.formatDateValue(date);
 
 		this.selectedDate = date;
 		this.setState({
 			showCalendar: false,
 			inputValue,
-			dateValue: date,
+			dateValue,
 		});
 
 		this.props.onChange && this.props.onChange(date);
@@ -130,38 +155,39 @@ class FormLunar extends Component{
 		this.props.onSelect && this.props.onSelect(date);
 	}
 
-	getLunar = () => { // 返回
+	getLunar = () => { // 返回日历组件
 		const props = _.cloneDeep(this.props);
 		const state = this.state;
-		const defaultValue = state.dateValue && state.dateValue.solarTime;
 		const lunarClass = classNames({
 			'active-lunar': true,
 		});
-
-		const dClinetHeight = document.documentElement.clientHeight; // 视窗口高度
-		const dClinetWidth = document.documentElement.clientWidth; // 视窗口宽度
-		const iRect = this.iEvent.currentTarget.getBoundingClientRect();
-		iRect.toBottom = dClinetHeight - iRect.bottom; // 输入框距浏览器窗口底部距离
-		iRect.toRight = dClinetWidth - iRect.left; // 输入框左端距浏览器窗口右部距离
-		let lunarHeight = 321;
-		let lunarWidth = 300;
 		let lunarStyle = {};
-		if(iRect.toBottom < lunarHeight){
-			if(iRect.top < lunarHeight){
-				lunarStyle.top = 0;
+
+		if(this.iEvent){
+			const dClinetHeight = document.documentElement.clientHeight; // 视窗口高度
+			const dClinetWidth = document.documentElement.clientWidth; // 视窗口宽度
+			const iRect = this.iEvent.currentTarget.getBoundingClientRect();
+			iRect.toBottom = dClinetHeight - iRect.bottom; // 输入框距浏览器窗口底部距离
+			iRect.toRight = dClinetWidth - iRect.left; // 输入框左端距浏览器窗口右部距离
+			let lunarHeight = 321;
+			let lunarWidth = 300;
+			if(iRect.toBottom < lunarHeight){
+				if(iRect.top < lunarHeight){
+					lunarStyle.top = 0;
+				}
+				else{
+					lunarStyle.top = iRect.top-lunarHeight;
+				}
 			}
 			else{
-				lunarStyle.top = iRect.top-lunarHeight;
+				lunarStyle.top = iRect.bottom;
 			}
-		}
-		else{
-			lunarStyle.top = iRect.bottom;
-		}
-		if(iRect.toRight < lunarWidth){
-			lunarStyle.right = 0;
-		}
-		else{
-			lunarStyle.left = iRect.left;
+			if(iRect.toRight < lunarWidth){
+				lunarStyle.right = 0;
+			}
+			else{
+				lunarStyle.left = iRect.left;
+			}
 		}
 
 		delete props.className;
@@ -176,7 +202,7 @@ class FormLunar extends Component{
 				unmountOnExit
 				classNames = "alert"
 			>
-				<BaseLunar {...props} style={lunarStyle} className={lunarClass} fullscreen={false} defaultValue={defaultValue}  onSelect={this.onSelect} />
+				<BaseLunar {...props} style={lunarStyle} className={lunarClass} fullscreen={false} defaultValue={state.dateValue && state.dateValue.solarTime}  onSelect={this.onSelect} />
 			</CSSTransition>
 		)
 	}
@@ -221,6 +247,7 @@ class FormLunar extends Component{
 					onClick={this.handleInputClick} 
 					onBlur={this.handleInputBlur} 
 					className='active-input'
+					placeholder={props.placeholder}
 					suffix={<React.Fragment>
 						<Icon type="calendar" />
 						{state.inputValue && <Icon type="close-circle" theme="filled" onClick={this.handleClear} />}

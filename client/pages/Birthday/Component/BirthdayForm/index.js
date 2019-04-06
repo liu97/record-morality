@@ -3,8 +3,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import moment from 'moment';
+import _ from 'lodash';
 import LunarCal from "components/LunarCal/FormLunar";
-import { message, Form, Button, Input, DatePicker, InputNumber, Calendar   } from 'antd';
+import { message, Form, Button, Input, DatePicker, InputNumber, Radio } from 'antd';
 
 const { TextArea } = Input;
 const PREFIX = 'birthday-form';
@@ -19,7 +20,10 @@ const PREFIX = 'birthday-form';
 @Form.create()
 class BirthdayForm extends Component{
 	constructor(props){
-		super(props);
+        super(props);
+        this.state = {
+            dateType: props.birthday && props.birthday.dateType || '1',
+        }
 	}
 
 	componentDidMount(){
@@ -27,7 +31,12 @@ class BirthdayForm extends Component{
 	}
 
 	UNSAFE_componentWillReceiveProps(nextProps){
-
+        let { fetchBirthdayListResult } = nextProps;
+        if(!_.isEqual(fetchBirthdayListResult,this.props.fetchBirthdayListResult) &&fetchBirthdayListResult && fetchBirthdayListResult.isLoading === false) {
+			this.setState({
+                dateType:  fetchBirthdayListResult.info.data[0] && fetchBirthdayListResult.info.data[0].dateType,
+            })
+		}
     }
     
     goBack = () => {
@@ -38,8 +47,8 @@ class BirthdayForm extends Component{
 		e.preventDefault();
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			if (!err) {
-				if(values.date){
-					values.date = values.date.format('YYYY-MM-DD');
+				if(values.date && values.date.solarTime){
+                    values.date = values.date.solarTime.format('YYYY-MM-DD');
 				}
 
 				for(let key of Object.keys(values)){
@@ -47,21 +56,27 @@ class BirthdayForm extends Component{
 						delete values[key];
 					}
                 }
-                debugger
                 this.props.handleSubmit && this.props.handleSubmit(values);
-				console.log('Received values of form: ', values);
+                console.log('Received values of form: ', values);
 			}
 		});
     }
     
     dateCellRender = (date) => {
-        console.log(date.format('YYYY-MM-DD'))
         return <span>{date.format('DD')}</span>;
     }
 
+    dateTypeChange  = (e) => {
+        this.setState({
+            dateType: e.target.value,
+        })
+    }
+
 	render(){
-        const { birthday, mode } = this.props;
-		const { getFieldDecorator } = this.props.form;
+        const props = this.props;
+        const state = this.state;
+        const { birthday, mode, form } = props;
+        const { getFieldDecorator } = form;
 
 		const formItemLayout = {
 			labelCol: {
@@ -74,8 +89,10 @@ class BirthdayForm extends Component{
 			  sm: { span: 16 },
 			  md: { span: 8 },
 			},
-		};
-
+        };
+        
+        let lunarConfig = {};
+        state.dateType == '1' ? lunarConfig = {dateType: 'solar', placeholder: '阳历'} : lunarConfig = {dateType: 'lunar', placeholder: '阴历'}
 		return (
             <Form {...formItemLayout} onSubmit={this.handleSubmit} className={`${PREFIX}-form`}>
                 <Form.Item label="名字">
@@ -88,6 +105,19 @@ class BirthdayForm extends Component{
                         <Input disabled={mode == 'detail'}/>
                     )}
                 </Form.Item>
+                <Form.Item label="生日类型">
+                    {getFieldDecorator('dateType', {
+                        rules: [{
+                            required: true, message: '请输入生日日期',
+                        }],
+                        initialValue: (birthday && birthday.dateType) ? birthday.dateType : "1",
+                    })(
+                        <Radio.Group onChange={this.dateTypeChange}>
+                            <Radio value="1">阳历</Radio>
+                            <Radio value="2">阴历</Radio>
+                        </Radio.Group>
+                    )}
+                </Form.Item>
                 <Form.Item label="生日日期">
                     {getFieldDecorator('date', {
                         rules: [{
@@ -95,17 +125,7 @@ class BirthdayForm extends Component{
                         }],
                         initialValue: (birthday && birthday.date) ? moment(birthday.date) : null,
                     })(
-                        <DatePicker style={{width:'100%'}} placeholder="" disabled={mode == 'detail'}/>
-                    )}
-                </Form.Item>
-                <Form.Item label="生日日期">
-                    {getFieldDecorator('date2', {
-                        rules: [{
-                            required: true, message: '请输入生日日期',
-                        }],
-                        initialValue: (birthday && birthday.date) ? moment(birthday.date) : null,
-                    })(
-                        <LunarCal fullscreen={false} dateType={'lunar'}></LunarCal>
+                        <LunarCal fullscreen={false} {...lunarConfig}></LunarCal>
                     )}
                 </Form.Item>
                 <Form.Item label="提前提醒天数">
