@@ -145,6 +145,13 @@ const birthdayContrallers = {
                 result.msg = birthdayInfo.msg;
             }
             else{
+                let birthdayInfo = await birthdayService.getBirthdayInfo({
+                    where: {
+                        id: body.id
+                    }
+                }, ctx);
+                let birthdayData = birthdayInfo.dataValues[0];
+                scheduleServices.sendMailByMessage(birthdayData); // 检查修改的生日提醒是否就是今天
                 result = {
                     success: true,
                     msg: 'It is 200 status',
