@@ -23,10 +23,10 @@ class BaseLunar extends Component{
 	
 	// 追加阴历内容
     dateCellRender = (date) => {
-		let lunarTime = chineseLunar.solarToLunar(new Date(date.format('YYYY-MM-DD 00:00:00')));
-		let lunarValue = lunarTime.day == 1 ? 
-							chineseLunar.monthName(lunarTime.month, true, lunarTime.leap).slice(0,2) 
-							: chineseLunar.dayName(lunarTime.day);
+		let lunarDate = chineseLunar.solarToLunar(new Date(date.format('YYYY-MM-DD 00:00:00')));
+		let lunarValue = lunarDate.day == 1 ? 
+							chineseLunar.monthName(lunarDate.month, true, lunarDate.leap).slice(0,2) 
+							: chineseLunar.dayName(lunarDate.day);
         return <span className="ant-fullcalendar-value">{lunarValue}</span>;
 	}
 	
@@ -41,24 +41,24 @@ class BaseLunar extends Component{
 		if(!date){
 			return null;
 		}
-		else if(date.lunarTime){
+		else if(date.lunarDate){
 			return date;
 		}
 		else if(date._isAMomentObject){
-			let solarTime = date;
-			let lunarTime = chineseLunar.solarToLunar(new Date(solarTime.format('YYYY-MM-DD 00:00:00')));
-			let tradition = chineseLunar.format(lunarTime, 'T(A)Md');
-			lunarTime.dateValue = `${solarTime.format('YYYY-MM-DD')} ${tradition}`;
-			return {lunarTime, solarTime};
+			let solarDate = date;
+			let lunarDate = chineseLunar.solarToLunar(new Date(solarDate.format('YYYY-MM-DD 00:00:00')));
+			let tradition = chineseLunar.format(lunarDate, 'T(A)Md');
+			lunarDate.dateValue = `${solarDate.format('YYYY-MM-DD')} ${tradition}`;
+			return {lunarDate, solarDate};
 		}
 		else{
-			let lunarTime = date;
-			let commonDate = chineseLunar.lunarToSolar(lunarTime);
-			let solarTime = moment(commonDate);
-			let tradition = chineseLunar.format(lunarTime, 'T(A)Md');
-			lunarTime.dateValue = `${solarTime.format('YYYY-MM-DD')} ${tradition}`;
+			let lunarDate = date;
+			let commonDate = chineseLunar.lunarToSolar(lunarDate);
+			let solarDate = moment(commonDate);
+			let tradition = chineseLunar.format(lunarDate, 'T(A)Md');
+			lunarDate.dateValue = `${solarDate.format('YYYY-MM-DD')} ${tradition}`;
 
-			return {lunarTime, solarTime};
+			return {lunarDate, solarDate};
 		}
 	}
 
@@ -73,8 +73,8 @@ class BaseLunar extends Component{
 		const defaultValue = this.formatDateValue(props.defaultValue);
 		const value = this.formatDateValue(props.value);
 		const dateValue = {
-			defaultValue: defaultValue && defaultValue.solarTime,
-			value: value && value.solarTime,
+			defaultValue: defaultValue && defaultValue.solarDate,
+			value: value && value.solarDate,
 		}
 		for(let item of Object.keys(dateValue)){
 			if(dateValue[item] == undefined){

@@ -49,8 +49,8 @@ class BirthdayAdd extends Component{
                         && this.props.fetchBirthdayListResult.info.data[0];
         let date = moment(birthday && birthday.date).format('YYYY-MM-DD');
         if(birthday && birthday.dateType == '2'){
-            let lunarTime = chineseLunar.solarToLunar(new Date(moment(date).format('YYYY-MM-DD 00:00:00')));
-            date = date + ' ' +chineseLunar.format(lunarTime, 'T(A)Md');
+            let lunarDate = chineseLunar.solarToLunar(new Date(moment(date).format('YYYY-MM-DD 00:00:00')));
+            date = date + ' ' +chineseLunar.format(lunarDate, 'T(A)Md');
         }
         const labelCol= {
             xs: { span: 24 },

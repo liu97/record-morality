@@ -41,7 +41,7 @@ class FormLunar extends Component{
 	}
 
 	componentDidUpdate(prevProps, prevState){
-		if(!_.isEqual(prevState.dateValue, this.state.dateValue) || this.state.showCalendar) {
+		if(!_.isEqual(prevState.dateValue, this.state.dateValue) || !_.isEqual(prevState.showCalendar, this.state.showCalendar)) {
 			this.dRenderSub();
 		}
 	}
@@ -102,24 +102,24 @@ class FormLunar extends Component{
 		if(!date){
 			return null;
 		}
-		else if(date.lunarTime){
+		else if(date.lunarDate){
 			return date;
 		}
 		else if(date._isAMomentObject){
-			let solarTime = date;
-			let lunarTime = chineseLunar.solarToLunar(new Date(solarTime.format('YYYY-MM-DD 00:00:00')));
-			let tradition = chineseLunar.format(lunarTime, 'T(A)Md');
-			lunarTime.dateValue = `${solarTime.format('YYYY-MM-DD')} ${tradition}`;
-			return {lunarTime, solarTime};
+			let solarDate = date;
+			let lunarDate = chineseLunar.solarToLunar(new Date(solarDate.format('YYYY-MM-DD 00:00:00')));
+			let tradition = chineseLunar.format(lunarDate, 'T(A)Md');
+			lunarDate.dateValue = `${solarDate.format('YYYY-MM-DD')} ${tradition}`;
+			return {lunarDate, solarDate};
 		}
 		else{
-			let lunarTime = date;
-			let commonDate = chineseLunar.lunarToSolar(lunarTime);
-			let solarTime = moment(commonDate);
-			let tradition = chineseLunar.format(lunarTime, 'T(A)Md');
-			lunarTime.dateValue = `${solarTime.format('YYYY-MM-DD')} ${tradition}`;
+			let lunarDate = date;
+			let commonDate = chineseLunar.lunarToSolar(lunarDate);
+			let solarDate = moment(commonDate);
+			let tradition = chineseLunar.format(lunarDate, 'T(A)Md');
+			lunarDate.dateValue = `${solarDate.format('YYYY-MM-DD')} ${tradition}`;
 
-			return {lunarTime, solarTime};
+			return {lunarDate, solarDate};
 		}
 	}
 
@@ -130,10 +130,10 @@ class FormLunar extends Component{
 		let dateValue = this.formatDateValue(date);
 		if(date){
 			if(dateType == 'solar'){ // 如果是阳历类型
-				inputValue = dateValue.solarTime.format('YYYY-MM-DD');
+				inputValue = dateValue.solarDate.format('YYYY-MM-DD');
 			}
 			else{
-				inputValue = dateValue.lunarTime.dateValue
+				inputValue = dateValue.lunarDate.dateValue
 			}
 		}
 		return inputValue;
@@ -202,7 +202,7 @@ class FormLunar extends Component{
 				unmountOnExit
 				classNames = "alert"
 			>
-				<BaseLunar {...props} style={lunarStyle} className={lunarClass} fullscreen={false} defaultValue={state.dateValue && state.dateValue.solarTime}  onSelect={this.onSelect} />
+				<BaseLunar {...props} style={lunarStyle} className={lunarClass} fullscreen={false} defaultValue={state.dateValue && state.dateValue.solarDate}  onSelect={this.onSelect} />
 			</CSSTransition>
 		)
 	}

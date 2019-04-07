@@ -52,16 +52,23 @@ class Center extends Component{
     }
 
 	showModal = () => {
+        const { fetchUserInfoResult } = this.props;
+        const user = fetchUserInfoResult.info.data[0];
 		this.setState({
 		  	modalVisible: true,
-		});
+        });
+        this.props.form.setFieldsValue({
+            avatarPath: user.avatarPath,
+            nickName: user.nickName,
+            autograph: user.autograph
+        })
 	}
 	
 	handleCancelModal = (e) => {
-		console.log(e);
 		this.setState({
 		  	modalVisible: false,
-		});
+        });
+        this.props.dispatch(fetchUserInfo({}));
     }
     
     handleChange = (info) => {

@@ -47,8 +47,8 @@ class BirthdayForm extends Component{
 		e.preventDefault();
 		this.props.form.validateFieldsAndScroll((err, values) => {
 			if (!err) {
-				if(values.date && values.date.solarTime){
-                    values.date = values.date.solarTime.format('YYYY-MM-DD');
+				if(values.date && values.date.solarDate){
+                    values.date = values.date.solarDate.format('YYYY-MM-DD');
 				}
 
 				for(let key of Object.keys(values)){

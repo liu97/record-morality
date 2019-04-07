@@ -50,8 +50,8 @@ class Birthday extends Table{
 					// eslint-disable-next-line no-unused-vars
 					col.render = (text, record, index) => {
 						if(record.dateType == '2'){
-							let lunarTime = chineseLunar.solarToLunar(new Date(moment(text).format('YYYY-MM-DD 00:00:00')));
-							text = chineseLunar.format(lunarTime, 'T(A)Md');
+							let lunarDate = chineseLunar.solarToLunar(new Date(moment(text).format('YYYY-MM-DD 00:00:00')));
+							text = chineseLunar.format(lunarDate, 'T(A)Md');
 						}
 						else{
 							text = moment(text).format('YYYY-MM-DD');
