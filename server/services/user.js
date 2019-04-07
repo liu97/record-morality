@@ -5,21 +5,28 @@ const _ = require('lodash')
 const User = require('../models/user');
 const Folder = require('../models/folder');
 const Opt = require('./opt');
+const token = require('../utils/token');
 
 const userServices ={
-	async getUserInfo(info){
+	async getUserInfo(info, ctx){
+		const userId = ctx && token.getTokenMessage(ctx).id;
 		let result = {
 			isError: true,
 			msg: "代码逻辑有问题",
 		};
 		let userInfo = _.cloneDeep(info);
 
+		if(!userInfo.id && userId){
+			userInfo.id = userId;
+		}
+
 		result = await Opt.findAll(User,
 			{
 				where: {
 					...userInfo
 				}
-			}
+			},
+			userId
 		)
 
 		if(!result.isError){
@@ -50,6 +57,30 @@ const userServices ={
 		
 		return result;
 	},
+
+	async updateUser(info, ctx){
+		const userId = ctx && token.getTokenMessage(ctx).id;
+		let result = {
+			isError: true,
+			msg: "代码逻辑有问题",
+		};
+		let userInfo = _.cloneDeep(info);
+		if(!userInfo.id && userId){
+			userInfo.id = userId;
+		}
+
+		result = await Opt.update(User, 
+			{
+				...userInfo
+			},
+			{
+				where: {
+					id: userInfo.id
+				}
+			}
+		, userId)
+		return result;
+	}
 
 }
 

@@ -12,6 +12,8 @@ const AsyncBirthdayAdd = asyncComponent(() => import(/* webpackChunkName: "birth
 const AsyncBirthdayDetail = asyncComponent(() => import(/* webpackChunkName: "birthdayDetail" */ 'pages/Birthday/Detail'));
 const AsyncBirthdayEdit = asyncComponent(() => import(/* webpackChunkName: "birthdayEdit" */ 'pages/Birthday/Edit'));
 
+const AsyncAccountSetting = asyncComponent(() => import(/* webpackChunkName: "accountSetting" */ 'pages/Account'));
+
 export {
     AsyncLaR,
     AsyncApp,
@@ -24,4 +26,6 @@ export {
     AsyncBirthdayAdd,
     AsyncBirthdayDetail,
     AsyncBirthdayEdit,
+    
+    AsyncAccountSetting,
 }

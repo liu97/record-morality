@@ -13,6 +13,8 @@ const User = db.sequelize.define('user',{
     password: Sequelize.STRING(255),  // 密码
     telephone: Sequelize.STRING(11), // 手机号
     email: Sequelize.STRING(20), // 用户email
+    avatarPath: Sequelize.STRING(255), // 用户头像路径
+    autograph: Sequelize.STRING(255), // 用户签名
 },{
     paranoid: true,
 });

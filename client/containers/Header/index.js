@@ -2,6 +2,7 @@ import './index.less';
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
+import Center from '../Center';
 const { Header } = Layout;
 
 class Head extends Component{
@@ -45,6 +46,7 @@ class Head extends Component{
 						)
 					})}
 				</Menu>
+				<Center></Center>
 			</Header>
 		)
 	}

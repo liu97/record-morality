@@ -30,6 +30,12 @@ import {
 	updateBirthdayResult,
 } from './birthday';
 
+import {
+	fetchUserInfoResult,
+	updateUserResult,
+	updatePasswordResult,
+} from './user';
+
 const rootReducer = combineReducers({
 	postLoginResult,
 	postRegisterResult,
@@ -54,6 +60,10 @@ const rootReducer = combineReducers({
 	deleteBirthdayResult,
 	addBirthdayResult,
 	updateBirthdayResult,
+
+	fetchUserInfoResult,
+	updateUserResult,
+	updatePasswordResult,
 });
 
 export default rootReducer;

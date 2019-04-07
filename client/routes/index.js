@@ -12,6 +12,8 @@ import {
   AsyncBirthdayAdd,
   AsyncBirthdayDetail,
   AsyncBirthdayEdit,
+
+  AsyncAccountSetting,
 } from './async'
 
 const routes = [
@@ -79,6 +81,10 @@ const routes = [
             requiresAuth: false,
           },
         ]
+      },
+      {
+        path: '/admin/account',
+        component: AsyncAccountSetting,
       },
       {
         component: Error,

@@ -16,38 +16,6 @@ const config = require('../../config');
 
 
 const userContrallers = {
-    
-    async getUserInfo(ctx){ // 获取用户信息
-        let result = {
-			success: false,
-			msg: '',
-			data: null,
-        }
-
-        let query = _.cloneDeep(ctx.request.query);
-        if(!query.id){
-            ctx.status = 404;
-            result.msg = "未传入id";
-        }
-        else{
-            let userInfo = await userService.getUserInfo(query);
-
-            if(userInfo.isError){
-                ctx.status = 404;
-                result.msg = userInfo.msg;
-            }
-            else{
-                let userData = userInfo.dataValues;
-                result = {
-                    success: true,
-                    msg: 'It is 200 status',
-                    data: userData,
-                    count: userInfo.count,
-                }
-            }
-        }
-        ctx.body = result;
-    },
 
     async register(ctx){ //注册
         let result = {
@@ -218,6 +186,122 @@ const userContrallers = {
         console.log(result);
         ctx.body = result;
     },
+
+    async updateUserInfo(ctx){ // 修改用户信息
+        let result = {
+			success: false,
+			msg: '',
+			data: null,
+        }
+
+        let body = _.cloneDeep(ctx.request.body);
+        delete body.password;
+
+        let userInfo = await userService.updateUser(body, ctx);
+        if(userInfo.isError){
+            ctx.status = 404;
+            result.msg = userInfo.msg;
+        }
+        else{
+            result = {
+                success: true,
+                msg: 'It is 200 status',
+                data: userInfo
+            }
+        }
+        console.log(result);
+        ctx.body = result;
+    },
     
+    async updatePassword(ctx){ // 修改用户密码
+        let result = {
+			success: false,
+			msg: '',
+			data: null,
+        }
+
+        let body = _.cloneDeep(ctx.request.body);
+
+        let userInfo = await userService.getUserInfo({}, ctx);
+        let userdata = userInfo.dataValues;
+        if(userInfo.isError){
+            ctx.status = 404;
+            result.msg = userInfo.msg;
+        }
+        else{
+            if(userdata.length){
+                try{
+                    if (bcrypt.compareSync(body.password, userdata[0].password)) { // 判断数据库密码和用户输入密码是否相同
+                        let salt = bcrypt.genSaltSync(10);// 10 is by default
+                        let password = bcrypt.hashSync(body.newPassword, salt); // salt is inclued in generated hash
+                        let userInfo = await userService.updateUser({password}, ctx);
+
+                        if(userInfo.isError){
+                            ctx.status = 404;
+                            result.msg = userInfo.msg;
+                        }
+                        else{
+                            result = {
+                                success: true,
+                                msg: 'It is 200 status',
+                                data: userInfo
+                            }
+                        }
+                    }
+                    else{
+                        result.msg = "旧密码错误";
+                    }
+                }
+                catch(err){
+                    ctx.status = 404;
+                    result.msg = err;
+                }
+            }
+            else{
+                result.msg = "账号不存在";
+            }
+        }
+        console.log(result);
+        ctx.body = result;
+    },
+
+    async uploadAvatar(ctx){ // 上传头像
+        let filePath = ctx.req.file.path;
+        filePath = filePath.split('static').slice(-1);
+        let result = { 
+            success: true,
+            msg: 'It is 200 status',
+            data: {
+                url: filePath[0],
+            }
+        };
+        ctx.body = result;
+    },
+
+    async getUserInfo(ctx){ // 获取用户信息
+        let result = {
+			success: false,
+			msg: '',
+			data: null,
+        }
+
+        let query = _.cloneDeep(ctx.request.query);
+        let userInfo = await userService.getUserInfo(query, ctx);
+
+        if(userInfo.isError){
+            ctx.status = 404;
+            result.msg = userInfo.msg;
+        }
+        else{
+            let userData = userInfo.dataValues;
+            result = {
+                success: true,
+                msg: 'It is 200 status',
+                data: userData,
+                count: userInfo.count,
+            }
+        }
+        ctx.body = result;
+    },
 }
 module.exports = userContrallers;
