@@ -101,19 +101,23 @@ class Account extends Component{
                     <FormItem label="设置新的密码">
                         {getFieldDecorator('newPassword', {
                             rules: [{
-                                required: true, message: '请输入新的密码',
-                            }],
+                                    required: true, message: '请输入新的密码',
+                                },
+                                {
+                                    min:6, message: '密码最少6位'
+                                }
+                            ],
                         })(
-                            <Input type="password"/>
+                            <Input type="password"  placeholder="密码最少6位"/>
                         )}
                     </FormItem>
                     <FormItem label="重复新的密码">
                         {getFieldDecorator('newPassword2', {
                             rules: [{
-                                required: true, message: '请输入新的密码',
+                                required: true, message: '请重复输入新的密码',
                             }],
                         })(
-                            <Input type="password"/>
+                            <Input type="password" placeholder="两次密码必须一致"/>
                         )}
                     </FormItem>
 

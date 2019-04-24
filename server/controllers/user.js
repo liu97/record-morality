@@ -136,7 +136,7 @@ const userContrallers = {
 
         let body = _.cloneDeep(ctx.request.body);
 
-        if(!body.nickName){
+        if(!body.nickName > 0){
             result.msg = "未填写昵称";
         }
         else{
@@ -171,7 +171,7 @@ const userContrallers = {
         }
         else{
             let checkExist = await userService.getUserInfo({email: body.email});
-            if(checkExist.length){
+            if(checkExist.count > 0){
                 result.msg = '邮箱已经被注册过了呢';
             }
             else{
@@ -249,7 +249,7 @@ const userContrallers = {
                         }
                     }
                     else{
-                        result.msg = "旧密码错误";
+                        result.msg = "原密码错误";
                     }
                 }
                 catch(err){

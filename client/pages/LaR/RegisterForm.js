@@ -87,7 +87,18 @@ class RegisterForm extends Component{
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				this.props.handleSubmit(values);
+                if(values.password != values.password2){
+                    this.props.form.setFields({
+                        password2: {
+                            value: values.password2,
+                            errors: [new Error('两次填写的密码不一致')],
+                        },
+                    });
+                }
+				else{
+                    delete values.password2;
+                    this.props.handleSubmit(values);
+                }
 			}
 		});
 	}
@@ -98,23 +109,32 @@ class RegisterForm extends Component{
                 <Form onSubmit={this.handleSubmit} className="lag-form">
                     <FormItem>
                         {getFieldDecorator('nickName', {
-                            rules: [{ required: true, message: '请输入昵称!' }, {validator: this.validateNickName}],
+                            rules: [{ required: true, message: '请输入昵称!' }],
                         })(
-                            <Input prefix={<Icon type="user" style={{ color: 'rgba(250,82,82,1)' }} />} placeholder="nickName" autoComplete="off" />
-                        )}
-                    </FormItem>
-                    <FormItem>
-                        {getFieldDecorator('password', {
-                            rules: [{ required: true, message: '请输入密码!' }],
-                        })(
-                            <Input prefix={<Icon type="lock" style={{ color: 'rgba(250,82,82,1)' }} />} type="password" placeholder="password" />
+                            <Input prefix={<Icon type="user" style={{ color: 'rgba(250,82,82,1)' }} />} placeholder="昵称" autoComplete="off" />
                         )}
                     </FormItem>
                     <FormItem>
                         {getFieldDecorator('email', {
                             rules: [{ type: 'email', message: '请输入正确格式的email!' },{ required: true, message: '请输入email!' },{validator: this.validateEmail}],
                         })(
-                            <Input prefix={<Icon type="aliwangwang" style={{ color: 'rgba(250,82,82,1)' }} />} placeholder="email" />
+                            <Input prefix={<Icon type="aliwangwang" style={{ color: 'rgba(250,82,82,1)' }} />} placeholder="邮箱" />
+                        )}
+                    </FormItem>
+                    <FormItem>
+                        {getFieldDecorator('password', {
+                            rules: [{ required: true, message: '请输入密码!' }, {min:6, message: '密码最少6位'}],
+                        })(
+                            <Input prefix={<Icon type="lock" style={{ color: 'rgba(250,82,82,1)' }} />} type="password" placeholder="密码（至少6位）" />
+                        )}
+                    </FormItem>
+                    <FormItem>
+                        {getFieldDecorator('password2', {
+                            rules: [{
+                                required: true, message: '请输入确认密码',
+                            }],
+                        })(
+                            <Input  prefix={<Icon type="lock" style={{ color: 'rgba(250,82,82,1)' }} />} type="password" placeholder="确认密码"/>
                         )}
                     </FormItem>
                     <FormItem>

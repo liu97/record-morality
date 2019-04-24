@@ -43,15 +43,11 @@ class TreeNav extends Component {
 
     UNSAFE_componentWillReceiveProps(nextProps) {
         let { fetchFolderTreeResult, updateFolderTreeResult, addFolderResult, deleteFolderResult, addNoteResult } = nextProps;
-        // if(!_.isEqual(fetchFolderTreeResult, this.props.fetchFolderTreeResult) && !fetchFolderTreeResult.isLoading){
-        //     this.addAsyncList(fetchFolderTreeResult);
-        // }
         if(!_.isEqual(updateFolderTreeResult, this.props.updateFolderTreeResult) && !updateFolderTreeResult.isLoading){
             this.props.dispatch(fetchFolderTree());
 
             this.hiddenModal();
             this.currentRight = {};
-            message.success('修改文件夹成功');
         }
         if(!_.isEqual(addFolderResult, this.props.addFolderResult) && !addFolderResult.isLoading){
             let { opt, extra, key } = this.currentRight;
@@ -62,7 +58,6 @@ class TreeNav extends Component {
             
             this.hiddenModal();
             this.currentRight = {};
-            message.success('新建文件夹成功');
         }
         if(!_.isEqual(deleteFolderResult, this.props.deleteFolderResult) && !deleteFolderResult.isLoading){
             let { opt, extra, key } = this.currentRight;

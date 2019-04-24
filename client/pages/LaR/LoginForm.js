@@ -22,14 +22,14 @@ class LoginForm extends Component{
                         {getFieldDecorator('email', {
                             rules: [{ type: 'email', message: '请输入正确格式的email!' },{ required: true, message: '请输入email!' }],
                         })(
-                            <Input prefix={<Icon type="aliwangwang" style={{ color: 'rgba(250,82,82,1)' }} />} placeholder="email" />
+                            <Input prefix={<Icon type="aliwangwang" style={{ color: 'rgba(250,82,82,1)' }} />} placeholder="邮箱" />
                         )}
                     </FormItem>
                     <FormItem>
                         {getFieldDecorator('password', {
                             rules: [{ required: true, message: '请输入密码!' }],
                         })(
-                            <Input prefix={<Icon type="lock" style={{ color: 'rgba(250,82,82,1)' }} />} type="password" placeholder="password" />
+                            <Input prefix={<Icon type="lock" style={{ color: 'rgba(250,82,82,1)' }} />} type="password" placeholder="密码" />
                         )}
                     </FormItem>
                     <FormItem>

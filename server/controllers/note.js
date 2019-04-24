@@ -27,7 +27,7 @@ const noteContrallers = {
 
         let body = _.cloneDeep(ctx.request.body);
         if(!body.title){
-			body.title = "新建文档";
+			body.title = "新建笔记";
         }
         
         if(!body.folderId){
@@ -120,7 +120,7 @@ const noteContrallers = {
         }
         else{
             if(body.content){ // 如果传了笔记内容，更新笔记内容
-                let oldNote = await noteService.getNoteInfo({id: body.id});
+                let oldNote = await noteService.getNoteInfo({id: body.id}, ctx);
                 if(!oldNote.isError && oldNote.count){
                     oldNote = oldNote.dataValues;
 
@@ -176,7 +176,7 @@ const noteContrallers = {
             delete query.end_time;
         }
 
-        let noteInfo = await noteService.getNoteInfo(query);
+        let noteInfo = await noteService.getNoteInfo(query, ctx);
 
         if(noteInfo.isError){
             ctx.status = 404;
@@ -255,7 +255,7 @@ const noteContrallers = {
                     '$lte': endtTime
                 }
                 delete query.type;
-                let noteInfo = await noteService.getNoteInfo(query);
+                let noteInfo = await noteService.getNoteInfo(query, ctx);
                 if(noteInfo.isError){
                     ctx.status = 404;
                     result.msg = noteInfo.msg;

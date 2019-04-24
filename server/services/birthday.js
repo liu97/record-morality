@@ -83,7 +83,7 @@ const birthdayServices ={
 			msg: "代码逻辑有问题",
         };
         let birthdayInfo = _.cloneDeep(info);
-
+        userId && (birthdayInfo.userId = userId);
         result = await opt.findAll(Birthday, birthdayInfo, userId);
         
         if(!result.isError){

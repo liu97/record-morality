@@ -39,7 +39,7 @@ class NavMenu extends Nav{
     }
 
     handleAddNote = (noteType) => {
-        this.props.handleAddNote('新建文件',noteType);
+        this.props.handleAddNote('新建笔记',noteType);
     }
 
     getDropDown(){

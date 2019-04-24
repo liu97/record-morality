@@ -88,7 +88,7 @@ const noteServices ={
 			msg: "代码逻辑有问题",
 		};
 		let noteInfo = _.cloneDeep(info);
-
+		userId && (noteInfo.userId = userId);
 		result = await opt.findAll(Note,
 			{
 				where: {
