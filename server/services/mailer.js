@@ -18,7 +18,7 @@ const mailerServices = {
             secureConnection: true, // 使用了 SSL
             auth: {
                 user: '1139472029@qq.com', //发送邮件的163邮箱账号
-                pass: 'tvlcyfkkgnnvbadc', //发送邮件的邮箱smtp授权码
+                pass: 'rilgpvdrrlcfibdh', //发送邮件的邮箱smtp授权码
             }
         });
         var mailOptions = {
@@ -36,7 +36,7 @@ const mailerServices = {
             }else{
                 console.log(error);
                 // return res.render("index", {message: "邮件发送失败，请稍后重试！"});
-                console.log(`${mail}的邮件发送失败\n未发送的信息：${text}
+                console.log(`${mail}的邮件发送失败\n未发送的信息：${html}
                 `);
             }
         });
