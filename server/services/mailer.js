@@ -18,7 +18,7 @@ const mailerServices = {
             secureConnection: true, // 使用了 SSL
             auth: {
                 user: '1139472029@qq.com', //发送邮件的163邮箱账号
-                pass: 'rilgpvdrrlcfibdh', //发送邮件的邮箱smtp授权码
+                pass: 'hisyignjuvtgjdbd', //发送邮件的邮箱smtp授权码
             }
         });
         var mailOptions = {
